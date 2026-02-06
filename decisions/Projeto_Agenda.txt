@@ -1,0 +1,251 @@
+Este documento consolida todo o planejamento conceitual do sistema, reunindo o que foi definido nas discussões e o que estava representado no mapa mental.
+
+Ele serve como fonte única de verdade conceitual para o início da construção do projeto.
+
+Não define tecnologias, implementações ou soluções técnicas. Não antecipa expansões. Tudo aqui é intencionalmente suficiente para começar a construir.
+
+1. Propósito do Sistema
+Centralizar controle de compromissos entre pessoas, tempo e regras, com o objetivo de:
+	- Reduzir conflitos de agenda e sobreposição de horários
+	- Padronizar processos de agendamento
+	- Aumentar previsibilidade e organização operacional
+	- Reduzir dependência de controle manual e comunicação informal
+	- Criar confiança no processo de agendamento
+O sistema existe para organizar o tempo compartilhado.
+
+2. Problemas que o Sistema Resolve
+	- Agendas conflitantes
+	- Sobreposição de horários
+	- Uso ineficiente do tempo disponível
+	- Falta de visibilidade de disponibilidade real
+	- Cancelamentos desorganizados
+	- Reagendamentos manuais e confusos
+	- Falta de histórico confiável de alterações
+	- Comunicação fragmentada entre envolvidos
+	- Processos não padronizados
+	- Erros humanos recorrentes
+	
+3. Contextos de Uso
+Exemplos de aplicação do sistema:
+	- Clínicas (médica, odontológica, psicológica)
+	- Prestadores de serviço (consultoria, manutenção, aulas, atendimentos individuais)
+	- Empresas (salas de reunião, equipes internas, agendas compartilhadas)
+	
+O domínio é genérico e aplicável a qualquer cenário onde tempo compartilhado precisa ser coordenado.
+
+4. Escopo Conceitual Inicial
+Oque deve ser implementado de imediato
+	- Usuários e perfis bem definidos
+	- Agendas individuais
+	- Compromissos com entidade central
+	- Regras básicas de agendamento
+	- Histórico de ações e estados
+	- Nota / reputação automatizada do usuário
+	
+Oque não deve ser implementado agora
+	- Integrações externas
+	- Relatórios avançados
+	- Automação complexa de decisões
+	- Dashboards e indicadores estratégicos
+	
+Esses itens são explicitamente fora do escopo inicial
+
+5. Elementos Centrais do Sistema
+O sistema se baseia em quatro elementos fundamentais:
+	- Usuários
+	- Tempo (Agenda)
+	- Compromissos
+	- Regras
+
+Esses elementos:
+	- São independentes
+	- São interligados
+	- Não dependem de decisões técnicas
+	
+6. Usuários e Perfis
+Perfis fixos e bem definidos
+1. Cliente / Solicitante
+2. Profissional / Executor
+3. Administrador do Sistema
+
+Um usuário possui um perfil principal. As regras do sistema se baseiam nesse perfil.
+
+Responsabilidade explícita
+	- Toda ação parte de um usuário identificável
+	- O comportamento do usuário é avaliado ao longo do tempo
+	- Esse comportamento influencia regras futuras
+	
+7. Permissões Conceituais por Perfil
+Cliente / Solicitante
+	- Cria e edita os próprios compromissos pessoais que não estão associados a um perfil de profissional
+	- Solicita novos compromissos
+	- Visualiza disponibilidade
+	- Solicita cancelamento ou reagendamento dentro das regras
+	- Visualiza seus próprios compromissos
+	- Não executa decisões críticas
+	- Visualiza seus próprios dados
+	- Visualiza histórico passado
+Profissional / Executor
+	- Principal dono da agenda operacional
+	- Cria e edita compromissos pessoais ou profissionais
+	- Confirma ou rejeita solicitações
+	- Define disponibilidade e indisponibilidades
+	- Visualiza histórico passado e compromissos futuros
+	- Visualizar seus próprios dados
+	- Criar e administrar perfis de Cliente
+Administrador de Sistema
+	- Configura regras globais
+	- Define políticas e exceções
+	- Gerencia usuários e permissões
+	- Acessa histórico completos
+	- Não interfere no dia a dia operacional
+
+Não há sobreposição confusa de responsabilidades.
+
+8. Agenda (Tempo e Disponibilidade)
+	- Agenda individual por usuário relevante (principalmente profissionais)
+	- Clientes não oferecem tempo, apenas solicitam
+	- Disponibilidade define quando compromissos podem existir
+	- Indisponibilidades são explícitas
+	- Compromissos ocupam intervalos contínuos
+	- Não é permitida sobreposição de tempo
+	
+9. Compromisso (Agendamento)
+Papel no Sistema
+O compromisso é a unidade central do sistema
+
+Ele conecta:
+	- Usuários
+	- Tempo
+	- Regras
+	- Histórico
+	
+O que é um Compromisso
+Uma reserva de tempo associada a:
+	- Pessoas
+	- Um intervalo específico no calendário
+	
+Informações Essenciais
+	- Data
+	- Hora de início
+	- Duração
+	- Envolvidos (se for um compromisso profissional)
+	- Tipo de compromisso
+	- Estado atual
+	- Título
+	- Observações relevantes (campo flexível)
+	
+Recursos não são estruturados - o usuário identifica um compromisso pelo seu título e seu contexto nas observações
+
+10. Estados de Compromisso
+Estados reais
+	- Rascunho
+	- Agendado
+	- Cancelado
+	
+Estados conceituais (histórico / avaliação)
+	- Solicitado
+	- Atrasado
+	- Não compareceu
+	- Concluído
+	
+Os estados:
+	- Representam a linha do tempo do compromisso
+	- Definem ações permitidas
+	- Geram impacto em histórico e nota
+	
+Reagendamento não é um estado. É apenas uma alteração de horário registrada no histórico
+
+11. Regras de Negócio Básicas
+	- Bloqueio de sobreposição de horários
+	- Limites de antecedência mínima e máxima
+	- Regras de cancelamento
+	- Prioridade por antecedência
+	- Limites baseados na agenda disponível
+	- Penalidades baseadas em comportamento
+	
+Regras são:
+	- Explícitas
+	- Verificáveis
+	- Aplicadas uniformemente
+	
+12. Fluxos Principais
+1. Criação de compromisso
+2. Confirmação
+3. Alteração do horário (se necessário)
+4. Cancelamento (se necessário)
+5. Visualização na agenda
+
+Toda ação relevante:
+	- Passa por regras
+	- Gera estado
+	- Gera histórico
+Não existem atalhos fora do sistema
+
+13. Histórico e Registro de Ações
+	- Linha do tempo completa dos compromissos passados e futuros
+	- Permite visualização dos dados de cada compromisso
+	- Registro de cada mudança de estado
+	- Registro de quem fez, quando e o efeito
+	- Histórico é imutável
+	- Base para auditoria, nota e relatórios futuros
+	
+14. Nota / Reputação do Usuário
+	- Cálculo automático
+	- Baseado em comportamento real
+	- Atrasos, cancelamentos e não comparecimento impactam a nota
+	- Influencia prioridades e restrições futuras
+	
+15. Notificações e Lembretes
+	- Informa usuários
+	- Reduzem falhas humanas
+	- Aumentam previsibilidade
+Disparadas por:
+	- Criação
+	- Confirmação
+	- Alteração
+	- Cancelamento
+	- Mudanças de estado
+Momentos:
+	- Imediato
+	- Horas antes
+	- Dias antes
+	
+16. Dados e Informações Importantes
+	- Agenda e disponibilidade
+	- Compromissos e histórico
+	- Informações pessoais
+	- Nota do usuário
+	- Logs de alteração
+	
+Todos os dados são rastreáveis
+
+Pode ser simples no início
+	- Poucos perfis
+	- Regras básicas
+	- Agenda individual
+Deve ser pensado desde já
+	- Histórico longo
+	- Crescimento de usuários
+	- Complexidade gradual de regras
+	
+18. Riscos e pontos de Atenção
+	- Ignorar exceções
+	- Subestimar cancelamentos
+	- Estados inconsistentes
+	- Agenda confusa
+	- Regras pouco claras
+	- Dependência de controle manual
+Esses riscos são tratados pelo próprio modelo conceitual definido aqui
+
+Encerramento
+
+Este documento define os fundamentos do projeto.
+
+Tudo o que não está aqui:
+
+	- Ou não faz parte do escopo inicial
+
+	- Ou será validado durante a construção
+
+Ele é estável o suficiente para começar. Flexível o suficiente para evoluir sem perder estrutura.
