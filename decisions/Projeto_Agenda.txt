@@ -229,7 +229,7 @@ Deve ser pensado desde já
 	- Crescimento de usuários
 	- Complexidade gradual de regras
 	
-18. Riscos e pontos de Atenção
+17. Riscos e pontos de Atenção
 	- Ignorar exceções
 	- Subestimar cancelamentos
 	- Estados inconsistentes
