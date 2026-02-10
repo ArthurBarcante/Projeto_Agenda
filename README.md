@@ -421,4 +421,4 @@ Avaliação do Cancelamento
   - Falta de rastreabilidade
   - Dependência de controle manual
     
--Esses riscos são mitigados pela estrutura conceitual definida aqui.
+- Esses riscos são mitigados pela estrutura conceitual definida aqui.
