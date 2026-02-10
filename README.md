@@ -1,5 +1,5 @@
 # Projeto_Agenda
-# Projeto_Agenda
+
 Sistema de Agendamento — Fundamentos Conceituais
 
 Este documento consolida todo o planejamento conceitual do sistema de agendamento.
