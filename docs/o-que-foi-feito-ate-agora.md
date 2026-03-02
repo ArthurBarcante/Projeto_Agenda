@@ -4,6 +4,13 @@ Esta página registra o estado atual do projeto **AIgenda**.
 
 - Repositório: https://github.com/ArthurBarcante/Projeto_Agenda
 - Versão atual do projeto: **0.1**
+- Tag de versão publicada: **v0.1**
+
+## Publicação e versionamento
+
+- Projeto publicado e sincronizado no GitHub (`main`).
+- Tag anotada `v0.1` criada e enviada para o repositório remoto.
+- `README.md` revisado para refletir a versão atual do projeto (`0.1`).
 
 ## Banco de dados e migrations
 
@@ -73,6 +80,7 @@ Os testes cobrem principalmente: regras de tenant, modelo de empresa, regras de 
 - Autenticação por JWT implementada.
 - Núcleo de agendamentos (criar, editar, cancelar) implementado com validações.
 - Suite inicial de testes automatizados implementada.
+- Código e documentação alinhados com a versão `0.1` no GitHub.
 
 ## Próximos passos sugeridos
 
