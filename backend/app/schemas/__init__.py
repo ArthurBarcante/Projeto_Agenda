@@ -1,3 +1,3 @@
-from app.schemas.appointment import AppointmentResponse, AppointmentUpdate
+from app.schemas.compromisso import CompromissoAtualizacao, CompromissoResposta
 
-__all__ = ["AppointmentUpdate", "AppointmentResponse"]
+__all__ = ["CompromissoAtualizacao", "CompromissoResposta"]

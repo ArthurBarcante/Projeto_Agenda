@@ -42,6 +42,25 @@ Resumo breve:
 - **P1:** ampliar testes de integração, padronizar erros e consolidar política de timezone.
 - **P2:** melhorar observabilidade e rastreabilidade requisito-código-teste.
 
+## Diretriz de arquitetura (Fase 5)
+
+- **Frontend (feature-based):**
+	- `src/app`: apenas roteamento e composição de páginas.
+	- `src/features`: regras por domínio (`autenticacao`, `compromissos`, `usuarios`).
+	- `src/shared/api`: cliente HTTP e endpoints centralizados.
+	- `src/shared`: componentes base, utilitários e tipos reutilizáveis.
+
+- **Backend (modularização progressiva):**
+	- `app/api`: camada HTTP.
+	- `app/modules/compromissos/services`: serviço de domínio em português.
+	- `app/modules/schedule/services`: mantido como compatibilidade para transição.
+	- `app/models` e `app/schemas`: contratos e persistência.
+
+- **Princípios de evolução contínua:**
+	- Nova regra de negócio nasce no módulo de domínio (`modules/<dominio>/services`).
+	- Camada de API não implementa regra de negócio; apenas orquestra dependências e contratos.
+	- Serviços de frontend devem consumir a API via `shared/api/httpClient.ts`.
+
 ## Referências rápidas
 
 - [Página inicial](../../README.md)

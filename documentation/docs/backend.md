@@ -13,8 +13,7 @@ backend/
 │   │   ├── deps.py
 │   │   ├── auth/
 │   │   │   ├── __init__.py
-│   │   │   ├── auth.py
-│   │   │   └── deps.py
+│   │   │   └── auth.py
 │   │   ├── schedule/
 │   │   │   ├── __init__.py
 │   │   │   └── appointments.py
@@ -64,9 +63,8 @@ backend/
 ### API (camada HTTP)
 
 - `app/api/deps.py`: dependências globais da API (ex.: usuário autenticado).
-- `app/api/auth/auth.py`: endpoint de login e geração de token.
-- `app/api/auth/deps.py`: dependências específicas da autenticação.
-- `app/api/schedule/appointments.py`: endpoints de criação/edição/cancelamento de compromissos.
+- `app/api/auth/auth.py`: endpoint de autenticação (`/autenticacao/entrar`) e geração de token.
+- `app/api/schedule/appointments.py`: endpoints de criação/edição/cancelamento (`/compromissos`).
 - `app/api/test/tests.py`: endpoints utilitários de verificação.
 
 ### Core (regras transversais)
@@ -89,6 +87,11 @@ backend/
 - `app/models/user.py`: entidade de usuário.
 - `app/models/appointment.py`: entidade de compromisso e máquina de estado.
 - `app/models/appointment_participant.py`: relação compromisso-participante.
+
+### Nomenclatura física do banco
+
+- Tabelas principais padronizadas para português: `empresas`, `usuarios`, `compromissos`, `participantes_compromissos`.
+- Migração de tradução de nomenclatura: `alembic/versions/b7e4c2a9d1f0_traduz_nomenclatura_banco_para_portugues.py`.
 
 ### Aplicação (regras de negócio)
 

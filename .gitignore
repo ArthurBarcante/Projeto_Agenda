@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Local environments
+.venv/
+venv/
+virtualenv/
+
+# Environment files
+.env
+*.env
+
+# Frontend
+frontend/aigenda-frontend/.next/
+frontend/aigenda-frontend/node_modules/
+frontend/aigenda-frontend/out/
+frontend/aigenda-frontend/coverage/
+
+# OS/editor
+.DS_Store
+.vscode/

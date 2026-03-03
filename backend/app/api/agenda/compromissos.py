@@ -1,0 +1,1 @@
+from app.api.compromissos.compromissos import router
