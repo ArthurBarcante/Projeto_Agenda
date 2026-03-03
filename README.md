@@ -1,63 +1,32 @@
-# PROJETO AGENDA - Sistema Inteligente de Organização e Evolução Pessoal (AIGENDA)
+# AIGENDA
 
-**Versão atual:** `0.1`  
-**Tag:** `v0.1`
+Sistema inteligente de organização e evolução pessoal com foco em agenda estruturada, prevenção de conflitos, isolamento multi-tenant e evolução por fases.
 
-## Objetivo do sistema
+## Estrutura principal do projeto
 
-O **AIGENDA** é um sistema digital para ajudar pessoas e equipes a organizarem sua rotina de forma inteligente, progressiva e adaptativa.
+```text
+aigenda/
+├── backend/        # Código backend (FastAPI, domínio, serviços, ORM, migrações)
+├── frontend/       # Código frontend (Next.js)
+├── config/         # Configurações e dependências do projeto
+├── tests/          # Testes automatizados
+├── documentation/  # Documentação de apoio
+└── virtualenv/     # Ambientes virtuais Python
+```
 
-Não é apenas uma agenda tradicional. O sistema foi construído para:
+## Navegação do projeto no GitHub
 
-- organizar compromissos com consistência estrutural;
-- evitar conflitos de horário automaticamente;
-- impedir sobreposição de tarefas;
-- manter integridade organizacional;
-- preparar base sólida para evolução comportamental e personalização futura.
+- [Visão geral do projeto (página inicial)](README.md)
+- [Backend: estrutura e arquivos](documentation/docs/backend.md)
+- [Frontend: estrutura e arquivos](documentation/docs/frontend.md)
+- [Configurações e tecnologias](documentation/docs/config.md)
+- [Virtualenv (ambiente Python)](documentation/docs/virtualenv.md)
+- [Documentação de fases e roadmap](documentation/docs/documentation.md)
+- [Testes automatizados](documentation/docs/tests.md)
 
-## Princípio de autonomia
+## Visão geral do sistema
 
-Desde o primeiro uso, o usuário mantém liberdade para criar, ajustar e cancelar compromissos.  
-O sistema não bloqueia ações por nível: a evolução futura amplia personalização e profundidade, sem restringir autonomia.
-
-## Estado atual do projeto
-
-O AIGENDA está estruturado em fases evolutivas. Atualmente, a **Fase 1 - Organização Inteligente** está implementada.
-
-Essa fase entrega:
-
-- cadastro e edição de compromissos;
-- múltiplos participantes;
-- prevenção automática de conflitos;
-- isolamento multi-tenant por empresa;
-- controle de auditoria (apenas criador altera/cancela);
-- máquina de estados segura.
-
-## Arquitetura atual
-
-- Arquitetura modular por domínio.
-- Fluxo interno: Controllers (rotas) -> Services (regras de negócio) -> Repository/ORM -> Models (domínio).
-- Separação de responsabilidades aplicada entre API, serviços, domínio e persistência.
-
-## Tecnologias utilizadas
-
-- FastAPI
-- Uvicorn
-- SQLAlchemy
-- PostgreSQL
-- Alembic
-- Python-JOSE (JWT)
-- Passlib (bcrypt)
-- Pytest
-- Python-dotenv
-
-## Documentação
-
-- [Status do projeto (o que foi feito até agora)](docs/o-que-foi-feito-ate-agora.md)
-- [Funcionalidades atuais](docs/funcionalidades-atuais.md)
-- [Funcionalidades futuras (roadmap)](docs/funcionalidades-futuras.md)
-- [Roadmap de melhorias da Fase 1](docs/roadmap-melhorias-fase1.md)
-
-## Repositório
-
-- GitHub: https://github.com/ArthurBarcante/Projeto_Agenda
+- **Fase atual:** Fase 1 (Organização Inteligente) implementada.
+- **Objetivo atual:** organizar compromissos com integridade e sem sobreposição.
+- **Base técnica:** FastAPI + SQLAlchemy + Alembic + PostgreSQL + Next.js.
+- **Diretriz do produto:** autonomia permanente do usuário; evolução amplia a experiência sem bloquear funcionalidades base.
