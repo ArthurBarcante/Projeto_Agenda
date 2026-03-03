@@ -56,6 +56,7 @@ Essa fase entrega:
 - [Status do projeto (o que foi feito até agora)](docs/o-que-foi-feito-ate-agora.md)
 - [Funcionalidades atuais](docs/funcionalidades-atuais.md)
 - [Funcionalidades futuras (roadmap)](docs/funcionalidades-futuras.md)
+- [Roadmap de melhorias da Fase 1](docs/roadmap-melhorias-fase1.md)
 
 ## Repositório
 

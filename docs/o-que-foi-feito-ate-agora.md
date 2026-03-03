@@ -31,6 +31,7 @@ Esta página registra o status executivo do projeto **AIGENDA**.
 
 - [Funcionalidades atuais](funcionalidades-atuais.md)
 - [Funcionalidades futuras](funcionalidades-futuras.md)
+- [Roadmap de melhorias da Fase 1](roadmap-melhorias-fase1.md)
 
 ## Próximo marco sugerido
 
