@@ -1,32 +1,92 @@
-# AIGENDA
+# AIgenda
 
-Sistema inteligente de organização e evolução pessoal com foco em agenda estruturada, prevenção de conflitos, isolamento multi-tenant e evolução por fases.
+O AIgenda é um sistema de organização inteligente de compromissos, pensado para equipes e empresas que precisam de agendamento confiável, seguro e escalável.
 
-## Estrutura principal do projeto
+O projeto já nasce com fundamentos de arquitetura profissional: separação por camadas, isolamento multi-tenant, controle de autoria, prevenção automática de conflitos de agenda e testes estruturais.
+
+## Objetivo do sistema
+
+- Organizar compromissos de forma centralizada
+- Permitir múltiplos participantes por compromisso
+- Evitar conflitos de horário automaticamente
+- Manter rastreabilidade de autoria e histórico
+- Preparar base técnica para evolução em fases (engajamento, personalização e inteligência adaptativa)
+
+## Stack do projeto
+
+- Backend: FastAPI + SQLAlchemy + Alembic
+- Banco de dados: PostgreSQL (via Docker Compose)
+- Frontend: React + Vite + TypeScript
+- Testes: Pytest
+
+## Estrutura principal
 
 ```text
 aigenda/
-├── backend/        # Código backend (FastAPI, domínio, serviços, ORM, migrações)
-├── frontend/       # Código frontend (Next.js)
-├── config/         # Configurações e dependências do projeto
-├── tests/          # Testes automatizados
-├── documentation/  # Documentação de apoio
-└── virtualenv/     # Ambientes virtuais Python
+├── backend/
+├── frontend/
+├── docs/
+├── config/
+├── tests/
+├── docker-compose.yml
+└── Makefile
 ```
 
-## Navegação do projeto no GitHub
+## Como executar
 
-- [Visão geral do projeto (página inicial)](README.md)
-- [Backend: estrutura e arquivos](documentation/docs/backend.md)
-- [Frontend: estrutura e arquivos](documentation/docs/frontend.md)
-- [Configurações e tecnologias](documentation/docs/config.md)
-- [Virtualenv (ambiente Python)](documentation/docs/virtualenv.md)
-- [Documentação de fases e roadmap](documentation/docs/documentation.md)
-- [Testes automatizados](documentation/docs/tests.md)
+1. Criar e ativar ambiente virtual:
 
-## Visão geral do sistema
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-- **Fase atual:** Fase 1 (Organização Inteligente) implementada.
-- **Objetivo atual:** organizar compromissos com integridade e sem sobreposição.
-- **Base técnica:** FastAPI + SQLAlchemy + Alembic + PostgreSQL + Next.js.
-- **Diretriz do produto:** autonomia permanente do usuário; evolução amplia a experiência sem bloquear funcionalidades base.
+2. Instalar dependências:
+
+```bash
+pip install -r config/requirements.txt
+pip install -r config/requirements-dev.txt
+```
+
+3. Subir infraestrutura (PostgreSQL):
+
+```bash
+docker compose up -d
+```
+
+4. Rodar migrações:
+
+```bash
+alembic -c config/alembic.ini upgrade head
+```
+
+5. Executar API:
+
+```bash
+uvicorn backend.app.main:app --reload
+```
+
+6. Executar frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Documentação funcional por fase
+
+- Fase 1 (Organização Inteligente): `docs/fase-1.md`
+- Frontend da Fase 1: `docs/fase-1-frontend.md`
+- Roadmap de funcionalidades futuras: `docs/funcionalidades-futuras.md`
+- Guia detalhado da estrutura de pastas e arquivos: `docs/estrutura-do-projeto.md`
+
+## Qualidade e validação
+
+- Testes automatizados no diretório `tests/`
+- Migrações versionadas em `backend/alembic/versions/`
+- Organização por módulos de domínio no backend (`auth`, `users`, `schedule`, `companies`)
+
+## Visão de evolução
+
+O AIgenda segue uma estratégia em fases: primeiro garantir uma base robusta de organização (Fase 1), depois evoluir para engajamento e gamificação (Fase 2), personalização progressiva (Fase 3) e inteligência adaptativa (Fase 4).
