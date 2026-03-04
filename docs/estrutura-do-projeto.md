@@ -1,117 +1,179 @@
-# Estrutura do Projeto — Guia Detalhado
+# Estrutura do Projeto — Guia Completo
 
-Este documento descreve, de forma objetiva, o papel de cada pasta e dos principais arquivos do AIgenda.
+Este documento descreve o corpo atual de pastas e arquivos do AIgenda, com foco no papel de cada parte da aplicação.
+
+## Estado estrutural consolidado
+
+- `frontend/` é a pasta oficial do frontend.
+- A pasta redundante `frontend/aigenda-frontend/` foi removida.
+- A pasta redundante `documentation/` foi removida.
+- Toda documentação oficial permanece em `docs/`.
 
 ## Raiz do projeto (`aigenda/`)
 
-- `README.md`: visão geral do sistema, execução local e links para documentação.
-- `docker-compose.yml`: sobe infraestrutura de apoio (ex.: PostgreSQL).
-- `Makefile`: atalhos de comandos de desenvolvimento e automação.
-- `.gitignore`: arquivos/pastas ignorados no versionamento.
+- `.gitignore`: regras de arquivos ignorados.
+- `README.md`: visão geral, execução e links de documentação.
+- `backend/`: API, domínio, modelos e migrações.
+- `config/`: configurações e dependências Python.
+- `docs/`: documentação funcional e técnica.
+- `frontend/`: aplicação Next.js.
+- `tests/`: testes automatizados do backend.
 
 ## Backend (`backend/`)
 
-### `backend/app/`
+### Arquivos e pastas principais
 
-Contém o código principal da API FastAPI.
+- `backend/aigenda.db`: base SQLite local (ambiente de desenvolvimento).
+- `backend/alembic/`: mecanismo de migração de schema.
+- `backend/app/`: código principal da aplicação FastAPI.
 
-- `main.py`: inicialização da aplicação e registro de rotas.
+### Migrações (`backend/alembic/`)
 
-#### `backend/app/core/`
+- `env.py`: configura contexto de execução do Alembic.
+- `script.py.mako`: template para novas migrações.
+- `versions/`: histórico de evolução do banco:
+	- `06b0bc232d22_criar_tabela_empresas.py`
+	- `3afa394c9de8_criar_tabela_usuarios.py`
+	- `8f2c7a1b90d4_adicionar_indices_conflito_compromissos.py`
+	- `b7e4c2a9d1f0_traduz_nomenclatura_banco_para_portugues.py`
 
-Configurações transversais da aplicação.
+### Aplicação (`backend/app/`)
 
-- `config.py`: leitura de variáveis de ambiente e configurações globais.
-- `database.py`: engine/sessão do banco e utilitários de acesso.
-- `dependencies.py`: dependências reutilizáveis (injeção em rotas/serviços).
-- `exceptions.py`: exceções de domínio e tratamento padronizado.
-- `security.py`: utilitários de autenticação e segurança.
+- `__init__.py`: metadados do pacote backend.
+- `principal.py`: ponto de entrada FastAPI e inclusão de rotas.
 
-#### `backend/app/modules/`
+#### Camada de API (`backend/app/api/`)
 
-Módulos de domínio, organizados por contexto de negócio.
+- `dependencias.py`: dependências compartilhadas das rotas.
+- `autenticacao/autenticacao.py`: endpoints de autenticação.
+- `compromissos/compromissos.py`: endpoints de compromissos.
+- `agenda/compromissos.py`: endpoints de agenda.
+- `testes/testes.py`: endpoints auxiliares de teste/diagnóstico.
 
-##### `auth/`
+#### Núcleo (`backend/app/core/`)
 
-- `routes.py`: endpoints de autenticação.
-- `schemas.py`: contratos de entrada/saída da autenticação.
+- `inquilino.py`: controle de contexto multi-tenant.
+- `autenticacao/seguranca.py`: utilitários de segurança/autorização.
+- `autenticacao/token_jwt.py`: criação/validação de JWT.
+- `config/configuracoes.py`: configurações globais da aplicação.
+- `config/uuid7.py`: geração/manipulação de UUID7.
 
-##### `users/`
+#### Banco e persistência
 
-- `models.py`: entidades de usuário no banco.
-- `schemas.py`: validação e serialização de dados de usuário.
-- `services.py`: regras de negócio de usuários.
-- `routes.py`: endpoints de usuários.
+- `db/sessao.py`: sessão/engine de acesso ao banco.
+- `repositorios/base.py`: padrão base de repositório.
 
-##### `schedule/`
+#### Modelos (`backend/app/models/`)
 
-- `models.py`: entidades de compromissos e relações.
-- `schemas.py`: contratos de criação/retorno de compromissos.
-- `repository.py`: acesso estruturado a dados de agenda.
-- `services.py`: regras de conflito, estado e autoria.
-- `routes.py`: endpoints de agenda.
+- `base.py`: base ORM comum.
+- `mixins.py`: comportamentos reutilizáveis para entidades.
+- `empresa.py`: entidade Empresa (tenant).
+- `usuario.py`: entidade Usuário.
+- `compromisso.py`: entidade Compromisso.
+- `participante_compromisso.py`: associação de participantes em compromissos.
 
-##### `companies/`
+#### Schemas (`backend/app/schemas/`)
 
-- `models.py`: entidades relacionadas a empresas/tenant.
+- `compromisso.py`: contratos atuais de entrada/saída de compromisso.
+- `compromisso_legado.py`: compatibilidade com formato legado.
 
-#### `backend/app/services/`
+#### Módulos de domínio (`backend/app/modules/`)
 
-Espaço para serviços compartilhados entre módulos.
+- `agenda/services/servico_compromisso.py`: regras de serviço da agenda.
+- `compromissos/services/compromisso_service.py`: regras de negócio de compromissos.
+- `auth/`, `companies/`, `schedule/`, `users/`: estrutura preparada para expansão por domínio.
 
-#### `backend/app/utils/`
+#### Pastas de apoio
 
-Utilitários genéricos para apoio às camadas da aplicação.
-
-### `backend/alembic/`
-
-Controle de migrações de banco de dados.
-
-- `env.py`: configuração de execução das migrações.
-- `script.py.mako`: template padrão para novos scripts de migração.
-- `versions/`: histórico versionado de alterações de schema.
-
-## Configuração (`config/`)
-
-- `alembic.ini`: configuração do Alembic.
-- `requirements.txt`: dependências de produção.
-- `requirements-dev.txt`: dependências de desenvolvimento.
-- `.env`: variáveis de ambiente locais (não deve ser exposto publicamente).
+- `services/`: serviços compartilhados de aplicação.
+- `utils/`: utilitários gerais.
 
 ## Frontend (`frontend/`)
 
-Aplicação cliente em React + TypeScript + Vite.
+Frontend oficial em Next.js (App Router) com React, TypeScript e Tailwind.
 
-- `package.json`: scripts e dependências do frontend.
-- `vite.config.ts`: configuração de build/dev server.
-- `index.html`: página base.
+### Configuração da aplicação
 
-### `frontend/src/`
+- `.gitignore`: regras de ignorados do frontend.
+- `package.json`: scripts e dependências.
+- `package-lock.json`: lockfile das dependências.
+- `next.config.ts`: configuração do Next.js.
+- `tsconfig.json`: configuração TypeScript.
+- `eslint.config.mjs`: configuração de lint.
+- `postcss.config.mjs`: pipeline PostCSS.
+- `tailwind.config.ts`: tokens e escopo Tailwind.
 
-- `main.tsx`: bootstrap do React.
-- `App.tsx`: composição principal.
-- `Login.tsx`: tela de login.
-- `Dashboard.tsx`: painel inicial autenticado.
+### Assets estáticos (`frontend/public/`)
 
-## Documentação (`docs/`)
+- `file.svg`, `globe.svg`, `next.svg`, `vercel.svg`, `window.svg`.
 
-- `FASE1_ARQUITETURA_OFICIAL.md`: diretriz arquitetural original da fase 1.
-- `fase-1.md`: escopo funcional da Organização Inteligente.
-- `fase-1-frontend.md`: recorte do frontend na fase 1.
+### App Router (`frontend/src/app/`)
+
+- `layout.tsx`: layout base da aplicação.
+- `globals.css`: estilos globais.
+- `page.tsx`: rota raiz.
+- `favicon.ico`: ícone do app.
+- `(auth)/entrar/page.tsx`: página de login.
+- `(dashboard)/painel/page.tsx`: painel do usuário.
+- `(dashboard)/compromissos/page.tsx`: página de compromissos.
+- `(dashboard)/perfil/page.tsx`: página de perfil.
+
+### Features (`frontend/src/features/`)
+
+- `autenticacao/`
+	- `services/autenticacaoService.ts`
+	- `types/autenticacao.ts`
+	- `ui/EntrarView.tsx`
+- `compromissos/`
+	- `hooks/useCompromissos.ts`
+	- `services/compromissosService.ts`
+	- `types/compromisso.ts`
+	- `ui/CompromissosView.tsx`
+	- `ui/PainelView.tsx`
+- `usuarios/`
+	- `ui/PerfilView.tsx`
+
+### Compartilhado (`frontend/src/shared/`)
+
+- `api/endpoints.ts`: catálogo de endpoints de integração.
+- `api/httpClient.ts`: cliente HTTP centralizado.
+- `components/PaginaBase.tsx`: componente base de página.
+- `lib/formatarDataHora.ts`: utilitário de formatação de data/hora.
+- `types/compromisso.ts`: tipos compartilhados de compromisso.
+
+### Suporte interno (`frontend/src/`)
+
+- `store/README.md`: documentação do padrão de estado global.
+- `styles/README.md`: documentação de organização de estilos.
+
+## Configuração (`config/`)
+
+- `.env`: variáveis de ambiente locais.
+- `.gitignore`: ignorados específicos da pasta.
+- `alembic.ini`: configuração do Alembic.
+- `requirements.txt`: dependências Python do backend.
+
+## Documentação oficial (`docs/`)
+
+- `fase-1.md`: escopo funcional da Fase 1 (Organização Inteligente).
+- `fase-1-frontend.md`: recorte funcional do frontend na Fase 1.
 - `funcionalidades-futuras.md`: roadmap das fases 2, 3 e 4.
-- `estrutura-do-projeto.md`: este guia de estrutura.
+- `estrutura-do-projeto.md`: este guia completo da estrutura.
 
 ## Testes (`tests/`)
 
-- `test_schedule.py`: cenários de regras da agenda.
-- `test_users.py`: cenários de regras de usuários.
-- `test_real_conflict.py`: validação de conflito real de agenda.
-- `test_real_concurrency_exclude.py`: cenário de concorrência e exclusão.
+- `test_appointment_cancel_service.py`: valida cancelamento de compromissos.
+- `test_appointment_model.py`: valida regras do modelo de compromisso.
+- `test_appointment_time_conflict_service.py`: valida conflitos de horário.
+- `test_base_repository.py`: valida camada base de repositórios.
+- `test_company_model.py`: valida entidade/consistência de empresa.
+- `test_env.py`: valida ambiente/configurações.
+- `test_tenant_scope_enforcement.py`: valida isolamento por tenant.
 
 ## Convenções adotadas
 
-- `routes.py`: camada HTTP (entrada/saída da API).
-- `services.py`: regras de negócio.
-- `repository.py`: acesso persistente aos dados.
-- `models.py`: entidades do banco.
-- `schemas.py`: contratos de validação e serialização.
+- `api/`: camada HTTP e contratos de acesso externo.
+- `services/`: regras de negócio.
+- `repositorios/`: acesso a dados/persistência.
+- `models/`: entidades e mapeamento ORM.
+- `schemas/`: validação e serialização de dados.

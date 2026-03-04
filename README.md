@@ -16,7 +16,7 @@ O projeto já nasce com fundamentos de arquitetura profissional: separação por
 
 - Backend: FastAPI + SQLAlchemy + Alembic
 - Banco de dados: PostgreSQL (via Docker Compose)
-- Frontend: React + Vite + TypeScript
+- Frontend: Next.js + React + TypeScript + Tailwind CSS
 - Testes: Pytest
 
 ## Estrutura principal
@@ -41,11 +41,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-2. Instalar dependências:
+2. Instalar dependências do backend:
 
 ```bash
 pip install -r config/requirements.txt
-pip install -r config/requirements-dev.txt
 ```
 
 3. Subir infraestrutura (PostgreSQL):
@@ -60,10 +59,10 @@ docker compose up -d
 alembic -c config/alembic.ini upgrade head
 ```
 
-5. Executar API:
+5. Executar API (entrypoint atual):
 
 ```bash
-uvicorn backend.app.main:app --reload
+PYTHONPATH=backend uvicorn app.principal:app --reload
 ```
 
 6. Executar frontend:
@@ -85,7 +84,7 @@ npm run dev
 
 - Testes automatizados no diretório `tests/`
 - Migrações versionadas em `backend/alembic/versions/`
-- Organização por módulos de domínio no backend (`auth`, `users`, `schedule`, `companies`)
+- Organização por domínio no backend (`api`, `models`, `repositorios`, `modules`)
 
 ## Visão de evolução
 
