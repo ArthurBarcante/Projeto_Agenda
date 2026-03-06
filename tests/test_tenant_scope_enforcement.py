@@ -25,7 +25,7 @@ def test_tenant_scoped_query_gets_automatic_company_filter():
     session_module._enforce_tenant_scope(execute_state)
     sql = str(execute_state.statement)
 
-    assert "usuarios.empresa_id" in sql
+    assert "users.company_id" in sql
     clear_current_company_id()
 
 

@@ -1,1 +1,1 @@
-from app.api.compromissos.compromissos import router
+from app.modules.agenda.api.compromissos import router

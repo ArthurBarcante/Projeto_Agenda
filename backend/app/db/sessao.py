@@ -18,7 +18,7 @@ SessaoLocal = sessionmaker(
 
 
 def _eh_entidade_escopo_inquilino(entidade: type) -> bool:
-    return bool(getattr(entity, "__tenant_scoped__", False) and hasattr(entity, "company_id"))
+    return bool(getattr(entidade, "__tenant_scoped__", False) and hasattr(entidade, "company_id"))
 
 
 @event.listens_for(SessaoLocal, "do_orm_execute")

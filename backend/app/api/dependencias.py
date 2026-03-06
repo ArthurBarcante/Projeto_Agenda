@@ -4,25 +4,28 @@ from sqlalchemy.orm import Session
 from jose import JWTError
 
 from app.core.autenticacao.token_jwt import decodificar_token
+from app.core.errors.api_error import APIError
+from app.core.errors.error_codes import ErrorCode
 from app.core.inquilino import definir_empresa_atual_id
 from app.db.sessao import obter_db
-from app.models.usuario import Usuario
-from app.models.empresa import Empresa
+from app.models.user import User
+from app.models.company import Company
+from app.modules.permissoes.services.permission_service import PermissionService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/autenticacao/entrar")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def obter_usuario_atual(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(obter_db)
-) -> Usuario:
+) -> User:
 
     try:
         payload = decodificar_token(token)
-        usuario_id: str = payload.get("sub")
-        empresa_id: str = payload.get("company_id")
+        user_id: str = payload.get("sub")
+        company_id: str = payload.get("company_id")
 
-        if usuario_id is None or empresa_id is None:
+        if user_id is None or company_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token inválido"
@@ -34,11 +37,11 @@ def obter_usuario_atual(
             detail="Token inválido"
         )
 
-    definir_empresa_atual_id(empresa_id)
+    definir_empresa_atual_id(company_id)
 
-    usuario = db.query(Usuario).filter(
-        Usuario.id == usuario_id,
-        Usuario.company_id == empresa_id
+    usuario = db.query(User).filter(
+        User.id == user_id,
+        User.company_id == company_id
     ).first()
 
     if not usuario:
@@ -51,12 +54,12 @@ def obter_usuario_atual(
 
 
 def obter_empresa_atual(
-    usuario_atual: Usuario = Depends(obter_usuario_atual),
+    usuario_atual: User = Depends(obter_usuario_atual),
     db: Session = Depends(obter_db)
-) -> Empresa:
+) -> Company:
 
-    empresa = db.query(Empresa).filter(
-        Empresa.id == usuario_atual.company_id
+    empresa = db.query(Company).filter(
+        Company.id == usuario_atual.company_id
     ).first()
 
     if not empresa:
@@ -66,3 +69,23 @@ def obter_empresa_atual(
         )
 
     return empresa
+
+
+def require_permission(codigo_permissao: str):
+    def guard(
+        usuario_atual: User = Depends(obter_usuario_atual),
+        db: Session = Depends(obter_db),
+    ) -> User:
+        permissao_service = PermissionService(db)
+        if not permissao_service.usuario_tem_permissao(
+            usuario_id=usuario_atual.id,
+            codigo_permissao=codigo_permissao,
+        ):
+            raise APIError(
+                codigo=ErrorCode.USUARIO_NAO_AUTORIZADO,
+                mensagem="Usuário não possui permissão para esta ação",
+                status_code=status.HTTP_403_FORBIDDEN,
+            )
+        return usuario_atual
+
+    return guard

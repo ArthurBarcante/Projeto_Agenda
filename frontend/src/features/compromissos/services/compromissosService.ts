@@ -3,8 +3,10 @@ import { requisicaoHttp } from "@/shared/api/httpClient";
 
 import type { CompromissoApi } from "@/features/compromissos/types/compromisso";
 
-export async function listarCompromissos(): Promise<CompromissoApi[]> {
-  return requisicaoHttp<CompromissoApi[]>(endpointsApi.compromissos.listar, {
+export async function listAppointments(): Promise<CompromissoApi[]> {
+  return requisicaoHttp<CompromissoApi[]>(endpointsApi.appointments.list, {
     method: "GET",
   });
 }
+
+export const listarCompromissos = listAppointments;

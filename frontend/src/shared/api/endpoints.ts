@@ -1,8 +1,8 @@
 export const endpointsApi = {
-  autenticacao: {
-    entrar: "/autenticacao/entrar",
+  auth: {
+    login: "/auth/login",
   },
-  compromissos: {
-    listar: "/compromissos",
+  appointments: {
+    list: "/appointments",
   },
 } as const;

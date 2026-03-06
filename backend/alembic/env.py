@@ -5,10 +5,18 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.models.base import Base
-from app.models.empresa import Empresa
-from app.models.usuario import Usuario
-from app.models.compromisso import Compromisso
-from app.models.participante_compromisso import ParticipanteCompromisso
+from app.models.company import Company
+from app.models.user import User
+from app.models.appointment import Appointment
+from app.models.appointment_participant import AppointmentParticipant
+from app.models.audit_log import AuditLog
+from app.models.idempotency_key import IdempotencyKey
+from app.modules.outbox.models.outbox_event import OutboxEvent
+from app.modules.webhooks.models.webhook_subscription import WebhookSubscription
+from app.modules.permissoes.models.permission import Permission
+from app.modules.permissoes.models.role import Role
+from app.modules.permissoes.models.role_permission import RolePermission
+from app.modules.permissoes.models.user_role import UserRole
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -17,6 +17,7 @@ def _build_chain_query(first_result):
     query = MagicMock()
     query.outerjoin.return_value = query
     query.filter.return_value = query
+    query.with_for_update.return_value = query
     query.first.return_value = first_result
     return query
 
