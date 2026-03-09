@@ -12,12 +12,12 @@ class OutboxService:
 
     def registrar_evento(
         self,
-        empresa_id: UUID,
-        tipo_evento: str,
+        company_id: UUID,
+        event_type: str,
         payload: dict[str, object],
     ) -> OutboxEvent:
         return self.repository.criar_evento(
-            empresa_id=empresa_id,
-            tipo_evento=tipo_evento,
+            company_id=company_id,
+            event_type=event_type,
             payload=payload,
         )

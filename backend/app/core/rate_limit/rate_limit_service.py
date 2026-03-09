@@ -15,17 +15,17 @@ def _obter_redis_client() -> Redis:
     return _redis_client
 
 
-def _chave_minuto_atual(empresa_id: UUID | str) -> str:
+def _chave_minuto_atual(company_id: UUID | str) -> str:
     minuto_atual = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
-    return f"rate_limit:{empresa_id}:{minuto_atual}"
+    return f"rate_limit:{company_id}:{minuto_atual}"
 
 
-async def verificar_rate_limit(empresa_id: UUID | str) -> bool:
+async def verificar_rate_limit(company_id: UUID | str) -> bool:
     redis = _obter_redis_client()
-    chave = _chave_minuto_atual(empresa_id)
+    key = _chave_minuto_atual(company_id)
 
-    contador = await redis.incr(chave)
+    contador = await redis.incr(key)
     if contador == 1:
-        await redis.expire(chave, 60)
+        await redis.expire(key, 60)
 
     return contador > settings.RATE_LIMIT_REQUESTS_PER_MINUTE

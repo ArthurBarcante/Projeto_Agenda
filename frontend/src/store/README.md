@@ -1,3 +1,3 @@
 # store
 
-Diretório reservado para estado global compartilhado entre features.
+Directory reserved for shared global state across features.

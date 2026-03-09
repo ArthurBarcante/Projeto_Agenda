@@ -29,7 +29,7 @@ def _mensagem_http_exception(exc: HTTPException) -> str:
     if isinstance(detalhe, str):
         return detalhe
     if detalhe is None:
-        return "Erro na requisição"
+        return "Erro na request"
     return str(detalhe)
 
 
@@ -40,7 +40,7 @@ def register_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(HTTPException)
     async def handle_http_exception(_: Request, exc: HTTPException) -> JSONResponse:
-        codigo = ErrorCode.VALIDACAO_FALHOU if exc.status_code < 500 else ErrorCode.ERRO_INTERNO
+        codigo = ErrorCode.VALIDATION_FAILED if exc.status_code < 500 else ErrorCode.INTERNAL_ERROR
         return JSONResponse(
             status_code=exc.status_code,
             content=_payload(codigo, _mensagem_http_exception(exc)),
@@ -50,20 +50,20 @@ def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(ValidationError)
     async def handle_validation_error(_: Request, exc: Exception) -> JSONResponse:
         if isinstance(exc, RequestValidationError):
-            mensagem = "Dados de entrada inválidos"
+            mensagem = "Dados de entrada invalids"
         elif isinstance(exc, ValidationError):
-            mensagem = "Falha de validação"
+            mensagem = "Falha de validation"
         else:
-            mensagem = "Falha de validação"
+            mensagem = "Falha de validation"
 
         return JSONResponse(
             status_code=422,
-            content=_payload(ErrorCode.VALIDACAO_FALHOU, mensagem),
+            content=_payload(ErrorCode.VALIDATION_FAILED, mensagem),
         )
 
     @app.exception_handler(Exception)
     async def handle_unexpected_error(_: Request, __: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=500,
-            content=_payload(ErrorCode.ERRO_INTERNO, "Erro interno no servidor"),
+            content=_payload(ErrorCode.INTERNAL_ERROR, "Erro interno no servidor"),
         )

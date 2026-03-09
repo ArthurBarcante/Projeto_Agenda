@@ -1,135 +1,240 @@
-from fastapi import HTTPException
+from datetime import datetime
+from uuid import UUID
+
+from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
 
 from app.core.errors.api_error import APIError
+from app.core.errors.error_codes import ErrorCode
 from app.core.tenant.tenant_context import clear_tenant, set_tenant
-from app.modules.agenda.services.compromisso_service import CompromissoService
+from app.modules.schedule.models.appointment import Appointment
+from app.modules.schedule.models.appointment import AppointmentStatus
+from app.modules.schedule.models.appointment_participant import AppointmentParticipant
+from app.modules.schedule.repositories.appointment_repository import AppointmentRepositoryAlias
+from app.modules.schedule.schemas.appointment import AppointmentCreate, AppointmentUpdate
+from app.modules.users.models.user import User
+from app.modules.audit.services.audit_service import AuditService
+from app.modules.outbox.services.outbox_service import OutboxService
 
 
-class AppointmentService(CompromissoService):
+class AppointmentService:
     _DETAIL_MAP = {
-        "Conflito de horário para um ou mais usuários": "Time conflict for one or more users",
-        "Já existe um compromisso nesse horário": "Time conflict for one or more users",
-        "Compromisso não encontrado": "Appointment not found",
-        "Apenas compromissos agendados podem ser atualizados": "Only scheduled appointments can be updated",
-        "Apenas o criador pode cancelar": "Only the creator can cancel",
-        "Compromisso não pode ser cancelado": "Appointment cannot be cancelled",
+        "Time conflict for one or more users": "Time conflict for one or more users",
+        "An appointment already exists at this time": "Time conflict for one or more users",
+        "Appointment not found": "Appointment not found",
+        "AppointmentAlias not found": "Appointment not found",
+        "Only appointments agendados podem ser atualizados": "Only scheduled appointments can be updated",
+        "Only o creator pode cancel": "Only the creator can cancel",
+        "Only o creator pode modificar este appointment": "Only the creator can cancel",
+        "AppointmentAlias cannot be cancelled": "Appointment cannot be cancelled",
     }
+
+    def __init__(self, db: Session):
+        self.db = db
+        self.repository = AppointmentRepositoryAlias(db)
+        self.audit_service = AuditService(db)
+        self.outbox_service = OutboxService(db)
+
+    def _snapshot_appointment(self, appointment: Appointment) -> dict[str, object]:
+        return {
+            "id": str(appointment.id),
+            "tenant_id": str(appointment.company_id),
+            "creator_id": str(appointment.creator_id),
+            "title": appointment.title,
+            "description": appointment.description,
+            "start_time": appointment.start_time.isoformat(),
+            "end_time": appointment.end_time.isoformat(),
+            "status": appointment.status.value,
+            "participant_ids": [
+                str(participant.user_id)
+                for participant in appointment.participants
+            ],
+        }
+
+    def _check_time_conflict(
+        self,
+        user_ids: list[UUID],
+        start_time: datetime,
+        end_time: datetime,
+        ignore_appointment_id: UUID | None = None,
+    ) -> None:
+        unique_user_ids = list(dict.fromkeys(user_ids))
+        if not unique_user_ids:
+            return
+
+        if self.repository.has_time_conflict(
+            user_ids=unique_user_ids,
+            start_time=start_time,
+            end_time=end_time,
+            ignore_appointment_id=ignore_appointment_id,
+        ):
+            raise APIError(
+                codigo=ErrorCode.SCHEDULE_CONFLICT,
+                mensagem="An appointment already exists at this time",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+
+    def get_or_404(self, appointment_id: UUID) -> Appointment:
+        appointment = self.repository.find_by_id(appointment_id)
+        if not appointment:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Appointment not found",
+            )
+        return appointment
 
     def _translate_exception(self, exc: HTTPException | APIError) -> HTTPException:
         if isinstance(exc, APIError):
             detail = self._DETAIL_MAP.get(exc.mensagem, exc.mensagem)
-            status_code = 400 if exc.codigo == "CONFLITO_AGENDA" else exc.status_code
+            status_code = 400 if exc.codigo == "SCHEDULE_CONFLICT" else exc.status_code
             return HTTPException(status_code=status_code, detail=detail)
 
         detail = self._DETAIL_MAP.get(exc.detail, exc.detail)
         return HTTPException(status_code=exc.status_code, detail=detail)
 
-    @staticmethod
-    def _is_updatable(appointment) -> bool:
-        if hasattr(appointment, "pode_ser_atualizado"):
-            return appointment.pode_ser_atualizado()
-        if hasattr(appointment, "can_be_updated"):
-            return appointment.can_be_updated()
-        return False
-
-    @staticmethod
-    def _cancel_appointment(appointment, current_user) -> None:
-        if hasattr(appointment, "cancelar"):
-            appointment.cancelar(current_user)
-            return
-        if hasattr(appointment, "cancel"):
-            appointment.cancel(current_user)
-            return
-        raise AttributeError("Appointment has no cancel method")
-
-    def create_appointment(self, data, current_user):
+    def create_appointment(self, dados: AppointmentCreate, current_user: User):
         set_tenant(current_user.company_id)
         try:
-            try:
-                return self.criar_compromisso(dados=data, usuario_atual=current_user)
-            except (HTTPException, APIError) as exc:
-                raise self._translate_exception(exc) from exc
+            payload = dados.model_dump()
+            participant_ids = [
+                participant_id
+                for participant_id in dict.fromkeys(payload.get("participant_ids", payload.get("participantes_ids", [])))
+                if participant_id != current_user.id
+            ]
+            self._check_time_conflict(
+                user_ids=[current_user.id, *participant_ids],
+                start_time=payload.get("start_time"),
+                end_time=payload.get("end_time"),
+            )
+
+            appointment = Appointment(
+                company_id=current_user.company_id,
+                creator_id=current_user.id,
+                title=payload.get("title"),
+                description=payload.get("description"),
+                start_time=payload.get("start_time"),
+                end_time=payload.get("end_time"),
+                status=AppointmentStatus.scheduled,
+            )
+
+            participants = [
+                AppointmentParticipant(
+                    company_id=current_user.company_id,
+                    appointment_id=appointment.id,
+                    user_id=participant_id,
+                )
+                for participant_id in participant_ids
+            ]
+
+            created_appointment = self.repository.create_appointment(
+                appointment=appointment,
+                participants=participants,
+                auto_commit=False,
+            )
+
+            self.audit_service.registrar_evento(
+                tenant_id=current_user.company_id,
+                user_id=current_user.id,
+                acao="criacao",
+                entity="appointment",
+                entidade_id=created_appointment.id,
+                dados_antes=None,
+                dados_depois=self._snapshot_appointment(created_appointment),
+            )
+
+            self.outbox_service.registrar_evento(
+                company_id=current_user.company_id,
+                event_type="APPOINTMENT_CREATED",
+                payload={
+                    "appointment_id": str(created_appointment.id),
+                    "user_id": str(current_user.id),
+                    "start_time": created_appointment.start_time.isoformat(),
+                    "end_time": created_appointment.end_time.isoformat(),
+                },
+            )
+
+            self.db.commit()
+            self.db.refresh(created_appointment)
+            return created_appointment
+        except (HTTPException, APIError) as exc:
+            raise self._translate_exception(exc) from exc
+        except Exception:
+            self.db.rollback()
+            raise
         finally:
             clear_tenant()
 
-    def update_appointment(self, appointment_id, data, current_user):
+    def update_appointment(self, appointment_id: UUID, dados: AppointmentUpdate, current_user: User):
         set_tenant(current_user.company_id)
         try:
-            appointment = self.repository.buscar_por_id(appointment_id)
-            if appointment is None:
-                raise HTTPException(status_code=404, detail="Appointment not found")
+            appointment = self.get_or_404(appointment_id)
             if getattr(appointment, "creator_id", None) != current_user.id:
                 raise HTTPException(status_code=403, detail="Only the creator can cancel")
 
-            if not self._is_updatable(appointment):
+            can_be_updated = getattr(appointment, "can_be_updated", None)
+            if not callable(can_be_updated) or not can_be_updated():
                 raise HTTPException(status_code=400, detail="Only scheduled appointments can be updated")
 
-            payload = data.model_dump(exclude_unset=True)
-            starts_input = payload.get("starts_at", payload.get("start_time", payload.get("inicio_em")))
-            ends_input = payload.get("ends_at", payload.get("end_time", payload.get("fim_em")))
-            if starts_input is not None or ends_input is not None:
-                starts_at = starts_input or appointment.starts_at
-                ends_at = ends_input or appointment.ends_at
+            payload = dados.model_dump(exclude_unset=True)
+            before_data = self._snapshot_appointment(appointment)
+            if "start_time" in payload or "end_time" in payload:
+                start_time = payload.get("start_time", appointment.start_time)
+                end_time = payload.get("end_time", appointment.end_time)
                 participant_ids = [
                     participant.user_id
                     for participant in getattr(appointment, "participants", [])
                 ]
-                user_ids = [appointment.creator_id, *participant_ids]
-                try:
-                    self._verificar_conflito_horario(
-                        usuarios_ids=user_ids,
-                        inicio_em=starts_at,
-                        fim_em=ends_at,
-                        ignorar_compromisso_id=appointment_id,
-                    )
-                except (HTTPException, APIError) as exc:
-                    raise self._translate_exception(exc) from exc
+                self._check_time_conflict(
+                    user_ids=[appointment.creator_id, *participant_ids],
+                    start_time=start_time,
+                    end_time=end_time,
+                    ignore_appointment_id=appointment_id,
+                )
 
-            field_map = {
-                "titulo": "title",
-                "descricao": "description",
-                "title": "title",
-                "description": "description",
-                "starts_at": "starts_at",
-                "ends_at": "ends_at",
-                "start_time": "starts_at",
-                "end_time": "ends_at",
-                "inicio_em": "starts_at",
-                "fim_em": "ends_at",
-            }
             for field, value in payload.items():
-                setattr(appointment, field_map.get(field, field), value)
+                setattr(appointment, field, value)
 
-            self.db.commit()
-            self.db.refresh(appointment)
+            self.audit_service.registrar_evento(
+                tenant_id=current_user.company_id,
+                user_id=current_user.id,
+                acao="edicao",
+                entity="appointment",
+                entidade_id=appointment.id,
+                dados_antes=before_data,
+                dados_depois=self._snapshot_appointment(appointment),
+            )
 
-            try:
-                return appointment
-            except HTTPException as exc:
-                raise self._translate_http_exception(exc) from exc
+            return self.repository.update_appointment(appointment)
+        except (HTTPException, APIError) as exc:
+            raise self._translate_exception(exc) from exc
         finally:
             clear_tenant()
 
-    def cancel_appointment(self, appointment_id, current_user):
+    def cancel_appointment(self, appointment_id: UUID, current_user: User):
         set_tenant(current_user.company_id)
         try:
+            appointment = self.get_or_404(appointment_id)
+            before_data = self._snapshot_appointment(appointment)
+
             try:
-                appointment = self.obter_ou_404(appointment_id)
-            except HTTPException as exc:
-                raise self._translate_exception(exc) from exc
-            try:
-                self._cancel_appointment(appointment, current_user)
+                appointment.cancel(current_user)
             except PermissionError as exc:
                 raise HTTPException(status_code=403, detail="Only the creator can cancel") from exc
             except ValueError as exc:
                 raise HTTPException(status_code=400, detail="Appointment cannot be cancelled") from exc
 
-            self.db.commit()
-            self.db.refresh(appointment)
+            self.audit_service.registrar_evento(
+                tenant_id=current_user.company_id,
+                user_id=current_user.id,
+                acao="cancellation",
+                entity="appointment",
+                entidade_id=appointment.id,
+                dados_antes=before_data,
+                dados_depois=self._snapshot_appointment(appointment),
+            )
 
-            try:
-                return appointment
-            except HTTPException as exc:
-                raise self._translate_exception(exc) from exc
+            return self.repository.cancel_appointment(appointment)
+        except (HTTPException, APIError) as exc:
+            raise self._translate_exception(exc) from exc
         finally:
             clear_tenant()

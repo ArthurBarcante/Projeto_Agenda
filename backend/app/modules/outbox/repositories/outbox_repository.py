@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.modules.outbox.models.outbox_event import OutboxEvent, StatusOutboxEvento
-from app.repositorios.base_repository import BaseRepository
+from app.core.db.repositories import BaseRepository
 
 
 class OutboxRepository(BaseRepository):
@@ -13,13 +13,13 @@ class OutboxRepository(BaseRepository):
 
     def criar_evento(
         self,
-        empresa_id: UUID,
-        tipo_evento: str,
+        company_id: UUID,
+        event_type: str,
         payload: dict[str, object],
     ) -> OutboxEvent:
         evento = OutboxEvent(
-            company_id=empresa_id,
-            event_type=tipo_evento,
+            company_id=company_id,
+            event_type=event_type,
             payload=payload,
             status=StatusOutboxEvento.PENDING.value,
             attempts=0,

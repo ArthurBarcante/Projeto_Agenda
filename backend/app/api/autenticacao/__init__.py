@@ -1,1 +1,0 @@
-from .autenticacao import router

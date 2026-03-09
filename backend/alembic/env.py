@@ -4,19 +4,19 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from app.models.base import Base
-from app.models.company import Company
-from app.models.user import User
-from app.models.appointment import Appointment
-from app.models.appointment_participant import AppointmentParticipant
-from app.models.audit_log import AuditLog
-from app.models.idempotency_key import IdempotencyKey
+from app.core.db.models.base import Base
+from app.modules.users.models.company import Company
+from app.modules.users.models.user import User
+from app.modules.schedule.models.appointment import Appointment
+from app.modules.schedule.models.appointment_participant import AppointmentParticipant
+from app.modules.notifications.models.audit_log import AuditLog
+from app.modules.outbox.models.idempotency_key import IdempotencyKey
 from app.modules.outbox.models.outbox_event import OutboxEvent
-from app.modules.webhooks.models.webhook_subscription import WebhookSubscription
-from app.modules.permissoes.models.permission import Permission
-from app.modules.permissoes.models.role import Role
-from app.modules.permissoes.models.role_permission import RolePermission
-from app.modules.permissoes.models.user_role import UserRole
+from app.modules.notifications.models.webhook_subscription import WebhookSubscription
+from app.modules.permissions.models.permission import Permission
+from app.modules.permissions.models.role import Role
+from app.modules.permissions.models.role_permission import RolePermission
+from app.modules.permissions.models.user_role import UserRole
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

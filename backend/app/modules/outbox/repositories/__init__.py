@@ -1,3 +1,3 @@
-from .outbox_repository import OutboxRepository
+from app.modules.outbox.repositories.outbox_repository import OutboxRepository
 
 __all__ = ["OutboxRepository"]

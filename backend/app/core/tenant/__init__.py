@@ -1,4 +1,4 @@
-from .tenant_context import clear_tenant, get_tenant, set_tenant
+from app.core.tenant.tenant_context import clear_tenant, get_tenant, set_tenant
 
 
 def set_current_company_id(company_id):

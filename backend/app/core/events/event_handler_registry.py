@@ -11,7 +11,7 @@ class EventHandlerRegistry:
     def __init__(self) -> None:
         self._handlers: dict[EventType, list[EventHandler]] = defaultdict(list)
 
-    def registrar_handler(self, event_type: EventType | str, handler: EventHandler) -> None:
+    def register_handler(self, event_type: EventType | str, handler: EventHandler) -> None:
         tipo = EventType(event_type)
         handlers = self._handlers[tipo]
         if handler not in handlers:

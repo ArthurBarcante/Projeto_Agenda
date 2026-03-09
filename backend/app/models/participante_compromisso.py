@@ -1,4 +1,0 @@
-from app.models.appointment_participant import AppointmentParticipant
-
-
-ParticipanteCompromisso = AppointmentParticipant

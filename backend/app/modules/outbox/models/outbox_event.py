@@ -6,7 +6,7 @@ from sqlalchemy import DateTime, Index, Integer, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.tenant_model import TenantModel
+from app.core.db.models.tenant_model import TenantModel
 
 
 class StatusOutboxEvento(str, enum.Enum):
@@ -46,14 +46,6 @@ class OutboxEvent(TenantModel):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     process_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-
-    @property
-    def tipo_evento(self):
-        return self.event_type
-
-    @tipo_evento.setter
-    def tipo_evento(self, value: str) -> None:
-        self.event_type = value
 
     @property
     def tentativas(self):

@@ -1,11 +1,17 @@
 # Python
 __pycache__/
+*.pyc
 *.py[cod]
 *.pyo
 .pytest_cache/
+backend/__pycache__/
+backend/.pytest_cache/
+dev_data/
+*.db
 
 # Local environments
 .venv/
+env/
 venv/
 virtualenv/
 
@@ -14,11 +20,16 @@ virtualenv/
 *.env
 
 # Frontend
-frontend/aigenda-frontend/.next/
-frontend/aigenda-frontend/node_modules/
-frontend/aigenda-frontend/out/
-frontend/aigenda-frontend/coverage/
+frontend/.next/
+frontend/node_modules/
+frontend/out/
+frontend/coverage/
+**/.next/
+**/node_modules/
+**/build/
+**/dist/
 
 # OS/editor
 .DS_Store
 .vscode/
+.idea/

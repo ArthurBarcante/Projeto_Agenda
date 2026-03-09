@@ -1,3 +1,3 @@
 # styles
 
-Diretório reservado para tokens e folhas de estilo adicionais além de `src/app/globals.css`.
+Directory reserved for additional style tokens and style sheets beyond `src/app/globals.css`.

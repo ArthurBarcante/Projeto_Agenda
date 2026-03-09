@@ -23,7 +23,7 @@ def processar_eventos(db: Session, limite: int = 100) -> int:
                 "Processando evento outbox",
                 extra={
                     "evento_id": str(evento.id),
-                    "empresa_id": str(evento.company_id),
+                    "company_id": str(evento.company_id),
                     "event_type": evento.event_type,
                     "payload": evento.payload,
                 },

@@ -95,104 +95,104 @@ def _rename_index_if_exists(old_name: str, new_name: str) -> None:
 
 
 def upgrade() -> None:
-    _rename_table_if_exists("empresas", "companies")
-    _rename_table_if_exists("usuarios", "users")
-    _rename_table_if_exists("compromissos", "appointments")
-    _rename_table_if_exists("participantes_compromissos", "appointment_participants")
+    _rename_table_if_exists("companies", "companies")
+    _rename_table_if_exists("users", "users")
+    _rename_table_if_exists("appointments", "appointments")
+    _rename_table_if_exists("appointment_participants", "appointment_participants")
 
     _rename_column_if_exists("companies", "nome", "name")
     _rename_column_if_exists("companies", "identificador", "slug")
     _rename_column_if_exists("companies", "plano", "plan")
-    _rename_column_if_exists("companies", "ativo", "is_active")
+    _rename_column_if_exists("companies", "is_active", "is_active")
 
-    _rename_column_if_exists("users", "empresa_id", "company_id")
+    _rename_column_if_exists("users", "company_id", "company_id")
     _rename_column_if_exists("users", "nome", "name")
     _rename_column_if_exists("users", "hash_senha", "password_hash")
-    _rename_column_if_exists("users", "ativo", "is_active")
+    _rename_column_if_exists("users", "is_active", "is_active")
 
-    _rename_column_if_exists("appointments", "empresa_id", "company_id")
-    _rename_column_if_exists("appointments", "criador_id", "creator_id")
-    _rename_column_if_exists("appointments", "titulo", "title")
-    _rename_column_if_exists("appointments", "descricao", "description")
-    _rename_column_if_exists("appointments", "inicio_em", "start_time")
-    _rename_column_if_exists("appointments", "fim_em", "end_time")
+    _rename_column_if_exists("appointments", "company_id", "company_id")
+    _rename_column_if_exists("appointments", "creator_id", "creator_id")
+    _rename_column_if_exists("appointments", "title", "title")
+    _rename_column_if_exists("appointments", "description", "description")
+    _rename_column_if_exists("appointments", "start_time", "start_time")
+    _rename_column_if_exists("appointments", "end_time", "end_time")
     _rename_column_if_exists("appointments", "estado", "status")
 
-    _rename_column_if_exists("appointment_participants", "empresa_id", "company_id")
-    _rename_column_if_exists("appointment_participants", "compromisso_id", "appointment_id")
-    _rename_column_if_exists("appointment_participants", "usuario_id", "user_id")
+    _rename_column_if_exists("appointment_participants", "company_id", "company_id")
+    _rename_column_if_exists("appointment_participants", "appointment_id", "appointment_id")
+    _rename_column_if_exists("appointment_participants", "user_id", "user_id")
 
-    _rename_column_if_exists("audit_logs", "empresa_id", "company_id")
-    _rename_column_if_exists("audit_logs", "usuario_id", "user_id")
+    _rename_column_if_exists("audit_logs", "company_id", "company_id")
+    _rename_column_if_exists("audit_logs", "user_id", "user_id")
     _rename_column_if_exists("audit_logs", "acao", "action")
-    _rename_column_if_exists("audit_logs", "entidade", "entity")
+    _rename_column_if_exists("audit_logs", "entity", "entity")
     _rename_column_if_exists("audit_logs", "entidade_id", "entity_id")
     _rename_column_if_exists("audit_logs", "dados_antes", "before_data")
     _rename_column_if_exists("audit_logs", "dados_depois", "after_data")
-    _rename_column_if_exists("audit_logs", "criado_em", "created_at")
+    _rename_column_if_exists("audit_logs", "created_at", "created_at")
 
-    _rename_column_if_exists("idempotency_keys", "empresa_id", "company_id")
-    _rename_column_if_exists("idempotency_keys", "chave", "key")
+    _rename_column_if_exists("idempotency_keys", "company_id", "company_id")
+    _rename_column_if_exists("idempotency_keys", "key", "key")
     _rename_column_if_exists("idempotency_keys", "metodo", "method")
-    _rename_column_if_exists("idempotency_keys", "criado_em", "created_at")
+    _rename_column_if_exists("idempotency_keys", "created_at", "created_at")
 
-    _rename_column_if_exists("roles", "empresa_id", "company_id")
+    _rename_column_if_exists("roles", "company_id", "company_id")
     _rename_column_if_exists("roles", "nome", "name")
-    _rename_column_if_exists("roles", "descricao", "description")
-    _rename_column_if_exists("roles", "criado_em", "created_at")
+    _rename_column_if_exists("roles", "description", "description")
+    _rename_column_if_exists("roles", "created_at", "created_at")
 
     _rename_column_if_exists("permissions", "codigo", "code")
-    _rename_column_if_exists("permissions", "descricao", "description")
+    _rename_column_if_exists("permissions", "description", "description")
 
-    _rename_column_if_exists("user_roles", "usuario_id", "user_id")
+    _rename_column_if_exists("user_roles", "user_id", "user_id")
 
-    _rename_column_if_exists("outbox_events", "empresa_id", "company_id")
-    _rename_column_if_exists("outbox_events", "tipo_evento", "event_type")
+    _rename_column_if_exists("outbox_events", "company_id", "company_id")
+    _rename_column_if_exists("outbox_events", "event_type", "event_type")
     _rename_column_if_exists("outbox_events", "tentativas", "attempts")
-    _rename_column_if_exists("outbox_events", "criado_em", "created_at")
+    _rename_column_if_exists("outbox_events", "created_at", "created_at")
     _rename_column_if_exists("outbox_events", "processar_em", "process_at")
 
-    _rename_column_if_exists("webhook_subscriptions", "empresa_id", "company_id")
-    _rename_column_if_exists("webhook_subscriptions", "ativo", "is_active")
-    _rename_column_if_exists("webhook_subscriptions", "criado_em", "created_at")
+    _rename_column_if_exists("webhook_subscriptions", "company_id", "company_id")
+    _rename_column_if_exists("webhook_subscriptions", "is_active", "is_active")
+    _rename_column_if_exists("webhook_subscriptions", "created_at", "created_at")
 
-    _rename_constraint_if_exists("users", "uq_usuario_empresa_email", "uq_user_company_email")
+    _rename_constraint_if_exists("users", "uq_user_company_email", "uq_user_company_email")
     _rename_constraint_if_exists(
         "appointment_participants",
-        "uq_participante_compromisso_usuario",
+        "uq_appointment_participant_user",
         "uq_appointment_participant_user",
     )
     _rename_constraint_if_exists(
         "idempotency_keys",
-        "uq_idempotency_keys_empresa_chave",
+        "uq_idempotency_keys_company_key",
         "uq_idempotency_keys_company_key",
     )
     _rename_constraint_if_exists(
         "appointments",
-        "ex_compromissos_tenant_periodo_sem_sobreposicao",
+        "ex_appointments_tenant_period_no_overlap",
         "ex_appointments_tenant_period_no_overlap",
     )
 
     _rename_index_if_exists(
-        "ix_compromissos_empresa_inicio_fim_status",
+        "ix_appointments_company_start_end_status",
         "ix_appointments_company_start_end_status",
     )
     _rename_index_if_exists(
-        "ix_participantes_compromissos_usuario_compromisso",
+        "ix_appointment_participants_user_appointment",
         "ix_appointment_participants_user_appointment",
     )
-    _rename_index_if_exists("ix_audit_logs_usuario_id", "ix_audit_logs_user_id")
+    _rename_index_if_exists("ix_audit_logs_user_id", "ix_audit_logs_user_id")
     _rename_index_if_exists(
-        "ix_audit_logs_empresa_entidade_criado",
+        "ix_audit_logs_company_entity_created",
         "ix_audit_logs_company_entity_created",
     )
-    _rename_index_if_exists("ix_roles_empresa_id", "ix_roles_company_id")
+    _rename_index_if_exists("ix_roles_company_id", "ix_roles_company_id")
     _rename_index_if_exists("ix_permissions_codigo", "ix_permissions_code")
-    _rename_index_if_exists("ix_user_roles_usuario_id", "ix_user_roles_user_id")
-    _rename_index_if_exists("ix_outbox_events_empresa_id", "ix_outbox_events_company_id")
+    _rename_index_if_exists("ix_user_roles_user_id", "ix_user_roles_user_id")
+    _rename_index_if_exists("ix_outbox_events_company_id", "ix_outbox_events_company_id")
     _rename_index_if_exists("ix_outbox_events_processar_em", "ix_outbox_events_process_at")
     _rename_index_if_exists(
-        "ix_webhook_subscriptions_empresa_evento_ativo",
+        "ix_webhook_subscriptions_company_event_active",
         "ix_webhook_subscriptions_company_event_active",
     )
 
@@ -200,101 +200,101 @@ def upgrade() -> None:
 def downgrade() -> None:
     _rename_index_if_exists(
         "ix_appointments_company_start_end_status",
-        "ix_compromissos_empresa_inicio_fim_status",
+        "ix_appointments_company_start_end_status",
     )
     _rename_index_if_exists(
         "ix_appointment_participants_user_appointment",
-        "ix_participantes_compromissos_usuario_compromisso",
+        "ix_appointment_participants_user_appointment",
     )
-    _rename_index_if_exists("ix_audit_logs_user_id", "ix_audit_logs_usuario_id")
+    _rename_index_if_exists("ix_audit_logs_user_id", "ix_audit_logs_user_id")
     _rename_index_if_exists(
         "ix_audit_logs_company_entity_created",
-        "ix_audit_logs_empresa_entidade_criado",
+        "ix_audit_logs_company_entity_created",
     )
-    _rename_index_if_exists("ix_roles_company_id", "ix_roles_empresa_id")
+    _rename_index_if_exists("ix_roles_company_id", "ix_roles_company_id")
     _rename_index_if_exists("ix_permissions_code", "ix_permissions_codigo")
-    _rename_index_if_exists("ix_user_roles_user_id", "ix_user_roles_usuario_id")
-    _rename_index_if_exists("ix_outbox_events_company_id", "ix_outbox_events_empresa_id")
+    _rename_index_if_exists("ix_user_roles_user_id", "ix_user_roles_user_id")
+    _rename_index_if_exists("ix_outbox_events_company_id", "ix_outbox_events_company_id")
     _rename_index_if_exists("ix_outbox_events_process_at", "ix_outbox_events_processar_em")
     _rename_index_if_exists(
         "ix_webhook_subscriptions_company_event_active",
-        "ix_webhook_subscriptions_empresa_evento_ativo",
+        "ix_webhook_subscriptions_company_event_active",
     )
 
-    _rename_constraint_if_exists("users", "uq_user_company_email", "uq_usuario_empresa_email")
+    _rename_constraint_if_exists("users", "uq_user_company_email", "uq_user_company_email")
     _rename_constraint_if_exists(
         "appointment_participants",
         "uq_appointment_participant_user",
-        "uq_participante_compromisso_usuario",
+        "uq_appointment_participant_user",
     )
     _rename_constraint_if_exists(
         "idempotency_keys",
         "uq_idempotency_keys_company_key",
-        "uq_idempotency_keys_empresa_chave",
+        "uq_idempotency_keys_company_key",
     )
     _rename_constraint_if_exists(
         "appointments",
         "ex_appointments_tenant_period_no_overlap",
-        "ex_compromissos_tenant_periodo_sem_sobreposicao",
+        "ex_appointments_tenant_period_no_overlap",
     )
 
     _rename_column_if_exists("companies", "name", "nome")
     _rename_column_if_exists("companies", "slug", "identificador")
     _rename_column_if_exists("companies", "plan", "plano")
-    _rename_column_if_exists("companies", "is_active", "ativo")
+    _rename_column_if_exists("companies", "is_active", "is_active")
 
-    _rename_column_if_exists("users", "company_id", "empresa_id")
+    _rename_column_if_exists("users", "company_id", "company_id")
     _rename_column_if_exists("users", "name", "nome")
     _rename_column_if_exists("users", "password_hash", "hash_senha")
-    _rename_column_if_exists("users", "is_active", "ativo")
+    _rename_column_if_exists("users", "is_active", "is_active")
 
-    _rename_column_if_exists("appointments", "company_id", "empresa_id")
-    _rename_column_if_exists("appointments", "creator_id", "criador_id")
-    _rename_column_if_exists("appointments", "title", "titulo")
-    _rename_column_if_exists("appointments", "description", "descricao")
-    _rename_column_if_exists("appointments", "start_time", "inicio_em")
-    _rename_column_if_exists("appointments", "end_time", "fim_em")
+    _rename_column_if_exists("appointments", "company_id", "company_id")
+    _rename_column_if_exists("appointments", "creator_id", "creator_id")
+    _rename_column_if_exists("appointments", "title", "title")
+    _rename_column_if_exists("appointments", "description", "description")
+    _rename_column_if_exists("appointments", "start_time", "start_time")
+    _rename_column_if_exists("appointments", "end_time", "end_time")
     _rename_column_if_exists("appointments", "status", "estado")
 
-    _rename_column_if_exists("appointment_participants", "company_id", "empresa_id")
-    _rename_column_if_exists("appointment_participants", "appointment_id", "compromisso_id")
-    _rename_column_if_exists("appointment_participants", "user_id", "usuario_id")
+    _rename_column_if_exists("appointment_participants", "company_id", "company_id")
+    _rename_column_if_exists("appointment_participants", "appointment_id", "appointment_id")
+    _rename_column_if_exists("appointment_participants", "user_id", "user_id")
 
-    _rename_column_if_exists("audit_logs", "company_id", "empresa_id")
-    _rename_column_if_exists("audit_logs", "user_id", "usuario_id")
+    _rename_column_if_exists("audit_logs", "company_id", "company_id")
+    _rename_column_if_exists("audit_logs", "user_id", "user_id")
     _rename_column_if_exists("audit_logs", "action", "acao")
-    _rename_column_if_exists("audit_logs", "entity", "entidade")
+    _rename_column_if_exists("audit_logs", "entity", "entity")
     _rename_column_if_exists("audit_logs", "entity_id", "entidade_id")
     _rename_column_if_exists("audit_logs", "before_data", "dados_antes")
     _rename_column_if_exists("audit_logs", "after_data", "dados_depois")
-    _rename_column_if_exists("audit_logs", "created_at", "criado_em")
+    _rename_column_if_exists("audit_logs", "created_at", "created_at")
 
-    _rename_column_if_exists("idempotency_keys", "company_id", "empresa_id")
-    _rename_column_if_exists("idempotency_keys", "key", "chave")
+    _rename_column_if_exists("idempotency_keys", "company_id", "company_id")
+    _rename_column_if_exists("idempotency_keys", "key", "key")
     _rename_column_if_exists("idempotency_keys", "method", "metodo")
-    _rename_column_if_exists("idempotency_keys", "created_at", "criado_em")
+    _rename_column_if_exists("idempotency_keys", "created_at", "created_at")
 
-    _rename_column_if_exists("roles", "company_id", "empresa_id")
+    _rename_column_if_exists("roles", "company_id", "company_id")
     _rename_column_if_exists("roles", "name", "nome")
-    _rename_column_if_exists("roles", "description", "descricao")
-    _rename_column_if_exists("roles", "created_at", "criado_em")
+    _rename_column_if_exists("roles", "description", "description")
+    _rename_column_if_exists("roles", "created_at", "created_at")
 
     _rename_column_if_exists("permissions", "code", "codigo")
-    _rename_column_if_exists("permissions", "description", "descricao")
+    _rename_column_if_exists("permissions", "description", "description")
 
-    _rename_column_if_exists("user_roles", "user_id", "usuario_id")
+    _rename_column_if_exists("user_roles", "user_id", "user_id")
 
-    _rename_column_if_exists("outbox_events", "company_id", "empresa_id")
-    _rename_column_if_exists("outbox_events", "event_type", "tipo_evento")
+    _rename_column_if_exists("outbox_events", "company_id", "company_id")
+    _rename_column_if_exists("outbox_events", "event_type", "event_type")
     _rename_column_if_exists("outbox_events", "attempts", "tentativas")
-    _rename_column_if_exists("outbox_events", "created_at", "criado_em")
+    _rename_column_if_exists("outbox_events", "created_at", "created_at")
     _rename_column_if_exists("outbox_events", "process_at", "processar_em")
 
-    _rename_column_if_exists("webhook_subscriptions", "company_id", "empresa_id")
-    _rename_column_if_exists("webhook_subscriptions", "is_active", "ativo")
-    _rename_column_if_exists("webhook_subscriptions", "created_at", "criado_em")
+    _rename_column_if_exists("webhook_subscriptions", "company_id", "company_id")
+    _rename_column_if_exists("webhook_subscriptions", "is_active", "is_active")
+    _rename_column_if_exists("webhook_subscriptions", "created_at", "created_at")
 
-    _rename_table_if_exists("appointment_participants", "participantes_compromissos")
-    _rename_table_if_exists("appointments", "compromissos")
-    _rename_table_if_exists("users", "usuarios")
-    _rename_table_if_exists("companies", "empresas")
+    _rename_table_if_exists("appointment_participants", "appointment_participants")
+    _rename_table_if_exists("appointments", "appointments")
+    _rename_table_if_exists("users", "users")
+    _rename_table_if_exists("companies", "companies")

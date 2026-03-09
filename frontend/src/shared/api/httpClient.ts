@@ -39,7 +39,7 @@ export async function requisicaoHttp<T>(
       detalhe = await resposta.text();
     }
 
-    throw new ErroHttp("Falha na comunicação com a API", resposta.status, detalhe);
+    throw new ErroHttp("Failed to communicate with API", resposta.status, detalhe);
   }
 
   if (resposta.status === 204) {

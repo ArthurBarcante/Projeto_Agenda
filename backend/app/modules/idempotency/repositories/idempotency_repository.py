@@ -3,28 +3,28 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.models.idempotency_key import IdempotencyKey
-from app.repositorios.base_repository import BaseRepository
+from app.modules.outbox.models.idempotency_key import IdempotencyKey
+from app.core.db.repositories import BaseRepository
 
 
 class IdempotencyRepository(BaseRepository):
     def __init__(self, db: Session) -> None:
         super().__init__(db)
 
-    def buscar_por_chave(self, empresa_id: UUID, chave: str) -> IdempotencyKey | None:
+    def buscar_por_chave(self, company_id: UUID, key: str) -> IdempotencyKey | None:
         return (
             self.query(IdempotencyKey)
             .filter(
-                IdempotencyKey.company_id == empresa_id,
-                IdempotencyKey.key == chave,
+                IdempotencyKey.company_id == company_id,
+                IdempotencyKey.key == key,
             )
             .first()
         )
 
     def salvar_resposta(
         self,
-        empresa_id: UUID,
-        chave: str,
+        company_id: UUID,
+        key: str,
         endpoint: str,
         metodo: str,
         request_hash: str,
@@ -32,8 +32,8 @@ class IdempotencyRepository(BaseRepository):
         status_code: int,
     ) -> IdempotencyKey:
         registro = IdempotencyKey(
-            company_id=empresa_id,
-            key=chave,
+            company_id=company_id,
+            key=key,
             endpoint=endpoint,
             method=metodo,
             request_hash=request_hash,

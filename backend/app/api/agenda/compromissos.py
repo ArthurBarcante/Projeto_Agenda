@@ -1,1 +1,0 @@
-from app.modules.agenda.api.compromissos import router

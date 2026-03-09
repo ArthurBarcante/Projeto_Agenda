@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AIGENDA",
-  description: "Agenda inteligente com organização por contexto",
+  description: "Agenda inteligente com organization por contexto",
 };
 
 export default function RootLayout({

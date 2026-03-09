@@ -18,11 +18,11 @@ class IdempotencyService:
 
     @staticmethod
     def _obter_chave(request: Request) -> str | None:
-        chave = request.headers.get("Idempotency-Key")
-        if chave is None:
+        key = request.headers.get("Idempotency-Key")
+        if key is None:
             return None
 
-        chave_normalizada = chave.strip()
+        chave_normalizada = key.strip()
         return chave_normalizada or None
 
     async def _calcular_request_hash(self, request: Request) -> str:
@@ -46,24 +46,24 @@ class IdempotencyService:
     async def verificar_idempotencia(
         self,
         request: Request,
-        empresa_id: UUID,
+        company_id: UUID,
     ) -> JSONResponse | None:
-        chave = self._obter_chave(request)
-        if chave is None:
+        key = self._obter_chave(request)
+        if key is None:
             return None
 
         request_hash = await self._calcular_request_hash(request)
-        request.state.idempotency_key = chave
+        request.state.idempotency_key = key
         request.state.idempotency_hash = request_hash
 
-        registro = self.repository.buscar_por_chave(empresa_id=empresa_id, chave=chave)
+        registro = self.repository.buscar_por_chave(company_id=company_id, key=key)
         if registro is None:
             return None
 
         if registro.request_hash != request_hash:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Idempotency-Key já utilizada com payload diferente",
+                detail="Idempotency-Key already used com payload diferente",
             )
 
         return JSONResponse(
@@ -74,12 +74,12 @@ class IdempotencyService:
     async def registrar_resposta(
         self,
         request: Request,
-        empresa_id: UUID,
+        company_id: UUID,
         response_body: dict[str, Any],
         status_code: int,
     ) -> None:
-        chave = getattr(request.state, "idempotency_key", None) or self._obter_chave(request)
-        if chave is None:
+        key = getattr(request.state, "idempotency_key", None) or self._obter_chave(request)
+        if key is None:
             return
 
         request_hash = getattr(request.state, "idempotency_hash", None)
@@ -91,8 +91,8 @@ class IdempotencyService:
 
         try:
             self.repository.salvar_resposta(
-                empresa_id=empresa_id,
-                chave=chave,
+                company_id=company_id,
+                key=key,
                 endpoint=endpoint,
                 metodo=metodo,
                 request_hash=request_hash,
@@ -101,11 +101,11 @@ class IdempotencyService:
             )
         except IntegrityError:
             self.db.rollback()
-            registro_existente = self.repository.buscar_por_chave(empresa_id=empresa_id, chave=chave)
+            registro_existente = self.repository.buscar_por_chave(company_id=company_id, key=key)
             if registro_existente is None:
                 raise
             if registro_existente.request_hash != request_hash:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="Idempotency-Key já utilizada com payload diferente",
+                    detail="Idempotency-Key already used com payload diferente",
                 )
