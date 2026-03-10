@@ -1,197 +1,56 @@
-# Funcionalidades Explicadas com Exemplos
+# Principais Funcionalidades
 
-Este guia mostra cada funcionalidade do AIgenda de forma simples, com exemplos do dia a dia.
+## 1. Login e acesso seguro
 
-## FASE 1 - Organizacao Inteligente (concluida)
+O sistema permite que cada usuario entre com sua conta.
 
-Nesta fase, o foco e garantir organizacao e confiabilidade.
+Depois do login, ele recebe uma chave de acesso temporaria para usar as funcoes protegidas.
 
-### 1) Cadastro de compromissos
+## 2. Agenda de compromissos
 
-O usuario cria um compromisso com:
+E possivel:
 
-- titulo,
-- horario de inicio e fim,
-- descricao,
-- participantes.
+- criar compromisso;
+- editar compromisso;
+- cancelar compromisso;
+- incluir participantes.
 
-Exemplo real:
-"Reuniao de alinhamento", das 10:00 as 11:00, com equipe de vendas.
+## 3. Bloqueio de conflito de horario
 
-### 2) Participantes multiplos
+Quando uma pessoa tenta marcar um horario que ja esta ocupado, o sistema avisa e bloqueia a operacao.
 
-Um compromisso pode incluir varias pessoas.
+Isso reduz retrabalho e evita agendas confusas.
 
-Analogia:
-Como criar um evento de aniversario e convidar varios amigos ao mesmo tempo.
+## 4. Separacao por empresa
 
-### 3) Prevencao automatica de conflito
+Cada empresa enxerga apenas os proprios dados.
 
-O sistema verifica se algum participante ja tem outro compromisso no mesmo horario.
+Isso aumenta seguranca e privacidade.
 
-Se houver conflito, ele bloqueia o agendamento e avisa.
+## 5. Controle de permissao
 
-Exemplo:
-Joao ja esta em reuniao das 14:00 as 15:00.
-Se voce tentar incluir Joao em outro evento nesse horario, o AIgenda impede.
+Nem todo usuario pode fazer tudo.
 
-### 4) Controle de autoria
+O sistema controla permissoes para cada tipo de acao, como criar compromissos.
 
-Cada acao fica vinculada a quem criou ou alterou.
+## 6. Protecao contra duplicidade
 
-Pergunta que o sistema responde:
-"Quem marcou essa reuniao?"
+Se uma solicitacao for enviada duas vezes por falha de rede ou clique repetido, o sistema evita criar itens duplicados em operacoes criticas.
 
-### 5) Maquina de estados
+## 7. Registro de eventos importantes
 
-Compromissos passam por estados validos.
+O sistema salva trilhas de auditoria para facilitar analise de historico e confiabilidade.
 
-Exemplo de caminho comum:
+## 8. Fases do produto
 
-```text
-CRIADO -> CONFIRMADO -> CONCLUIDO
-   \-> CANCELADO
-```
+## Fase 1
 
-Isso evita situacoes ilogicas, como "concluir" algo que nunca foi confirmado.
+Base principal da agenda, seguranca e confiabilidade ja implementada.
 
-### 6) Isolamento multi-tenant
+## Fase 2
 
-Cada empresa so enxerga os proprios dados.
+Modulo de engajamento no frontend com estrutura para metas, XP e consistencia.
 
-Analogia:
-Condominio com apartamentos separados.
-Um morador nao entra no apartamento do outro.
+## Fases 3 e 4
 
-### 7) Testes estruturais
-
-O sistema e testado em niveis:
-
-- **Unitarios**: testam pecas pequenas.
-- **Integracao**: testam pecas juntas.
-- **E2E**: testam fluxo completo (do inicio ao fim).
-
-Isso reduz bugs e traz seguranca para evoluir.
-
-### 8) Indices de performance
-
-Indices ajudam o banco a encontrar informacoes mais rapido.
-
-Analogia:
-Livro com indice no inicio.
-Sem indice, voce folheia tudo; com indice, vai direto ao capitulo.
-
-## FASE 2 - Engajamento
-
-Objetivo: incentivar constancia do usuario.
-
-### 1) Sistema de metas
-
-Usuario define objetivos, por exemplo:
-
-- "realizar 5 compromissos produtivos na semana";
-- "manter agenda sem faltas por 10 dias".
-
-### 2) XP (experiencia)
-
-Ao cumprir boas praticas, ganha pontos.
-
-Analogia:
-Aplicativo de idioma que recompensa sequencia diaria.
-
-### 3) Painel de desempenho
-
-Mostra progresso com indicadores claros.
-
-Exemplo de perguntas respondidas:
-
-- Quantos compromissos conclui esta semana?
-- Quantos cancelei?
-- Minha constancia esta melhorando?
-
-### 4) Metricas de consistencia
-
-Mede regularidade dos habitos.
-
-Exemplo:
-"Voce manteve sua rotina de planejamento por 12 dias seguidos."
-
-## FASE 3 - Evolucao e Personalizacao
-
-Objetivo: adaptar o sistema ao nivel de maturidade do usuario.
-
-### 1) Sistema de niveis
-
-Usuario sobe de nivel conforme uso consistente e qualidade da rotina.
-
-Exemplo:
-
-- Nivel iniciante: funcoes basicas.
-- Nivel intermediario: recursos extras.
-- Nivel avancado: analises mais sofisticadas.
-
-### 2) Personalizacao progressiva da interface
-
-A interface muda aos poucos para nao sobrecarregar iniciantes.
-
-Exemplo:
-
-- No inicio: poucas informacoes, mais simplicidade.
-- Com evolucao: mais atalhos e relatorios.
-
-### 3) Expansao de recursos conforme maturidade
-
-Recursos novos aparecem quando fazem sentido para aquele usuario.
-
-Resultado:
-menos confusao e mais valor real no momento certo.
-
-## FASE 4 - Inteligencia Adaptativa
-
-Objetivo: tornar o sistema mais "inteligente" e proativo.
-
-### 1) Indice comportamental
-
-Cria uma leitura do comportamento de organizacao do usuario.
-
-Exemplo:
-Pontuacao baseada em pontualidade, constancia e cumprimento de metas.
-
-### 2) Ajuste automatico de metas
-
-Se meta estiver muito facil ou muito dificil, o sistema sugere ajuste.
-
-Analogia:
-Treino de academia que muda a carga conforme sua evolucao.
-
-### 3) Sugestao de reorganizacao
-
-Sistema detecta padroes ruins e sugere mudancas.
-
-Exemplo:
-"Voce concentra muitas reunioes na segunda de manha. Quer redistribuir para a tarde?"
-
-### 4) Analise de regularidade
-
-Mostra se sua rotina esta estavel ao longo das semanas.
-
-Exemplo:
-"Nas ultimas 4 semanas, sua taxa de cumprimento ficou entre 82% e 86%, com boa estabilidade."
-
-## Tabela resumo das fases
-
-| Fase | Foco principal | Beneficio direto |
-|---|---|---|
-| 1 | Organizacao e seguranca | Agenda confiavel sem conflitos |
-| 2 | Engajamento | Mais disciplina e motivacao |
-| 3 | Personalizacao | Sistema adaptado ao seu nivel |
-| 4 | Inteligencia | Sugestoes automaticas e melhoria continua |
-
-## Resumo final
-
-As funcionalidades do AIgenda evoluem em camadas:
-
-1. primeiro organiza com seguranca,
-2. depois engaja com metas,
-3. em seguida personaliza a experiencia,
-4. e por fim adapta-se ao comportamento real do usuario.
+Planejadas para evolucao de personalizacao e recomendacoes inteligentes.

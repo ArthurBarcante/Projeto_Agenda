@@ -1,12 +1,12 @@
 # AIgenda
 
-Plataforma de agendamento inteligente para equipes e empresas, com foco em confiabilidade, isolamento por tenant e escalabilidade.
+Plataforma de agendamento corporativo inteligente com foco em confiabilidade, isolamento multi-tenant e escalabilidade.
 
 ## Descricao
 
-O **AIgenda** e um sistema de gestao de compromissos para times que precisam organizar agendas com seguranca e previsibilidade.
+O **AIgenda** e um sistema de gestao de compromissos para equipes e empresas que precisam organizar agendas com seguranca e previsibilidade.
 
-O projeto resolve problemas comuns de operacao em ambientes corporativos:
+O projeto resolve problemas comuns em ambientes corporativos:
 
 - conflitos de horario entre participantes;
 - duplicidade de requisicoes em operacoes criticas;
@@ -14,10 +14,22 @@ O projeto resolve problemas comuns de operacao em ambientes corporativos:
 - controle de acesso por papeis e permissoes;
 - rastreabilidade de eventos e acoes no sistema.
 
-## Funcionalidades / Features
+O desenvolvimento e organizado em duas fases de produto:
+
+- **Fase 1 — Organizacao Inteligente**: agenda corporativa com prevencao de conflitos, multi-tenancy, RBAC e idempotencia.
+- **Fase 2 — Engajamento**: notificacoes, webhooks e integracoes para aumentar o engajamento dos usuarios.
+
+## Documentacao
+
+A documentacao completa esta em [`docs/`](docs/README.md):
+
+- [`docs/beginner/`](docs/beginner/README.md) — visao geral acessivel do sistema, setup e glossario.
+- [`docs/developer/`](docs/developer/README.md) — arquitetura, modulos, API, testes e guia de contribuicao.
+
+## Funcionalidades implementadas
 
 - Cadastro, atualizacao e cancelamento de compromissos.
-- Prevencao automatica de conflitos de horario.
+- Prevencao automatica de conflitos de horario (constraint + indices).
 - Suporte a multiplos participantes por compromisso.
 - Autenticacao via JWT.
 - Controle de acesso com RBAC (roles e permissions).
@@ -25,7 +37,8 @@ O projeto resolve problemas comuns de operacao em ambientes corporativos:
 - Idempotencia para evitar criacao duplicada em requests repetidos.
 - Middleware de rate limit com suporte a Redis.
 - Auditoria de eventos e padrao outbox para integracoes.
-- Testes organizados em camadas (`unit`, `integration`, `e2e`).
+- Webhooks e subscricoes de eventos.
+- Testes organizados em camadas (`unit`, `integration`, `e2e`) por fase de produto.
 
 ## Tecnologias
 
@@ -42,10 +55,10 @@ O projeto resolve problemas comuns de operacao em ambientes corporativos:
 
 ### Frontend
 
-- Next.js
-- React
-- TypeScript
+- Next.js (Fase 1 — Organizacao Inteligente)
+- React + TypeScript (Fase 2 — Engajamento)
 - Tailwind CSS
+- Vitest
 
 ### Qualidade
 
@@ -141,7 +154,15 @@ curl -X POST http://127.0.0.1:8000/appointments \
 ### Rodando testes
 
 ```bash
+# Todos os testes
 pytest
+
+# Por fase
+pytest tests/fase_1_organizacao_inteligente/
+pytest tests/fase_2_engajamento/
+
+# Frontend (Fase 2)
+cd frontend && npm test
 ```
 
 ## Contribuicao
@@ -159,6 +180,8 @@ git checkout -b feat/minha-feature
 2. Implemente sua alteracao com testes.
 3. Execute validacoes locais (`pytest` e lint do frontend quando aplicavel).
 4. Abra um Pull Request descrevendo contexto, solucao e impacto.
+
+Para detalhes sobre o fluxo de contribuicao, consulte [docs/developer/contributing.md](docs/developer/contributing.md).
 
 ## Licenca
 

@@ -13,7 +13,7 @@ class PermissionService:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def user_has_permission(
+    def _query_user_has_permission(
         self,
         user_id: UUID,
         permission_code: str,
@@ -39,7 +39,7 @@ class PermissionService:
         user_id: UUID,
         permission_code: str,
     ) -> bool:
-        return self.user_has_permission(
+        return self._query_user_has_permission(
             user_id=user_id,
             permission_code=permission_code,
         )

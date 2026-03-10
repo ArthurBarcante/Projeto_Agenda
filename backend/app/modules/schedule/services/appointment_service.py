@@ -36,6 +36,9 @@ class AppointmentService:
         self.outbox_service = OutboxService(db)
 
     def _snapshot_appointment(self, appointment: Appointment) -> dict[str, object]:
+        participants = getattr(appointment, "participants", []) or []
+        status = getattr(appointment, "status", None)
+        status_value = getattr(status, "value", status)
         return {
             "id": str(appointment.id),
             "tenant_id": str(appointment.company_id),
@@ -44,10 +47,10 @@ class AppointmentService:
             "description": appointment.description,
             "start_time": appointment.start_time.isoformat(),
             "end_time": appointment.end_time.isoformat(),
-            "status": appointment.status.value,
+            "status": status_value,
             "participant_ids": [
-                str(participant.user_id)
-                for participant in appointment.participants
+                str(getattr(participant, "user_id", participant))
+                for participant in participants
             ],
         }
 
@@ -92,10 +95,19 @@ class AppointmentService:
         detail = self._DETAIL_MAP.get(exc.detail, exc.detail)
         return HTTPException(status_code=exc.status_code, detail=detail)
 
-    def create_appointment(self, dados: AppointmentCreate, current_user: User):
+    def create_appointment(
+        self,
+        dados: AppointmentCreate | None = None,
+        current_user: User | None = None,
+        data: AppointmentCreate | None = None,
+    ):
+        payload_data = dados or data
+        if payload_data is None or current_user is None:
+            raise ValueError("Both appointment payload and current_user are required")
+
         set_tenant(current_user.company_id)
         try:
-            payload = dados.model_dump()
+            payload = payload_data.model_dump()
             participant_ids = [
                 participant_id
                 for participant_id in dict.fromkeys(payload.get("participant_ids", payload.get("participantes_ids", [])))
@@ -164,7 +176,17 @@ class AppointmentService:
         finally:
             clear_tenant()
 
-    def update_appointment(self, appointment_id: UUID, dados: AppointmentUpdate, current_user: User):
+    def update_appointment(
+        self,
+        appointment_id: UUID,
+        dados: AppointmentUpdate | None = None,
+        current_user: User | None = None,
+        data: AppointmentUpdate | None = None,
+    ):
+        payload_data = dados or data
+        if payload_data is None or current_user is None:
+            raise ValueError("Both appointment payload and current_user are required")
+
         set_tenant(current_user.company_id)
         try:
             appointment = self.get_or_404(appointment_id)
@@ -175,7 +197,7 @@ class AppointmentService:
             if not callable(can_be_updated) or not can_be_updated():
                 raise HTTPException(status_code=400, detail="Only scheduled appointments can be updated")
 
-            payload = dados.model_dump(exclude_unset=True)
+            payload = payload_data.model_dump(exclude_unset=True)
             before_data = self._snapshot_appointment(appointment)
             if "start_time" in payload or "end_time" in payload:
                 start_time = payload.get("start_time", appointment.start_time)

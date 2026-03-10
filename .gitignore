@@ -8,6 +8,7 @@ backend/__pycache__/
 backend/.pytest_cache/
 dev_data/
 *.db
+.coverage
 
 # Local environments
 .venv/

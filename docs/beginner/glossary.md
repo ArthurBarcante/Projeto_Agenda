@@ -1,125 +1,58 @@
-# Glossario para Iniciantes
+# Glossario Simples
 
-Este glossario traduz termos tecnicos do projeto para linguagem simples.
+## API
+Canal por onde a tela conversa com o sistema de regras.
 
-## A
+## Backend
+Parte que aplica regras e salva informacoes.
 
-**API**
-E a "porta" pela qual um sistema conversa com outro.
-No AIgenda, o frontend envia pedidos para a API do backend.
+## Frontend
+Parte visual, que a pessoa usa no navegador.
 
-**Autenticacao**
-Processo de confirmar identidade (quem voce e).
-Exemplo: login com email e senha.
+## Compromisso
+Evento da agenda (reuniao, tarefa com horario, etc.).
 
-**Autorizacao**
-Define o que voce pode fazer apos entrar.
-Exemplo: usuario comum nao pode acessar funcoes de administrador.
+## Login
+Processo para entrar no sistema com usuario e senha.
 
-## B
+## Token
+Chave temporaria que prova que o usuario esta autenticado.
 
-**Backend**
-Parte interna do sistema, onde ficam regras e processamento.
+## JWT
+Tipo de token usado neste projeto.
 
-**Banco de dados**
-Local onde informacoes ficam armazenadas de forma organizada.
+## Permissao (RBAC)
+Regra que define quem pode fazer cada acao.
 
-## C
+## Tenant
+Empresa cadastrada no sistema.
 
-**Compromisso**
-Evento/reuniao agendada no sistema.
+## Multi-tenant
+Modelo onde varias empresas usam o mesmo sistema sem misturar dados.
 
-**Conflito de horario**
-Quando duas atividades ocupam o mesmo horario para a mesma pessoa.
+## Banco de dados
+Local onde as informacoes ficam armazenadas.
 
-## E
+## Idempotencia
+Protecao para nao criar duplicado quando a mesma solicitacao e reenviada.
 
-**E2E (End-to-End)**
-Tipo de teste que valida o fluxo completo, como um usuario real usaria.
+## Outbox
+Forma segura de guardar eventos para envio posterior.
 
-## F
+## Rate limit
+Limite de chamadas em um periodo para evitar excesso.
 
-**FastAPI**
-Tecnologia usada no backend para criar APIs em Python.
+## Auditoria
+Registro do historico de alteracoes importantes.
 
-**Frontend**
-Parte visual do sistema: telas, botoes e formularios.
+## Teste unitario
+Teste de uma parte pequena e isolada.
 
-## I
+## Teste de integracao
+Teste de varias partes funcionando juntas.
 
-**Idempotencia**
-Mecanismo para impedir efeito duplicado ao repetir a mesma requisicao.
-Exemplo: evitar criar dois compromissos iguais por clique duplo.
+## Teste E2E
+Teste do fluxo completo, da entrada ate a resposta final.
 
-**Indice de performance**
-Estrutura no banco que acelera buscas.
-
-## J
-
-**JWT (token)**
-"Cracha digital" usado para provar que voce esta autenticado.
-
-## M
-
-**Maquina de estados**
-Regras que controlam as mudancas de status de um compromisso.
-Exemplo: criado -> confirmado -> concluido.
-
-**Metricas de consistencia**
-Indicadores que mostram se usuario mantem regularidade na rotina.
-
-**Multi-tenant**
-Arquitetura que separa dados por empresa.
-Cada empresa acessa apenas o proprio conteudo.
-
-## O
-
-**Outbox**
-Padrao para registrar eventos de forma segura antes de integra-los com outros sistemas.
-
-## P
-
-**Painel de desempenho**
-Tela com indicadores de progresso (metas, consistencia, produtividade).
-
-**Permissao**
-Regra que libera ou bloqueia certas acoes para cada tipo de usuario.
-
-## R
-
-**Rate limit**
-Limite de quantidade de requisicoes em um periodo de tempo.
-Ajuda a proteger o sistema contra abuso.
-
-**RBAC (Role-Based Access Control)**
-Modelo de acesso baseado em papeis.
-Exemplo: admin, gestor, colaborador.
-
-**Redis**
-Banco de dados em memoria, muito rapido, usado para controles temporarios.
-
-## T
-
-**Tenant**
-Empresa/organizacao dentro de um sistema multi-tenant.
-
-**Teste de integracao**
-Teste que valida se modulos diferentes funcionam bem juntos.
-
-**Teste unitario**
-Teste de uma parte pequena e isolada do codigo.
-
-## X
-
-**XP (Experiencia)**
-Pontos ganhos por boas praticas e constancia no uso do sistema.
-
-## Dica final
-
-Se algum termo parecer dificil, pense assim:
-
-- "Quem usa" -> frontend
-- "Quem decide regras" -> backend
-- "Quem guarda historico" -> banco de dados
-
-Com esse mapa mental, quase tudo fica mais facil de entender.
+## XP
+Pontuacao de engajamento (fase 2).

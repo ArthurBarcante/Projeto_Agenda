@@ -1,10 +1,12 @@
-# API Reference (Estudo Tecnico)
+# API Reference
 
-## 1. Convencoes gerais
-- Base local: `http://127.0.0.1:8000`
-- Auth: `Authorization: Bearer <jwt>`
-- Content-Type: `application/json`
-- Modelo de erro padrao:
+## Convencoes
+
+- base local: `http://127.0.0.1:8000`
+- autenticacao: `Authorization: Bearer <jwt>`
+- formato: `application/json`
+
+Modelo de erro padrao (handlers globais):
 
 ```json
 {
@@ -16,11 +18,14 @@
 }
 ```
 
-## 2. Autenticacao
-### `POST /auth/login`
-Alias legado: `POST /authentication/login`
+## Autenticacao
+
+## `POST /auth/login`
+
+Rota legada equivalente: `POST /authentication/login`.
 
 Request:
+
 ```json
 {
   "company_identifier": "acme",
@@ -30,6 +35,7 @@ Request:
 ```
 
 Response 200:
+
 ```json
 {
   "token_acesso": "<jwt>",
@@ -38,14 +44,18 @@ Response 200:
 ```
 
 Erros comuns:
+
 - 401: credenciais invalidas.
 
-## 3. Agenda
-### `POST /appointments`
-- Permissao exigida: `agenda.criar`
-- Header opcional: `Idempotency-Key`
+## Agenda
+
+## `POST /appointments`
+
+- permissao exigida: `agenda.criar`
+- header opcional: `Idempotency-Key`
 
 Request:
+
 ```json
 {
   "title": "Reuniao de planejamento",
@@ -56,10 +66,13 @@ Request:
 }
 ```
 
-Compatibilidade:
-- `participantes_ids` tambem e aceito.
+Compatibilidade de payload:
+
+- `participant_ids` (atual)
+- `participantes_ids` (legado suportado por alias)
 
 Response 201:
+
 ```json
 {
   "id": "6f8472d2-7de8-4f92-95d0-52b4fc96f7df",
@@ -76,31 +89,49 @@ Response 201:
 ```
 
 Erros comuns:
-- 400/409: conflito de horario.
+
 - 403: sem permissao.
+- 409: conflito de horario.
 - 409: `Idempotency-Key` reutilizada com payload diferente.
 
-### `PUT /appointments/{appointment_id}`
-Atualiza campos permitidos (`title`, `description`, `start_time`, `end_time`, `status`).
+## `PUT /appointments/{appointment_id}`
+
+Atualiza campos do compromisso.
+
+Request tipico:
+
+```json
+{
+  "title": "Reuniao atualizada",
+  "start_time": "2026-03-10T12:00:00Z",
+  "end_time": "2026-03-10T13:00:00Z"
+}
+```
 
 Erros comuns:
-- 403: usuario nao e autor.
-- 400: appointment fora de estado atualizavel.
-- 404: appointment inexistente no tenant.
 
-### `PATCH /appointments/{appointment_id}/cancel`
+- 403: usuario nao e criador.
+- 400: estado do compromisso nao permite update.
+- 404: compromisso nao encontrado no tenant.
+
+## `PATCH /appointments/{appointment_id}/cancel`
+
 Cancela compromisso.
 
 Erros comuns:
-- 403: usuario nao e autor.
-- 400: appointment nao pode ser cancelado.
-- 404: nao encontrado no tenant.
 
-## 4. Endpoint utilitario
-### `GET /me`
-Retorna identificadores de usuario e empresa com base no token.
+- 403: usuario nao e criador.
+- 400: compromisso nao pode ser cancelado.
+- 404: compromisso nao encontrado no tenant.
+
+## Utilitario
+
+## `GET /me`
+
+Retorna identificadores do usuario autenticado.
 
 Response 200:
+
 ```json
 {
   "user_id": "56e6f976-0e4d-4dbf-9f15-a6e0adac8268",
@@ -108,7 +139,8 @@ Response 200:
 }
 ```
 
-## 5. Exemplo de chamada com idempotencia
+## Exemplo de criacao com idempotencia
+
 ```bash
 curl -X POST http://127.0.0.1:8000/appointments \
   -H "Authorization: Bearer <token>" \
@@ -122,12 +154,3 @@ curl -X POST http://127.0.0.1:8000/appointments \
     "participant_ids": []
   }'
 ```
-
-## 6. API e evolucao por fases
-- Fase 1: endpoints atuais cobrem autenticacao e agenda robusta.
-- Fase 2: esperado adicionar APIs de metas, XP e painel.
-- Fase 3: esperado adicionar APIs de niveis e feature unlock.
-- Fase 4: esperado adicionar APIs de recomendacao e ajuste adaptativo.
-
-Recomendacao de estudo:
-- manter versionamento explicito quando fases 2-4 entrarem em producao para preservar compatibilidade de clientes existentes.
