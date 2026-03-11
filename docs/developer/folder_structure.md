@@ -13,7 +13,7 @@ dev_data/    -> dados locais de desenvolvimento
 
 ## Backend
 
-## `backend/main.py`
+## `backend/app/main.py`
 
 Compoe a aplicacao FastAPI:
 

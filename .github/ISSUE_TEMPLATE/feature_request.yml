@@ -1,0 +1,71 @@
+name: Feature request
+description: Suggest an improvement or new functionality.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to describe a feature proposal clearly, including problem, solution, and impact.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+      placeholder: Describe the pain point or limitation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: What should be built or changed?
+      placeholder: Describe the feature and expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you evaluate?
+      placeholder: Include trade-offs if possible.
+
+  - type: dropdown
+    id: impact-area
+    attributes:
+      label: System impact area
+      description: Which area is most affected?
+      options:
+        - Backend API
+        - Frontend UI
+        - Database
+        - Performance
+        - Security
+        - Developer Experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact-details
+    attributes:
+      label: Impact details
+      description: Explain expected impact on users, maintainers, or architecture.
+      placeholder: Describe expected benefits and possible risks.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for existing feature requests before opening this issue.
+          required: true
+        - label: I explained why this feature is valuable.
+          required: true

@@ -1,0 +1,98 @@
+name: Bug report
+description: Report a reproducible problem in the system.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill in all required fields so the team can reproduce and fix the issue faster.
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug description
+      description: What is happening and why this is a problem?
+      placeholder: A clear and concise description of the issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List exact steps so we can reproduce the behavior.
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected result.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+      placeholder: Describe the current result.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the issue.
+      placeholder: Drag and drop screenshots here.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste relevant logs, stack traces, or error messages.
+      render: shell
+
+  - type: input
+    id: environment-os
+    attributes:
+      label: Environment - OS
+      description: Operating system where the issue occurs.
+      placeholder: e.g. Ubuntu 24.04, Windows 11, macOS 14
+    validations:
+      required: true
+
+  - type: input
+    id: environment-browser
+    attributes:
+      label: Environment - Browser
+      description: Browser and version (if frontend related).
+      placeholder: e.g. Firefox 123, Chrome 122, Safari 17
+
+  - type: input
+    id: environment-version
+    attributes:
+      label: Environment - App version
+      description: Application, API, or commit version.
+      placeholder: e.g. v1.4.2 or commit abc123
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for existing issues before opening this report.
+          required: true
+        - label: I can reproduce this issue consistently.
+          required: true

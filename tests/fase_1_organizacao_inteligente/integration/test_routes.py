@@ -26,7 +26,7 @@ def test_auth_login_returns_token_when_credentials_are_valid(client, monkeypatch
     def override_db():
         yield AuthDBStub(company=company, user=user)
 
-    from main import app
+    from app.main import app
 
     app.dependency_overrides[get_db] = override_db
 
@@ -40,7 +40,7 @@ def test_auth_login_returns_401_when_company_does_not_exist(client):
     def override_db():
         yield AuthDBStub(company=None, user=None)
 
-    from main import app
+    from app.main import app
 
     app.dependency_overrides[get_db] = override_db
 
@@ -59,7 +59,7 @@ def test_auth_login_returns_401_when_password_is_invalid(client, monkeypatch):
     def override_db():
         yield AuthDBStub(company=company, user=user)
 
-    from main import app
+    from app.main import app
 
     app.dependency_overrides[get_db] = override_db
 
@@ -85,7 +85,7 @@ def test_me_route_returns_current_user_identifiers(client, current_user_factory)
     def override_current_user():
         return current_user
 
-    from main import app
+    from app.main import app
 
     app.dependency_overrides[dependencies.get_current_user] = override_current_user
 

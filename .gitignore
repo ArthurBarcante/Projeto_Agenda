@@ -1,14 +1,20 @@
-# Python
+# Python cache
 __pycache__/
 *.pyc
-*.py[cod]
 *.pyo
+*.pyd
+*.py[cod]
+
+# Pytest
 .pytest_cache/
-backend/__pycache__/
 backend/.pytest_cache/
-dev_data/
-*.db
+
+# Coverage reports
 .coverage
+htmlcov/
+
+# Database files
+*.db
 
 # Local environments
 .venv/
@@ -29,6 +35,9 @@ frontend/coverage/
 **/node_modules/
 **/build/
 **/dist/
+
+# Build artifacts
+dev_data/
 
 # OS/editor
 .DS_Store

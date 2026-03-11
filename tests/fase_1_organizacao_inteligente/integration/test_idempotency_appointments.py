@@ -13,7 +13,7 @@ from app.modules.schedule.models.appointment import AppointmentStatusAlias
 from app.api.routers import schedule as appointments_api
 from app.modules.schedule.services.appointment_service import AppointmentService
 from app.modules.permissions.services.permission_service import PermissionService
-from main import app
+from app.main import app
 
 
 class _FakeAppointment:

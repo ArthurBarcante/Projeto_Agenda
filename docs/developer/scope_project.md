@@ -24,7 +24,7 @@ Escopo implementado hoje:
 
 ## Backend
 
-- `backend/main.py`
+- `backend/app/main.py`
 - rotas principais:
 	- `POST /auth/login`
 	- `POST /appointments`
@@ -125,7 +125,7 @@ tests/README.md
 - `.github/workflows/`: pipelines de automacao (CI/CD).
 
 ### 5.3 Backend - bootstrap e migracoes
-- `backend/main.py`: ponto de entrada da API FastAPI e composicao da aplicacao.
+- `backend/app/main.py`: ponto de entrada da API FastAPI e composicao da aplicacao.
 - `backend/alembic/env.py`: contexto Alembic para execucao de migracoes.
 - `backend/alembic/script.py.mako`: template de novos arquivos de migracao.
 - `backend/alembic/versions/06b0bc232d22_create_companies_table.py`: cria tabela de empresas/tenants.

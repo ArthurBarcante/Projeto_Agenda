@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Project documentation
+    url: https://github.com/ArthurBarcante/Projeto_Agenda/tree/main/docs
+    about: Check setup, architecture, and developer docs before opening an issue.
+  - name: Discussions
+    url: https://github.com/ArthurBarcante/Projeto_Agenda/discussions
+    about: Use discussions for open-ended ideas and community conversation.

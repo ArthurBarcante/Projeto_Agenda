@@ -41,7 +41,7 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 alembic -c alembic.ini upgrade head
-uvicorn backend.main:app --reload
+uvicorn backend.app.main:app --reload
 ```
 
 Se tudo estiver certo, a API abre em `http://127.0.0.1:8000`.

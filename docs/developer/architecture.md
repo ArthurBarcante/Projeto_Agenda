@@ -25,7 +25,7 @@ flowchart TD
 
 ## Composicao da aplicacao
 
-Ponto de entrada: `backend/main.py`.
+Ponto de entrada: `backend/app/main.py`.
 
 Responsabilidades no bootstrap:
 
