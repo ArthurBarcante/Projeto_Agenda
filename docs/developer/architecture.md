@@ -10,73 +10,88 @@ O AIgenda foi estruturado para entregar agenda corporativa com:
 - resiliencia de escrita (idempotencia + outbox);
 - observabilidade basica (auditoria).
 
-## Camadas e fluxo principal
+# Architecture
 
-```mermaid
-flowchart TD
-  C[Cliente HTTP / Frontend] --> R[FastAPI Routers]
-  R --> M[Middlewares]
-  M --> D[Dependencies]
-  D --> S[Services]
-  S --> REPO[Repositories]
-  REPO --> PG[(PostgreSQL)]
-  M --> RL[(Redis)]
-```
+O AIgenda segue uma arquitetura web em camadas, com frontend separado do backend e persistencia concentrada na camada de banco de dados.
 
-## Composicao da aplicacao
+No estado atual do repositorio, a arquitetura esta parcialmente implementada e parcialmente preparada como base para evolucao.
 
-Ponto de entrada: `backend/app/main.py`.
+## Visao geral
 
-Responsabilidades no bootstrap:
+O sistema pode ser entendido em tres blocos:
 
-- instancia `FastAPI`;
-- registra `TenantContextMiddleware` e `RateLimitMiddleware`;
-- registra handlers globais de erro;
-- registra handlers de eventos de schedule e notifications;
-- inclui rotas atuais e legadas.
+1. frontend para interface com o usuario;
+2. backend para API e regras de negocio;
+3. banco de dados para persistencia.
 
-## Decisoes de arquitetura
+O frontend envia requisicoes HTTP ao backend.
 
-## 1. Multi-tenancy via contexto
+O backend processa essas requisicoes e conversa com o banco para ler ou gravar dados.
 
-- middleware extrai tenant do JWT;
-- tenant e armazenado em contexto de execucao;
-- repositorios sensiveis exigem tenant no contexto;
-- queries de entidades tenant-scoped sao protegidas por enforcement de sessao.
+## Backend e frontend em conjunto
 
-## 2. Defesa em profundidade para conflito de horario
+O frontend atual usa Next.js para estruturar paginas, layouts e providers.
 
-- validacao aplicacional no `AppointmentService`;
-- consulta de conflito com lock (`with_for_update`) no repositorio;
-- indices e constraint de banco para reforco de integridade.
+Quando o usuario executa uma acao, como login ou consulta de compromissos, a interface chama um service de frontend.
 
-## 3. Escrita confiavel
+Esse service usa um cliente HTTP compartilhado para conversar com a API FastAPI.
 
-- idempotencia por `Idempotency-Key` com hash canonico do corpo;
-- outbox transacional para dissociar integracao externa da resposta HTTP;
-- auditoria de alteracoes no ciclo de vida de compromissos.
+No backend, a aplicacao principal registra routers de autenticacao, usuarios e compromissos.
 
-## 4. Compatibilidade evolutiva
+Em termos de nomenclatura tecnica, isso aparece no codigo como `auth`, `users` e `appointments`.
 
-- rotas legadas (`/authentication/login`) coexistem com rotas atuais (`/auth/login`);
-- schemas aceitam aliases de campos para transicao controlada de clientes.
+Com isso, o sistema ja possui uma fronteira clara entre camada de interface e camada de negocio.
 
-## Fluxo de criacao de compromisso
+## Arquitetura em camadas no backend
 
-```mermaid
-sequenceDiagram
-  participant UI as Cliente
-  participant API as /appointments
-  participant TM as TenantMiddleware
-  participant RL as RateLimitMiddleware
-  participant IDEM as IdempotencyService
-  participant SVC as AppointmentService
-  participant DB as PostgreSQL
-  participant OUT as Outbox
+A organizacao do backend aponta para esta separacao:
 
-  UI->>API: POST /appointments
-  API->>TM: resolve tenant do token
-  API->>RL: valida limite por tenant
+- routers para exposicao de endpoints;
+- schemas para validacao de dados;
+- services para regras de negocio;
+- repositories para acesso a dados;
+- models ORM para persistencia.
+
+Mesmo quando alguns arquivos ainda estao enxutos, essa divisao deixa clara a intencao arquitetural e reduz acoplamento.
+
+## Banco de dados e persistencia
+
+O projeto usa SQLAlchemy e possui infraestrutura de banco em `backend/db/`.
+
+Os modelos compartilham bases comuns com campos padrao de identificacao e auditoria temporal.
+
+Um ponto importante da arquitetura e o uso de uma base orientada a tenant.
+
+Isso sinaliza que o sistema foi pensado para isolar dados por empresa.
+
+## Isolamento por empresa
+
+O conceito de multi-tenancy aparece na modelagem por meio de `TenantModel` e do campo associado a empresa.
+
+Arquiteturalmente, isso significa que o sistema nao trata todos os usuarios como pertencentes ao mesmo espaco de dados.
+
+Cada empresa deve operar no proprio contexto.
+
+## Estrategia de crescimento
+
+O repositorio mostra uma fase de consolidacao.
+
+Ha uma base atual mais enxuta no codigo principal e sinais de uma arquitetura mais ampla no historico e na organizacao anterior da documentacao.
+
+Para quem vai evoluir o sistema, a direcao mais segura e continuar reforcando estas fronteiras:
+
+- frontend focado em interface e consumo da API;
+- backend focado em regras e persistencia;
+- banco isolado em uma camada propria;
+- testes acompanhando cada dominio.
+
+## Beneficios dessa arquitetura
+
+- facilita manutencao;
+- melhora leitura por novos colaboradores;
+- reduz mistura de responsabilidades;
+- prepara o sistema para escalar por modulos;
+- ajuda a introduzir novas funcionalidades sem reescrever a base inteira.
   API->>IDEM: verifica chave idempotente
   IDEM-->>API: hit ou miss
   API->>SVC: create_appointment(...)

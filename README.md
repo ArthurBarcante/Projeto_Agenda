@@ -1,44 +1,59 @@
 # AIgenda
 
-Plataforma de agendamento corporativo inteligente com foco em confiabilidade, isolamento multi-tenant e escalabilidade.
+Plataforma de agenda digital para organizacao de compromissos, com base arquitetural preparada para crescimento por modulos.
 
 ## Descricao
 
-O **AIgenda** e um sistema de gestao de compromissos para equipes e empresas que precisam organizar agendas com seguranca e previsibilidade.
+O **AIgenda** e um projeto de organizacao de agenda para pessoas, equipes e empresas.
 
-O projeto resolve problemas comuns em ambientes corporativos:
+O repositorio atual combina duas frentes:
 
-- conflitos de horario entre participantes;
-- duplicidade de requisicoes em operacoes criticas;
-- isolamento de dados entre empresas (multi-tenant);
-- controle de acesso por papeis e permissoes;
-- rastreabilidade de eventos e acoes no sistema.
+- uma visao de produto orientada a organizacao inteligente e evolucao futura;
+- uma base tecnica em consolidacao, com backend, frontend, testes e documentacao separados.
 
-O desenvolvimento e organizado em duas fases de produto:
+Hoje, o projeto ja possui estrutura para autenticacao, usuarios, compromissos, persistencia com SQLAlchemy, interface web com Next.js e suites de testes organizadas por contexto.
 
-- **Fase 1 — Organizacao Inteligente**: agenda corporativa com prevencao de conflitos, multi-tenancy, RBAC e idempotencia.
-- **Fase 2 — Engajamento**: notificacoes, webhooks e integracoes para aumentar o engajamento dos usuarios.
+## Estado atual do repositorio
+
+O repositrio esta em fase de consolidacao da base.
+
+Isso significa que a arquitetura esta mais avancada do que a quantidade de fluxos completos expostos na interface e na API.
+
+Em termos práticos, o codigo atual entrega:
+
+- aplicacao FastAPI com registro de routers de `auth`, `users` e `appointments`;
+- models ORM para usuarios e compromissos;
+- camada de banco separada em `backend/db/`;
+- frontend com rotas de `signin`, `dashboard`, `appointments` e `profile`;
+- cliente HTTP compartilhado no frontend;
+- testes de backend e frontend organizados por feature.
 
 ## Documentacao
 
-A documentacao completa esta em [`docs/`](docs/README.md):
+A documentacao do projeto esta organizada por publico.
 
-- [`docs/beginner/`](docs/beginner/README.md) — visao geral acessivel do sistema, setup e glossario.
-- [`docs/developer/`](docs/developer/README.md) — arquitetura, modulos, API, testes e guia de contribuicao.
+### Beginner
 
-## Funcionalidades implementadas
+- [docs/beginner/what_is_the_project.md](docs/beginner/what_is_the_project.md)
+- [docs/beginner/what_the_project_does.md](docs/beginner/what_the_project_does.md)
+- [docs/beginner/how_the_project_works.md](docs/beginner/how_the_project_works.md)
 
-- Cadastro, atualizacao e cancelamento de compromissos.
-- Prevencao automatica de conflitos de horario (constraint + indices).
-- Suporte a multiplos participantes por compromisso.
-- Autenticacao via JWT.
-- Controle de acesso com RBAC (roles e permissions).
-- Isolamento multi-tenant por empresa.
-- Idempotencia para evitar criacao duplicada em requests repetidos.
-- Middleware de rate limit com suporte a Redis.
-- Auditoria de eventos e padrao outbox para integracoes.
-- Webhooks e subscricoes de eventos.
-- Testes organizados em camadas (`unit`, `integration`, `e2e`) por fase de produto.
+### Developer
+
+- [docs/developer/project_structure.md](docs/developer/project_structure.md)
+- [docs/developer/backend.md](docs/developer/backend.md)
+- [docs/developer/frontend.md](docs/developer/frontend.md)
+- [docs/developer/tests.md](docs/developer/tests.md)
+- [docs/developer/architecture.md](docs/developer/architecture.md)
+- [docs/developer/project_planning.md](docs/developer/project_planning.md)
+- [docs/developer/future_improvements.md](docs/developer/future_improvements.md)
+
+## Estrutura principal
+
+- `backend/`: API, modelos, servicos e infraestrutura de banco.
+- `frontend/`: interface web com Next.js, React e TypeScript.
+- `tests/`: testes de backend e frontend.
+- `docs/`: documentacao para iniciantes e desenvolvedores.
 
 ## Tecnologias
 
@@ -49,59 +64,58 @@ A documentacao completa esta em [`docs/`](docs/README.md):
 - SQLAlchemy
 - Alembic
 - PostgreSQL
-- Redis
 - Pydantic
 - Uvicorn
 
 ### Frontend
 
-- Next.js (Fase 1 — Organizacao Inteligente)
-- React + TypeScript (Fase 2 — Engajamento)
+- Next.js
+- React
+- TypeScript
 - Tailwind CSS
-- Vitest
 
 ### Qualidade
 
 - Pytest
+- Vitest
 - ESLint
 
-## Instalacao / Setup
+## Setup
 
-### 1) Clonar o repositorio
+### 1. Clonar o repositorio
 
 ```bash
 git clone <url-do-repositorio>
 cd aigenda
 ```
 
-### 2) Configurar variaveis de ambiente
-
-```bash
-cp .env.example .env
-```
-
-Edite o arquivo `.env` com os valores do seu ambiente local (principalmente `DATABASE_URL`, `SECRET_KEY` e `REDIS_URL`).
-
-### 3) Subir dependencias externas
-
-Garanta que voce possui:
-
-- PostgreSQL em execucao
-- Redis em execucao
-
-### 4) Setup do backend
+### 2. Configurar ambiente Python
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-alembic -c alembic.ini upgrade head
+```
+
+### 3. Configurar banco de dados
+
+Defina a variavel `DATABASE_URL` no seu ambiente ou no arquivo `.env`, conforme sua configuracao local.
+
+Depois execute as migracoes:
+
+```bash
+alembic -c backend/db/alembic.ini upgrade head
+```
+
+### 4. Subir o backend
+
+```bash
 uvicorn backend.app.main:app --reload
 ```
 
 API disponivel em `http://127.0.0.1:8000`.
 
-### 5) Setup do frontend
+### 5. Subir o frontend
 
 Em outro terminal:
 
@@ -113,75 +127,47 @@ npm run dev
 
 Frontend disponivel em `http://localhost:3000`.
 
-## Uso / Exemplos
+## Endpoints e rotas relevantes no estado atual
 
-### Endpoints principais
+### Backend
 
 - `POST /auth/login`
-- `POST /appointments`
-- `PUT /appointments/{appointment_id}`
-- `PATCH /appointments/{appointment_id}/cancel`
-- `GET /me`
+- prefixo `/users`
+- prefixo `/appointments`
 
-### Exemplo: login
+Observacao: os routers ja estao registrados, mas parte do comportamento ainda esta em implementacao.
 
-```bash
-curl -X POST http://127.0.0.1:8000/auth/login \
-	-H "Content-Type: application/json" \
-	-d '{
-		"company_identifier": "acme",
-		"email": "user@acme.com",
-		"senha": "123456"
-	}'
-```
+### Frontend
 
-### Exemplo: criar compromisso com idempotencia
+- `/signin`
+- `/dashboard`
+- `/appointments`
+- `/profile`
+
+## Testes
 
 ```bash
-curl -X POST http://127.0.0.1:8000/appointments \
-	-H "Authorization: Bearer <seu_token>" \
-	-H "Content-Type: application/json" \
-	-H "Idempotency-Key: 7f005748-8c8e-4f89-92ea-9d4aa5e6b220" \
-	-d '{
-		"titulo": "Reuniao de planejamento",
-		"descricao": "Sprint semanal",
-		"inicio": "2026-03-10T10:00:00Z",
-		"fim": "2026-03-10T11:00:00Z",
-		"participantes_ids": []
-	}'
+pytest -c tests/config/pytest.ini --rootdir=.
+pytest -c tests/config/pytest.ini --rootdir=. tests/backend/
+pytest -c tests/config/pytest.ini --rootdir=. tests/frontend/
 ```
 
-### Rodando testes
+No frontend:
 
 ```bash
-# Todos os testes
-pytest
-
-# Por fase
-pytest tests/fase_1_organizacao_inteligente/
-pytest tests/fase_2_engajamento/
-
-# Frontend (Fase 2)
-cd frontend && npm test
+cd frontend
+npm test
 ```
 
-## Contribuicao
+## Terminologia adotada
 
-Contribuicoes sao bem-vindas.
+Para manter consistencia entre codigo e documentacao:
 
-Fluxo recomendado:
-
-1. Crie uma branch a partir da `main`:
-
-```bash
-git checkout -b feat/minha-feature
-```
-
-2. Implemente sua alteracao com testes.
-3. Execute validacoes locais (`pytest` e lint do frontend quando aplicavel).
-4. Abra um Pull Request descrevendo contexto, solucao e impacto.
-
-Para detalhes sobre o fluxo de contribuicao, consulte [docs/developer/contributing.md](docs/developer/contributing.md).
+- o dominio de negocio e descrito em portugues como `compromissos`;
+- o nome tecnico do modulo e da rota continua `appointments`;
+- o fluxo de acesso do usuario e descrito como `login` ou `autenticacao`;
+- a rota web correspondente no frontend continua `signin`;
+- o modulo tecnico do backend continua `auth`.
 
 ## Licenca
 

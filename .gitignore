@@ -6,8 +6,7 @@ __pycache__/
 *.py[cod]
 
 # Pytest
-.pytest_cache/
-backend/.pytest_cache/
+tests/config/.pytest_cache/
 
 # Coverage reports
 .coverage
