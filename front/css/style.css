@@ -1,0 +1,104 @@
+/* ===================== */
+/* RESET GLOBAL */
+/* ===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===================== */
+/* VARIAVEIS (PADRAO DO PROJETO) */
+/* ===================== */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+
+  --background: #0f172a;
+  --background-secondary: #1e293b;
+
+  --card-bg: #0b1220;
+
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+
+  --error: #f87171;
+
+  --border: #1e293b;
+}
+
+/* ===================== */
+/* BASE DO BODY */
+/* ===================== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* FUNDO MODERNO */
+  background: radial-gradient(circle at 20% 30%, #1e293b, transparent 40%),
+    radial-gradient(circle at 80% 70%, #312e81, transparent 40%),
+    var(--background);
+}
+
+/* ===================== */
+/* ELEMENTOS PADRAO */
+/* ===================== */
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+input,
+button {
+  font-family: inherit;
+}
+
+/* ===================== */
+/* UTILITARIOS (REUSO) */
+/* ===================== */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+/* ===================== */
+/* AUTH WRAPPER */
+/* ===================== */
+.auth-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* ===================== */
+/* ANIMACAO GLOBAL */
+/* ===================== */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

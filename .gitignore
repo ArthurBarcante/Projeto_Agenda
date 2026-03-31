@@ -1,0 +1,19 @@
+# Python virtual environments
+/.venv/
+configs/.venv/
+
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Front-end dependencies/cache
+node_modules/
+
+# Local data mocks (not versioned)
+back/mock/
+
+# Local tests (not versioned)
+tests/
