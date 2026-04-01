@@ -1,63 +1,79 @@
 # O que é o projeto
 
-Este projeto e uma agenda inteligente criada para ajudar o usuário a organizar melhor a própria rotina.
+O Projeto Agenda é um sistema criado para ajudar a pessoa a organizar melhor a própria rotina.
 
-Em vez de ser apenas uma agenda comum, ele foi pensado para unir organização, acompanhamento e motivação no mesmo sistema.
+Em termos simples, ele junta duas ideias no mesmo lugar:
 
-## Qual e a ideia principal
+- organizar compromissos, tarefas e horários
+- oferecer uma base para acompanhar a rotina de forma mais prática
 
-A proposta do projeto e permitir que a pessoa cadastre compromissos, atividades e horários de forma pratica, mas com um diferencial: o sistema busca ajudar o usuário a seguir sua rotina com mais constância.
+Hoje, o projeto já tem uma parte funcional importante: o sistema de usuários.
 
-Ou seja, não e apenas sobre anotar tarefas. E sobre criar uma rotina mais organizada e mais fácil de manter no dia a dia.
+Isso significa que uma pessoa já pode:
 
-## O que torna essa agenda inteligente
+- criar uma conta
+- fazer login
+- ter seus dados salvos de verdade em um banco de dados
+- ser identificada pelo sistema depois que entra
 
-O projeto quer ir além de uma lista de horários.
+## Qual é a proposta principal
 
-Ele foi pensado para funcionar como uma agenda que:
+A proposta é que o sistema não seja apenas um lugar para anotar coisas.
 
-- organiza compromissos e tarefas
-- ajuda o usuário a visualizar melhor sua rotina
-- incentiva a continuidade dos hábitos
-- usa missões e streaks como forma de motivação
+A ideia é construir uma agenda mais completa, capaz de ajudar o usuário a:
 
-## O que são missões e streaks
+- lembrar do que precisa fazer
+- manter uma rotina organizada
+- acompanhar o próprio progresso com o tempo
 
-Missões são pequenas metas ou atividades que o usuário deve cumprir dentro da rotina.
+Hoje, essa visão ainda está em construção, mas a base principal já começou a ser montada.
 
-Exemplos:
+## O que já existe de verdade no projeto
 
-- estudar em determinado horário
-- concluir uma tarefa importante do dia
-- cumprir um compromisso marcado
+Neste momento, o projeto já possui:
 
-Streaks representam uma sequência de dias ou periodos em que o usuário conseguiu manter um hábito ou cumprir sua rotina corretamente.
+- uma tela de cadastro
+- uma tela de login
+- um backend que recebe esses dados
+- um banco PostgreSQL para salvar usuários
+- proteção de senha com hash, que é uma forma segura de armazenamento
+- autenticação com token, que permite ao sistema saber quem está logado
 
-Na prática, isso funciona como um incentivo. Quanto mais o usuário segue sua rotina, maior sua sequência. Isso ajuda a criar disciplina e manter a motivação.
+Em outras palavras, o projeto já deixou de ser apenas uma ideia visual. Ele já tem uma parte real funcionando no backend.
 
-## Para que esse projeto serve
+## O que significa "backend" aqui
 
-Esse projeto serve para pessoas que querem:
+Para quem não é da área, backend é a parte do sistema que fica por trás da interface.
 
-- organizar melhor o tempo
-- lembrar de compromissos importantes
-- criar constância em estudos, trabalho ou hábitos pessoais
-- ter mais controle sobre a própria rotina
-- se sentir incentivadas a continuar seguindo o planejamento
+É essa parte que:
 
-## Por que ele pode ser útil
+- recebe os dados enviados pelo usuário
+- valida se estão corretos
+- salva as informações
+- responde se deu tudo certo ou se houve erro
 
-Muitas pessoas até tentam se organizar, mas acabam abandonando a rotina depois de alguns dias.
+No Projeto Agenda, é o backend que hoje cuida do cadastro, do login e da identificação do usuário autenticado.
 
-Esse projeto busca resolver isso juntando duas coisas:
+## O que significa "banco de dados"
 
-1. organização da agenda
-2. motivação para continuar usando a agenda
+Banco de dados é o lugar onde as informações ficam guardadas de forma permanente.
 
-Com isso, a ferramenta não fica limitada a marcar horários. Ela tambem ajuda o usuario a permanecer engajado com o proprio planejamento.
+No caso deste projeto, isso quer dizer que os usuários cadastrados não ficam apenas na memória do programa. Eles ficam salvos no PostgreSQL, que é o banco usado pelo sistema hoje.
+
+## O que o projeto quer se tornar no futuro
+
+O objetivo é evoluir essa base para chegar a uma agenda inteligente completa.
+
+Mais para frente, a ideia é permitir:
+
+- cadastro de tarefas
+- cadastro de eventos e compromissos
+- organização da rotina por usuário
+- acompanhamento de progresso
+- recursos de motivação, como missões e streaks
 
 ## Resumindo
 
-Este projeto e uma agenda inteligente que ajuda o usuário a organizar horários, compromissos e tarefas de forma mais eficiente.
+Hoje, o Projeto Agenda já é um sistema com cadastro, login e persistência real de usuários.
 
-Seu diferencial está no uso de missoes e streaks, que tornam a experiência mais motivadora e incentivam a pessoa a seguir sua rotina com mais disciplina e constância.
+No futuro, ele deve crescer para se tornar uma plataforma de organização pessoal mais completa, com agenda, tarefas, eventos e acompanhamento de rotina.

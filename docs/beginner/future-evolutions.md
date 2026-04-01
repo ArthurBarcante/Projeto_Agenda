@@ -1,130 +1,111 @@
 # Futuras evoluções do projeto
 
-O projeto já possui uma base inicial funcionando, mas a ideia principal dele ainda vai crescer bastante.
+O Projeto Agenda já tem uma base real de usuários funcionando, mas o objetivo dele é ir além disso.
 
-Como a proposta e criar uma agenda inteligente, ainda existem varias funções importantes que devem ser implementadas nas proximas etapas.
+Hoje, o sistema já sabe cadastrar usuários, fazer login, proteger senha e identificar quem está autenticado.
 
-## Evolução principal do projeto
+As próximas evoluções devem transformar essa base em uma agenda inteligente mais completa.
 
-A maior evolução esperada e sair de um sistema que hoje já faz login e cadastro para uma plataforma completa de organização pessoal.
+## O próximo grande passo
 
-Ou seja, a aplicação vai deixar de ser apenas uma base de acesso e vai passar a ajudar o usuário a planejar, acompanhar e manter a própria rotina.
+O próximo grande passo é sair de um sistema que hoje cuida principalmente de usuários para um sistema que também cuide da rotina dessas pessoas.
 
-## Funções que ainda devem ser implementadas
+Em outras palavras, o projeto precisa evoluir de:
 
-### Agenda de horários e compromissos
+- cadastro e login
 
-Uma das proximas evoluções sera permitir que o usuário cadastre compromissos e horários reais dentro do sistema.
+para:
 
-Exemplos:
+- organização do dia a dia
+- tarefas
+- compromissos
+- progresso
+- motivação
 
-- horário de estudo
-- reuniões
+## Funções que ainda devem ser criadas
+
+### Agenda de compromissos
+
+Uma evolução importante será permitir que cada usuário registre seus compromissos.
+
+Exemplos simples:
+
 - consultas
+- reuniões
+- horários de estudo
 - atividades pessoais
 
-Isso vai aproximar o projeto da função principal de uma agenda.
+Isso é o que vai começar a transformar o sistema em uma agenda de fato.
 
-### Cadastro e controle de tarefas
+### Tarefas por usuário
 
-Outra melhoria importante sera permitir que o usuário crie tarefas e acompanhe o que foi concluido.
+Outra etapa importante será permitir que cada pessoa crie suas próprias tarefas.
 
-Com isso, o sistema não vai cuidar apenas de horários, mas tambem das ações que fazem parte da rotina.
+Essas tarefas podem ajudar o usuário a acompanhar o que precisa fazer e o que já foi concluído.
 
-### Organização inteligente da rotina
+## Eventos e organização do tempo
 
-Esse é um dos pontos mais importantes da proposta.
+Além de tarefas, o projeto também pode crescer para guardar eventos e horários importantes, organizando melhor o tempo de cada usuário.
 
-No futuro, o sistema deve ajudar o usuário a organizar melhor os horários e distribuir atividades de forma mais inteligente.
+Isso ajuda a tornar a rotina mais clara e menos improvisada.
 
-A ideia é que a agenda não seja apenas um lugar para guardar informações, mas uma ferramenta que realmente ajude a montar uma rotina mais eficiente.
+## Rotina personalizada
 
-### Sistema de missões
+Mais para frente, o sistema pode passar a organizar os dados de forma mais inteligente para cada pessoa.
 
-As missões ainda devem ser implementadas como pequenas metas do dia a dia.
+A ideia é que o usuário não apenas anote informações, mas consiga realmente acompanhar como está usando o próprio tempo.
+
+## Missões
+
+As missões são uma ideia para transformar pequenas metas do dia a dia em objetivos mais visíveis.
 
 Por exemplo:
 
 - concluir uma tarefa importante
-- cumprir um horário planejado
-- seguir uma parte da rotina por completo
+- cumprir um compromisso do dia
+- seguir uma parte da rotina planejada
 
-Esse sistema vai servir como incentivo para manter a disciplina.
+Isso pode ajudar a tornar o uso do sistema mais motivador.
 
-### Sistema de streaks
+## Streaks
 
-Os streaks tambem fazem parte da ideia principal do projeto e ainda precisam ser desenvolvidos.
+Os streaks são sequências de dias em que a pessoa consegue manter constância.
 
-Eles devem mostrar quantos dias seguidos o usuário conseguiu manter constância na rotina.
+Por exemplo, se o usuário cumprir suas metas por vários dias seguidos, o sistema pode mostrar essa sequência.
 
-Isso vai ajudar a transformar o uso da agenda em algo mais motivador, porque o usuário podera acompanhar seu próprio ritmo de evolução.
+Isso serve como incentivo e ajuda a visualizar evolução ao longo do tempo.
 
-### Dashboard e visualização de progresso
+## Painel de progresso
 
-No futuro, o projeto tambem pode ganhar uma área para mostrar informações importantes de forma visual.
+No futuro, o projeto também pode mostrar informações de forma visual, para o usuário entender melhor como está indo.
 
-Por exemplo:
+Exemplos do que poderia aparecer:
 
-- tarefas concluidas
+- tarefas concluídas
 - compromissos do dia
-- missões em andamento
-- streak atual
-- histórico de desempenho
+- sequência atual
+- metas cumpridas
+- histórico de evolução
 
-Isso deixaria a experiência mais clara e mais completa.
+## Integração total entre frontend e backend real
 
-### Melhorias de segurança e validação
+Hoje, o backend já tem persistência real de usuários, mas o frontend ainda convive com partes de dados simulados.
 
-Hoje o sistema está em fase de desenvolvimento e usa validações mais simples.
+Uma evolução importante será ligar toda a aplicação ao backend real, para que tudo funcione de forma unificada.
 
-Mais para frente, será importante melhorar pontos como:
+## Melhorias de segurança e maturidade do sistema
 
-- proteção de senhas
-- validações mais completas
-- controle de sessão
-- autenticação mais segura
+Mesmo com a base de autenticação já pronta, o projeto ainda pode evoluir em pontos como:
 
-Essas melhorias são importantes para transformar o projeto em uma aplicação mais madura.
+- configuração mais segura das chaves do sistema
+- separação de permissões por tipo de usuário
+- testes automáticos
+- melhorias na organização interna do código
 
-### Banco de dados real
-
-Hoje existe uso de mock e um banco fake em memória para facilitar o desenvolvimento.
-
-No futuro, o ideal e usar um banco de dados real, para que as informações fiquem salvas de forma persistente e segura.
-
-Isso será importante principalmente quando o sistema comecar a guardar:
-
-- usuários
-- tarefas
-- compromissos
-- eventos
-- progresso
-- streaks
-
-### Integração completa entre frontend e backend real
-
-Embora parte dessa base ja esteja preparada, ainda faltam recursos para que toda a aplicacao funcione 100 por cento conectada ao backend real.
-
-Essa evolucao vai permitir abandonar o uso temporario do mock e concentrar tudo em uma unica API.
-
-## O que o projeto quer se tornar
-
-No futuro, a ideia e que o sistema seja uma plataforma capaz de:
-
-- organizar a rotina do usuario
-- registrar compromissos e tarefas
-- incentivar disciplina com missoes
-- mostrar constancia com streaks
-- acompanhar progresso ao longo do tempo
-
-Ou seja, o objetivo final nao e apenas ser uma agenda comum.
-
-O projeto quer se tornar uma agenda inteligente que ajuda o usuario a planejar melhor o dia e, ao mesmo tempo, se manter motivado para seguir a propria rotina.
+Essas mudanças não aparecem tanto para o usuário final, mas são importantes para deixar o sistema mais confiável.
 
 ## Resumindo
 
-As proximas evolucoes do projeto devem transformar a base atual em um sistema mais completo.
+Hoje, o Projeto Agenda já tem uma base real e importante funcionando.
 
-Hoje ja existe o comeco da plataforma.
-
-Depois, com a implementacao de agenda, tarefas, missoes, streaks, progresso e banco real, o projeto podera entregar a experiencia completa que foi pensada desde o inicio.
+As próximas evoluções devem levar essa base para o objetivo principal do sistema: se tornar uma agenda inteligente completa, com tarefas, compromissos, rotina, progresso e recursos de motivação.

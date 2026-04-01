@@ -1,100 +1,115 @@
-# Quais funções o projeto vai ter
+# Quais funções o projeto tem hoje
 
-Este projeto foi pensado para ser mais do que uma agenda simples.
+Este arquivo explica o que o Projeto Agenda já consegue fazer neste momento.
 
-Ele vai reunir organização de rotina, acompanhamento de tarefas e recursos de motivação para ajudar o usuário a manter constância no dia a dia.
+Como o sistema ainda está em desenvolvimento, algumas funções já existem e outras ainda serão criadas mais para frente.
 
-## Função principal do projeto
+## Funções que já estão funcionando
 
-A função principal da plataforma e ajudar a pessoa a organizar seus horários de forma mais inteligente.
+Hoje, o projeto já possui um primeiro núcleo funcional, voltado para usuários e autenticação.
 
-Isso significa que o sistema não vai servir apenas para anotar compromissos, mas também para orientar o usuário no acompanhamento da própria rotina.
+Na prática, isso quer dizer que o sistema já consegue lidar com o processo de entrada de uma pessoa no sistema.
 
-## Funções que o projeto vai ter
+### 1. Cadastro de usuário
 
-### Cadastro e login de usuários
+Uma pessoa já pode criar uma conta informando dados como:
 
-O sistema vai permitir que cada usuário crie sua conta e acesse seu proprio ambiente.
+- nome
+- email
+- senha
+- telefone
+- CPF
+- data de nascimento
+- tipo de usuário
 
-Com isso, cada pessoa poderá ter seus próprios dados, compromissos, tarefas e progresso salvos de forma separada.
+O sistema também faz algumas verificações automáticas, como:
 
-### Cadastro de compromissos
+- confirmar se a senha e a confirmação de senha são iguais
+- impedir email repetido
+- impedir CPF repetido
 
-O usuário poderá registrar compromissos importantes do dia a dia, como:
+## 2. Login com email e senha
 
-- reuniões
-- consultas
-- horários de estudo
-- atividades pessoais
+Depois do cadastro, o usuário já pode entrar no sistema com email e senha.
 
-Essa função ajuda a visualizar melhor o que precisa ser feito e quando cada atividade deve acontecer.
+Se os dados estiverem corretos, o backend libera o acesso.
 
-### Organização da rotina
+Se estiverem errados, o sistema responde com erro de forma segura, sem dizer exatamente se o problema foi no email ou na senha.
 
-O projeto vai ajudar a distribuir melhor as atividades ao longo do tempo.
+## 3. Senha protegida
 
-Em vez de deixar tudo solto, a ideia e que o usuário consiga montar uma rotina mais clara, com horários definidos e melhor controle do que precisa ser feito.
+As senhas não ficam salvas de forma aberta no banco.
 
-### Controle de tarefas
+Em vez disso, o sistema transforma a senha em um formato protegido chamado hash.
 
-O usuário tambem vai poder acompanhar tarefas e marcar o que ja foi concluido.
+Isso é importante porque, mesmo que alguém veja o conteúdo salvo no banco, não enxerga a senha original do usuário de forma direta.
 
-Isso ajuda a transformar objetivos em passos menores e mais fáceis de acompanhar no dia a dia.
+## 4. Usuário salvo de verdade no banco
 
-### Sistema de missões
+O sistema já usa PostgreSQL, que é um banco de dados real.
 
-O sistema vai usar missões para incentivar o usuário a cumprir partes da propria rotina.
+Isso significa que o cadastro não fica apenas em um arquivo temporário ou em memória. Os dados do usuário ficam gravados de forma persistente.
 
-Essas missões podem funcionar como pequenas metas, por exemplo:
+Em outras palavras, mesmo que a aplicação seja reiniciada, o usuário continua existindo no sistema.
 
-- estudar por um periodo do dia
-- concluir uma tarefa importante
-- comparecer a um compromisso planejado
+## 5. Login com token
 
-Esse recurso serve para tornar a rotina mais objetiva e mais motivadora.
+Quando o usuário faz login com sucesso, o sistema gera um token.
 
-### Sistema de streaks
+Esse token funciona como uma prova de que a pessoa já foi autenticada.
 
-O projeto tambem vai ter streaks, que representam sequências de dias em que o usuário conseguiu manter constância.
+Depois disso, ele pode ser enviado nas próximas requisições para o backend reconhecer quem está acessando o sistema.
 
-Por exemplo, se a pessoa cumprir sua rotina ou completar suas missões por vários dias seguidos, essa sequência cresce.
+## 6. Rota protegida para identificar o usuário logado
 
-Isso cria um incentivo para continuar, porque o usuário consegue ver seu próprio progresso ao longo do tempo.
+O projeto já possui uma rota protegida que permite verificar quem está autenticado naquele momento.
 
-### Acompanhamento de progresso
+Na prática, isso mostra que o sistema já consegue:
 
-Outra função importante será mostrar como o usuário está evoluindo.
+- receber o token
+- validar se ele é verdadeiro
+- descobrir qual usuário fez a requisição
 
-Em vez de apenas registrar tarefas, o sistema vai ajudar a perceber se a rotina esta sendo seguida, se ha constância e quais metas estão sendo cumpridas.
+## 7. Telas iniciais no frontend
 
-### Experiência simples e visual
+No frontend, já existem telas iniciais para:
 
-O projeto tambem foi pensado para ser fácil de usar.
+- login
+- cadastro
+- navegação entre essas telas
 
-A ideia e oferecer uma interface clara, direta e organizada, para que o usuário consiga entender rapidamente onde cadastrar, acompanhar e consultar suas informações.
+Isso quer dizer que o projeto já tem uma base visual para o fluxo de autenticação.
 
-## Por que essas funções são importantes
+## 8. Modo mock e modo real
 
-Essas funções se complementam.
+O projeto ainda mantém um modo de dados simulados para facilitar testes no frontend.
 
-Uma agenda comum apenas guarda horários. Já este projeto quer fazer mais:
+Ao mesmo tempo, o backend já possui persistência real de usuários.
 
-1. organizar a rotina
-2. ajudar no cumprimento das atividades
-3. incentivar a disciplina
-4. mostrar progresso com o tempo
+Isso faz com que o sistema esteja em uma fase de transição: parte dele ainda pode usar dados simulados, mas a área de autenticação de usuários já está conectada a um banco real.
 
-Isso torna o sistema mais útil para quem precisa de ajuda não só para planejar, mas tambem para manter a rotina funcionando de verdade.
+## O que ainda não está pronto
+
+Apesar de essas funções já existirem, o projeto ainda não possui a parte principal da agenda completa.
+
+Ainda faltam funções como:
+
+- tarefas por usuário
+- eventos e compromissos salvos no banco
+- organização da rotina
+- missões
+- streaks
+- painéis de progresso
 
 ## Resumindo
 
-O projeto vai ter funções voltadas para:
+Hoje, o Projeto Agenda já tem funções reais e importantes:
 
-- cadastro e login
-- organização de horários
-- controle de tarefas e compromissos
-- sistema de missões
-- sistema de streaks
-- acompanhamento da evolução do usuário
+- cadastro
+- login
+- senha protegida
+- usuário salvo em banco de dados
+- autenticação por token
+- rota protegida para saber quem está logado
 
-Em resumo, ele quer ser uma agenda inteligente que não apenas organiza o dia, más tambem incentiva o usuário a continuar seguindo sua rotina com mais foco e constância.
+Isso mostra que o sistema já possui uma base funcional de backend, mesmo que a parte completa da agenda ainda esteja em construção.

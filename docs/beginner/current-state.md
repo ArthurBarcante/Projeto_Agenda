@@ -1,110 +1,100 @@
 # Estado atual do projeto
 
-Hoje o projeto já possui uma base funcional, mas ainda esta em fase inicial de desenvolvimento.
+Hoje o Projeto Agenda já tem uma base funcional real, mas ainda não está completo.
 
-Isso significa que algumas partes importantes já funcionam, enquanto outras ainda estão sendo construidas para chegar na ideia completa da agenda inteligente.
+Isso quer dizer o seguinte:
 
-## O que já existe no projeto
+- a parte de usuários já funciona de verdade
+- a parte principal da agenda ainda está em construção
 
-Atualmente o sistema já possui uma estrutura separada entre frontend, backend, mock de dados e documentação.
+## O que o projeto já tem hoje
 
-Na prática, isso quer dizer que o projeto já está organizado para crescer de forma mais clara e mais fácil de manter.
+Atualmente o sistema já está dividido em áreas diferentes:
 
-## O que já funciona no frontend
+- frontend, que é a parte visual
+- backend, que é a parte que processa os dados
+- banco de dados, onde os usuários ficam salvos
+- documentação, que explica o projeto
 
-No frontend, o usuario já consegue acessar:
-
-- tela de login
-- tela de cadastro
-- navegação entre login e cadastro
-
-O cadastro já foi ampliado para receber mais informações do usuario, como:
-
-- nome
-- email
-- senha
-- confirmação de senha
-- telefone
-- cpf
-- data de nascimento
-
-Tambem já existe validação básica no fluxo de cadastro.
-
-Por exemplo:
-
-- o sistema verifica se as senhas coincidem
-- o sistema pode verificar se o email já existe no modo mock
+Essa organização é importante porque facilita o crescimento do sistema ao longo do tempo.
 
 ## O que já funciona no backend
 
-No backend, já existe uma API feita com FastAPI.
+O backend já possui uma API feita em FastAPI.
 
-Essa API já possui rotas de autenticação, como:
+Hoje, essa API já consegue:
+
+- cadastrar usuários
+- validar se o email já existe
+- validar se o CPF já existe
+- verificar se a senha e a confirmação de senha são iguais
+- salvar a senha de forma protegida
+- fazer login com email e senha
+- gerar token de autenticação
+- identificar o usuário logado em rota protegida
+
+Isso significa que a área de autenticação do sistema já não está mais em fase de simulação. Ela já funciona com persistência real.
+
+## O que já funciona no banco de dados
+
+O projeto já usa PostgreSQL para salvar usuários.
+
+Na prática, isso significa que:
+
+- os dados do usuário ficam armazenados de verdade
+- o cadastro continua existindo depois que a aplicação é fechada
+- o sistema já tem uma tabela de usuários criada
+
+Em resumo, o projeto já possui persistência real de usuários.
+
+## O que já funciona no frontend
+
+No frontend, já existem as telas iniciais de:
 
 - login
 - cadastro
 
-Hoje o backend já consegue:
+Também já existe navegação entre essas telas.
 
-- receber os dados de login
-- validar email e senha
-- cadastrar um novo usuario
-- impedir cadastro com email duplicado
-- impedir cadastro com cpf duplicado
+O frontend ainda está em uma etapa de evolução. Ele já pode conversar com a API real, mas ainda mantém suporte a dados simulados em algumas situações de teste e desenvolvimento.
 
-Tambem já existe configuração de CORS, o que permite a comunicação entre frontend e backend durante o desenvolvimento.
+## O que significa "dados simulados"
 
-## Como os dados estão sendo usados hoje
+Dados simulados, ou mock, são dados usados apenas para desenvolvimento e testes.
 
-Atualmente o projeto trabalha com dois modos.
+Eles ajudam quando a interface ainda está sendo construída ou quando nem tudo do backend está pronto.
 
-### Modo mock
+No Projeto Agenda, isso ainda existe em partes do frontend, mas o cadastro e a autenticação de usuários no backend já usam banco real.
 
-Nesse modo, o sistema usa o JSON Server para simular um banco de dados.
+## O que ainda não está pronto
 
-Esse modo é útil para desenvolver e testar o frontend com rapidez.
+A proposta principal do projeto é ser uma agenda inteligente completa.
 
-### Modo API real
-
-Nesse modo, o sistema usa o backend em FastAPI.
-
-Hoje essa troca é controlada por uma configuração simples no frontend.
-
-Ou seja, o projeto já foi preparado para funcionar com mock agora e migrar para a API real depois com pouca alteração.
-
-## O que isso mostra sobre o projeto hoje
-
-O projeto já deixou de ser apenas uma ideia.
-
-Ele já possui:
-
-- estrutura organizada
-- autenticação inicial
-- cadastro com mais dados do usuário
-- comunicação entre frontend e backend
-- suporte temporário para mock
-
-Em resumo, a base principal do sistema já existe.
-
-## O que ainda não esta pronto
-
-Apesar de a base já estar funcionando, a parte principal da proposta do projeto ainda não foi totalmente implementada.
+Essa parte ainda não foi implementada.
 
 Hoje ainda faltam recursos como:
 
-- agenda de horários e compromissos
-- criação de tarefas do dia a dia
-- organização inteligente da rotina
-- sistema de missões
-- sistema de streaks
-- acompanhamento visual do progresso
+- agenda de compromissos por usuário
+- tarefas salvas no banco
+- eventos ligados a cada conta
+- organização da rotina
+- missões
+- streaks
+- acompanhamento visual de progresso
 
-Ou seja, o projeto já funciona como base de autenticação e estrutura inicial da plataforma, mas ainda não chegou na versão completa da agenda inteligente.
+## O que isso mostra sobre o momento do projeto
+
+O projeto já passou da fase de ideia e já entrou em uma fase de base funcional.
+
+Ele ainda não entrega a experiência completa da agenda inteligente, mas já tem um primeiro bloco sólido e importante funcionando:
+
+- autenticação real
+- persistência de usuários
+- segurança básica de senha
+- identificação do usuário autenticado
 
 ## Resumindo
 
-Neste momento, o projeto está em uma fase de fundação.
+Hoje, o Projeto Agenda já tem um sistema real de usuários funcionando.
 
-Ele já tem a estrutura, o cadastro, o login e a comunicação entre as partes principais do sistema.
-
-O proximo passo é evoluir essa base para transformar a aplicação em uma agenda inteligente de verdade, com organização de rotina, motivação e acompanhamento de progresso.
+O que falta agora é expandir essa base para a parte mais visível da proposta: tarefas, eventos, rotina, progresso e recursos de acompanhamento.

@@ -1,52 +1,58 @@
 # Estrutura do Projeto (Developer)
 
-Data da analise: 31 de marco de 2026
+Data da revisao: 1 de abril de 2026
 
-## 1. Visao Tecnica Geral
+## Objetivo deste documento
 
-Este projeto esta organizado em quatro blocos principais:
+Este arquivo explica como o projeto esta organizado hoje, depois da implantacao de persistencia real de usuarios com PostgreSQL, autenticacao com JWT e rotas protegidas.
 
-- `front/`: interface web (HTML, CSS, JS modular)
-- `back/`: API em FastAPI
-- `docs/`: documentacao para iniciantes e devs
-- `tests/`: scripts de teste/simulacao
+O foco aqui e ajudar quem esta estudando desenvolvimento a entender nao apenas "onde cada arquivo esta", mas tambem "por que ele existe".
 
-Tambem existem pastas de suporte:
+---
 
-- `.venv/`: ambiente virtual Python da raiz
-- `configs/`: configuracoes de ambiente/dependencias
-- `.vscode/`: configuracoes locais de editor/debug
+## Visao geral da arquitetura
 
-## 2. Arvore Atual do Projeto
+Hoje o projeto esta dividido em quatro blocos principais:
 
-Observacao:
-- `.venv/` e `node_modules/` existem, mas nao sao expandidas aqui por tamanho.
+- `front/`: interface web em HTML, CSS e JavaScript
+- `back/`: API em FastAPI com banco PostgreSQL
+- `docs/`: documentacao para iniciantes e estudantes de desenvolvimento
+- `tests/`: arquivos de apoio para testes e simulacoes
+
+Ha tambem duas pastas de apoio:
+
+- `configs/`: dependencias do projeto
+- `.venv/`: ambiente virtual Python local
+
+---
+
+## Arvore resumida e atualizada
 
 ```text
 Projeto_Agenda/
-├── .gitignore
-├── .venv/
-├── .vscode/
-│   ├── launch.json
-│   └── settings.json
 ├── README.md
 ├── back/
 │   ├── app/
-│   │   ├── __pycache__/
-│   │   ├── main.py
+│   │   ├── core/
+│   │   │   ├── auth.py
+│   │   │   └── security.py
+│   │   ├── database/
+│   │   │   ├── base.py
+│   │   │   ├── connection.py
+│   │   │   └── deps.py
 │   │   ├── models/
-│   │   │   ├── __pycache__/
-│   │   │   └── fake_db.py
+│   │   │   ├── fake_db.py
+│   │   │   └── user.py
 │   │   ├── routers/
 │   │   │   └── auth/
-│   │   │       ├── __pycache__/
 │   │   │       ├── login.py
 │   │   │       └── register.py
-│   │   └── schemas/
-│   │       └── auth/
-│   │           ├── __pycache__/
-│   │           ├── login.py
-│   │           └── register.py
+│   │   ├── schemas/
+│   │   │   └── auth/
+│   │   │       ├── login.py
+│   │   │       ├── register.py
+│   │   │       └── user.py
+│   │   └── main.py
 │   └── mock/
 │       └── db.json
 ├── configs/
@@ -55,99 +61,185 @@ Projeto_Agenda/
 │   ├── beginner/
 │   └── developer/
 │       ├── back-end/
-│       │   ├── models.md
-│       │   ├── routers.md
-│       │   └── schemas.md
+│       │   ├── app.md
+│       │   └── security.md
 │       ├── front-end/
-│       │   ├── css.md
-│       │   ├── js.md
-│       │   └── ui.md
+│       │   ├── login.md
+│       │   └── register.md
+│       ├── future-requirements.md
 │       └── project-structure.md
 ├── front/
 │   ├── css/
-│   │   ├── auth/
-│   │   │   ├── login.css
-│   │   │   └── register.css
-│   │   └── style.css
-│   ├── index.html
 │   ├── js/
-│   │   ├── auth/
-│   │   │   ├── login.js
-│   │   │   └── register.js
-│   │   └── core/
-│   │       ├── api.js
-│   │       └── router.js
-│   └── ui/
-│       └── auth/
-│           ├── login.html
-│           └── register.html
-├── node_modules/
+│   ├── ui/
+│   └── index.html
 └── tests/
-    ├── back/
-    │   └── test.py
-    └── front/
-        └── login-simulation.js
 ```
 
-## 3. Responsabilidade de Cada Camada
+---
 
-### 3.1 Backend (`back/app`)
+## Como o backend esta organizado
 
-- `main.py`: cria a instancia FastAPI, registra middlewares (CORS) e inclui routers.
-- `models/fake_db.py`: "banco" em memoria para simular persistencia.
-- `schemas/auth/*.py`: contratos de entrada (Pydantic) para login e registro.
-- `routers/auth/*.py`: regras de negocio de autenticacao.
+## 1. `back/app/main.py`
 
-Fluxo simplificado no backend:
+### O que e
 
-1. Request chega no endpoint.
-2. Pydantic valida payload via schema.
-3. Router executa regra de negocio.
-4. Resposta JSON e retornada.
+O ponto de entrada da API.
 
-### 3.2 Frontend (`front`)
+### O que ele faz
 
-- `index.html`: shell principal da SPA simples.
-- `js/core/router.js`: troca dinamica de telas (`login` e `register`).
-- `js/core/api.js`: camada de integracao HTTP.
-- `js/auth/*.js`: comportamento de cada tela (eventos, validacoes, chamadas de API).
-- `ui/auth/*.html`: templates de interface.
-- `css/auth/*.css` e `css/style.css`: apresentacao visual.
+- cria a aplicacao FastAPI
+- registra CORS
+- importa os routers de autenticacao
+- garante a criacao das tabelas mapeadas pelo SQLAlchemy
 
-### 3.3 Dados Mock (`back/mock/db.json`)
+### Por que ele e importante
 
-Base usada com JSON Server para desenvolvimento rapido no frontend.
+Sem esse arquivo a API nao sobe. Ele conecta as partes principais do backend.
 
-### 3.4 Documentacao (`docs`)
+---
 
-- `docs/beginner/`: explicacoes para publico nao tecnico.
-- `docs/developer/`: visao tecnica para quem esta estudando desenvolvimento.
+## 2. `back/app/database/`
 
-## 4. Integracao Mock x API Real
+Essa pasta concentra a base do acesso ao banco.
 
-No frontend, `front/js/core/api.js` possui uma chave de alternancia:
+### `base.py`
 
-- `USE_REAL_API = false` -> usa JSON Server (`localhost:3000`)
-- `USE_REAL_API = true` -> usa FastAPI (`127.0.0.1:8000`)
+Define o `Base` do SQLAlchemy, que serve como ponto comum para os modelos do banco.
 
-Essa abordagem reduz acoplamento durante estudo e facilita migracao gradual para backend real.
+### `connection.py`
 
-## 5. Pontos de Atencao Tecnicos
+Cria o `engine` e a `SessionLocal`, ou seja:
 
-- A pasta `__pycache__/` nao deve ser versionada em Git.
-- `configs/requirements.txt` precisa refletir as dependencias reais do backend.
-- O fake DB em memoria (`fake_db.py`) e util para aprendizado, mas nao substitui persistencia real.
-- O projeto ainda esta em fase de consolidacao de testes automatizados.
+- a conexao com o PostgreSQL
+- a fabrica de sessoes usadas nas operacoes com o banco
 
-## 6. Resumo para Estudantes de Desenvolvimento
+### `deps.py`
 
-Este projeto e um bom exemplo de arquitetura didatica em camadas:
+Explica ao FastAPI como abrir e fechar uma sessao de banco por requisicao.
 
-- camada de interface (UI)
-- camada de comportamento (JS de pagina)
-- camada de acesso a dados (API client)
-- camada de API (FastAPI)
-- camada de contrato (schemas)
-- camada de dados simulados (mock/in-memory)
+Esse arquivo existe para que as rotas usem `Depends(get_db)` de forma limpa e segura.
 
-A estrutura atual facilita estudar separacao de responsabilidades, evolucao incremental e migracao de mock para backend real.
+---
+
+## 3. `back/app/models/`
+
+Essa pasta representa a estrutura persistida no banco.
+
+### `user.py`
+
+Define o modelo `User`, que hoje e a principal entidade persistida do sistema.
+
+Campos principais:
+
+- `id`
+- `name`
+- `email`
+- `password`
+- `phone`
+- `cpf`
+- `birthdate`
+- `role`
+
+### `fake_db.py`
+
+E um arquivo legado de apoio ao estudo. O fluxo real de usuario ja nao depende dele para cadastro e login.
+
+---
+
+## 4. `back/app/schemas/`
+
+Aqui ficam os contratos de entrada da API.
+
+### Por que isso importa
+
+O modelo do banco e o schema da API nao sao a mesma coisa.
+
+- model: representa a tabela
+- schema: representa o dado que entra ou sai da API
+
+### Arquivos atuais
+
+- `auth/user.py`: schema de criacao de usuario
+- `auth/login.py`: schema de login
+- `auth/register.py`: schema legado de registro, mantido para estudo e compatibilidade
+
+---
+
+## 5. `back/app/core/`
+
+Essa pasta concentra regras reutilizaveis de autenticacao e seguranca.
+
+### `security.py`
+
+Responsavel por:
+
+- gerar hash de senha
+- verificar senha com bcrypt
+- criar token JWT
+- decodificar token JWT
+
+### `auth.py`
+
+Responsavel por:
+
+- capturar o token Bearer da requisicao
+- validar o JWT
+- buscar o usuario autenticado no banco
+- devolver o usuario atual para rotas protegidas
+
+---
+
+## 6. `back/app/routers/`
+
+Essa pasta contem os endpoints.
+
+### `routers/auth/register.py`
+
+Implementa o cadastro real de usuario com:
+
+- validacao do schema
+- verificacao de email duplicado
+- verificacao de CPF duplicado
+- hash da senha
+- persistencia no PostgreSQL
+
+### `routers/auth/login.py`
+
+Implementa o login com:
+
+- busca do usuario por email
+- verificacao da senha com bcrypt
+- geracao de JWT
+- rota protegida `/auth/me`
+
+---
+
+## Como o frontend conversa com o backend
+
+O frontend esta separado da API e envia requisicoes HTTP para as rotas de autenticacao.
+
+Conceitualmente, o fluxo atual e este:
+
+1. a tela de cadastro envia os dados para `/auth/register`
+2. a tela de login envia email e senha para `/auth/login`
+3. o backend devolve um token JWT
+4. o frontend usa esse token em `Authorization: Bearer ...`
+5. rotas protegidas, como `/auth/me`, identificam o usuario logado
+
+---
+
+## Leitura recomendada para quem esta estudando
+
+Se voce quer entender o projeto do jeito mais claro possivel, a ordem mais didatica e:
+
+1. `main.py`
+2. `database/connection.py`
+3. `models/user.py`
+4. `schemas/auth/user.py`
+5. `routers/auth/register.py`
+6. `core/security.py`
+7. `routers/auth/login.py`
+8. `core/auth.py`
+
+Essa sequencia ajuda a perceber a arquitetura em camadas: entrada, validacao, regra de negocio, persistencia e autenticacao.
