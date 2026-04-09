@@ -1,111 +1,60 @@
-# Login (Front-end + Back-end)
+# Login
 
-## Objetivo deste documento
+## O que e
 
-Este arquivo explica o que e a funcionalidade de login no sistema, o que ja foi implementado e qual e o papel dela no fluxo geral da aplicacao.
+Esta funcionalidade e a porta de entrada do frontend para a area autenticada do sistema.
 
----
+Ela coleta email e senha, chama a camada de API, grava a sessao local e redireciona o usuario para o dashboard quando a autenticacao da certo.
 
-## O que e o login neste projeto
+## Arquivos desta funcionalidade
 
-Login e o processo de autenticar um usuario que ja foi cadastrado.
+- `front/ui/auth/login.html`
+- `front/js/auth/login.js`
+- `front/js/core/api/api.js`
+- `front/js/core/configs/auth.js`
+- `front/js/core/configs/session.js`
+- `front/css/auth/login.css`
 
-No projeto, isso significa receber:
+## Responsabilidade de cada arquivo
 
-- email
-- senha
+- `ui/auth/login.html`: define a estrutura visual do formulario de login.
+- `js/auth/login.js`: coleta os dados, trata erros, chama a autenticacao e decide a navegacao.
+- `js/core/api/api.js`: envia a requisicao para `/auth/login`, busca `/auth/me` e persiste a sessao valida.
+- `js/core/configs/auth.js`: decide se o usuario esta autenticado e revalida a sessao quando a pagina recarrega.
+- `js/core/configs/session.js`: grava token e usuario no armazenamento local e controla mensagens temporarias de autenticacao.
+- `css/auth/login.css`: estiliza o cartao, inputs, botao e estado de erro da tela.
 
-e verificar se essas informacoes pertencem a um usuario valido salvo no banco.
+## Detalhes
 
-O login envolve duas partes:
+### Tecnologias usadas
 
-- a pagina do frontend, onde a pessoa digita os dados
-- a rota do backend, que valida as credenciais e devolve um token JWT
+- HTML para a estrutura da pagina
+- CSS para o estilo visual
+- JavaScript modular com `type="module"`
+- Fetch API para comunicacao com o backend
+- `localStorage` e `sessionStorage` para sessao e mensagens de estado
 
----
+### Fluxo atual do login no frontend
 
-## O que foi feito
+1. O usuario preenche email e senha.
+2. `login.js` chama `authenticate(email, password)`.
+3. `api.js` faz `POST /auth/login`.
+4. Se o token vier correto, o frontend chama `GET /auth/me`.
+5. Token e usuario sao salvos localmente.
+6. A aplicacao navega para o dashboard.
 
-Hoje o fluxo de login ja esta implementado com autenticacao real.
+### Comportamento atual
 
-### No frontend
+- se o usuario ja estiver autenticado, a tela de login redireciona para o dashboard
+- mensagens de erro sao exibidas no proprio formulario
+- a autenticacao pode rodar em modo real ou mock, dependendo da configuracao central
 
-A interface de login existe como pagina dedicada dentro da estrutura de UI do projeto.
+### Estado atual da funcionalidade
 
-Ela tem a funcao de:
+O login esta funcional no frontend e integrado ao backend real.
 
-- capturar email e senha
-- enviar esses dados para a API
-- receber a resposta do backend
+O que ainda nao existe nessa funcionalidade:
 
-### No backend
-
-Foi criada a rota `POST /auth/login`.
-
-Essa rota faz o seguinte:
-
-1. recebe os dados por schema
-2. busca o usuario no PostgreSQL pelo email
-3. verifica a senha com `bcrypt`
-4. se estiver tudo certo, gera um token JWT
-5. devolve `access_token` e `token_type`
-
-Tambem foi criada a rota `GET /auth/me`, que usa esse token para descobrir quem esta autenticado.
-
----
-
-## Qual e a funcao do login no sistema
-
-O login e a porta de entrada para as partes protegidas da aplicacao.
-
-Sem ele:
-
-- o sistema nao sabe quem esta usando a aplicacao
-- nao e possivel proteger funcionalidades por usuario
-- nao e possivel ligar dados da agenda ao dono correto
-
-Com ele:
-
-- o backend reconhece o usuario
-- o frontend pode guardar o token e reutiliza-lo
-- rotas privadas passam a funcionar com autenticacao real
-
----
-
-## Fluxo didatico do login
-
-1. o usuario preenche email e senha na pagina
-2. o frontend envia esses dados para `/auth/login`
-3. o backend localiza o usuario pelo email
-4. o backend compara a senha digitada com o hash salvo
-5. se estiver correto, o backend gera um JWT
-6. o frontend usa esse token nas proximas requisicoes
-
----
-
-## Por que o token e importante
-
-Depois que o login acontece, o sistema nao precisa pedir email e senha a cada nova requisicao.
-
-Em vez disso, o frontend envia algo assim:
-
-```text
-Authorization: Bearer TOKEN
-```
-
-O backend le esse token e identifica o usuario autenticado.
-
-Esse modelo e chamado de autenticacao stateless e e muito usado em APIs modernas.
-
----
-
-## Resumo tecnico-didatico
-
-Neste projeto, o login nao e apenas uma tela. Ele e uma funcionalidade completa que conecta interface, validacao, banco de dados e JWT.
-
-Em termos práticos:
-
-- a pagina coleta os dados
-- a rota valida email e senha
-- o backend gera o token
-- o sistema passa a reconhecer o usuario logado
+- feedback visual de carregamento durante a requisicao
+- validacoes mais ricas no lado do cliente
+- recuperacao de senha

@@ -1,56 +1,64 @@
-import { loginRequest } from "../core/api.js";
+import { authenticate } from "../core/api/api.js";
+import { isAuthenticated } from "../core/configs/auth.js";
+import { consumeAuthMessage } from "../core/configs/session.js";
 
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const errorEl = document.getElementById("error");
-const loginForm = document.getElementById("login-form");
+const form = document.querySelector("#login-form");
 const goToRegister = document.getElementById("go-to-register");
+const errorMessage = document.getElementById("error");
 
-async function login(e) {
-  e.preventDefault();
-
-  const emailValue = email.value;
-  const passwordValue = password.value;
-
-  errorEl.innerText = "";
-
-  if (!emailValue || !passwordValue) {
-    errorEl.innerText = "Preencha todos os campos";
-    return;
+if (isAuthenticated()) {
+  if (typeof window.loadPage === "function") {
+    window.loadPage("dashboard");
+  } else {
+    window.location.href = "./index.html#/dashboard";
   }
 
+  throw new Error("Usuario autenticado nao pode acessar a tela de login.");
+}
+
+function showError(message) {
+  if (errorMessage) {
+    errorMessage.textContent = message;
+  }
+}
+
+function clearError() {
+  if (errorMessage) {
+    errorMessage.textContent = "";
+  }
+}
+
+const pendingAuthMessage = consumeAuthMessage();
+
+if (pendingAuthMessage) {
+  showError(pendingAuthMessage);
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  clearError();
+
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
+
   try {
-    const users = await loginRequest(emailValue, passwordValue);
+    await authenticate(email, password);
 
-    if (users.length > 0) {
-      const user = users[0];
-
-      alert("Login realizado com sucesso!");
-
-      // Simula sessão
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // redirecionamento futuro
-      console.log("Usuário logado:", user);
-    } else {
-      errorEl.innerText = "Email ou senha inválidos";
-    }
+    window.loadPage("dashboard");
   } catch (error) {
-    errorEl.innerText = "Erro ao conectar com o servidor";
+    showError(error.message || "Email ou senha inválidos");
   }
 }
 
 // Setup dos event listeners
-if (loginForm) {
-  loginForm.addEventListener("submit", login);
+if (form) {
+  form.addEventListener("submit", handleLogin);
 }
 
 if (goToRegister) {
   goToRegister.addEventListener("click", (e) => {
     e.preventDefault();
+    clearError();
     window.loadPage("register");
   });
 }
-
-// Exportar para uso global
-window.login = login;

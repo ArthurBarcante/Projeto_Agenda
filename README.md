@@ -1,293 +1,206 @@
 # Projeto Agenda
 
-Projeto de agenda com frontend em HTML, CSS e JavaScript puro e backend em FastAPI.
+Projeto de organizacao pessoal com frontend em HTML, CSS e JavaScript puro e backend em FastAPI.
 
-Hoje o backend ja possui autenticacao real com persistencia de usuarios em PostgreSQL, usando SQLAlchemy para ORM, bcrypt para hash de senha e JWT para autenticacao stateless.
+Hoje o projeto esta dividido em duas camadas com niveis diferentes de maturidade:
 
-## Estado Atual
+- o backend ja possui autenticacao, tarefas e eventos com persistencia real
+- o frontend ja possui fluxo visual de autenticacao e area autenticada inicial
+- a interface da agenda ainda nao consome as APIs de tarefas e eventos
 
-- Cadastro de usuario com persistencia real no PostgreSQL
-- Validacao de email e CPF duplicados
-- Validacao de confirmacao de senha via schema Pydantic
-- Senha salva com hash bcrypt
-- Login real com email e senha
-- Retorno de token JWT no login
-- Rota protegida para identificar o usuario autenticado
-- Frontend ainda pode alternar entre mock local e API real
+## Geral do projeto
 
-## Tecnologias
+O objetivo do Projeto Agenda e evoluir para uma aplicacao que ajude o usuario a organizar rotina, tarefas e compromissos em um unico lugar.
 
-- Frontend: HTML, CSS, JavaScript
-- Backend: FastAPI
-- ORM: SQLAlchemy
-- Banco de dados: PostgreSQL
-- Driver PostgreSQL: psycopg2-binary
-- Validacao: Pydantic
-- Hash de senha: bcrypt
-- Autenticacao: JWT com python-jose
-- Mock local: JSON Server
+No estado atual, o sistema ja entrega:
 
-## Estrutura Resumida
+- cadastro de usuario com persistencia em PostgreSQL
+- login com JWT
+- rota protegida para identificar o usuario autenticado
+- CRUD de tarefas por usuario no backend
+- CRUD de eventos por usuario no backend
+- frontend com login, cadastro, dashboard e navegacao autenticada
+
+Ainda estao em construcao:
+
+- interface visual da agenda conectada ao backend
+- interface visual de perfil
+- telas para criar, listar, editar e excluir tarefas e eventos no frontend
+- recursos mais avancados de acompanhamento de rotina
+
+## Estrutura resumida
 
 ```text
 Projeto_Agenda/
-├── README.md
-├── back/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── core/
-│   │   ├── database/
-│   │   ├── models/
-│   │   ├── routers/
-│   │   └── schemas/
-│   └── mock/
-├── configs/
-│   └── requirements.txt
-├── docs/
-│   ├── beginner/
-│   └── developer/
-├── front/
-└── tests/
+├── back/app/
+│   ├── core/        # autenticacao, token e seguranca
+│   ├── database/    # conexao e sessao do banco
+│   ├── models/      # tabelas ORM
+│   ├── routers/     # endpoints da API
+│   ├── schemas/     # validacao dos dados
+│   └── tests/       # testes automatizados do backend
+├── back/mock/       # base mock para uso opcional no frontend
+├── configs/         # dependencias do backend
+├── docs/            # documentacao beginner e developer
+└── front/           # interface web em HTML, CSS e JS puro
 ```
 
-## Fluxo Implementado Hoje
+## Configuracoes principais
 
-### Cadastro
-
-1. A API recebe os dados pelo schema de entrada.
-2. Valida email, CPF e confirmacao de senha.
-3. Gera hash bcrypt da senha.
-4. Salva o usuario na tabela `users` do PostgreSQL.
-
-### Login
-
-1. Busca o usuario pelo email.
-2. Compara a senha com o hash salvo no banco.
-3. Gera um token JWT com o `sub` do usuario.
-4. Retorna `access_token` e `token_type`.
-
-### Autenticacao
-
-1. O cliente envia `Authorization: Bearer TOKEN`.
-2. O backend decodifica o JWT.
-3. Busca o usuario no banco.
-4. Libera acesso a rotas protegidas.
-
-## Como Rodar o Projeto
-
-### 1. Criar e ativar o ambiente virtual
+### 1. Ambiente Python
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-```
-
-### 2. Instalar as dependencias do backend
-
-```bash
 pip install -r configs/requirements.txt
 ```
 
-Dependencias atuais em `configs/requirements.txt`:
+Dependencias principais:
 
 - fastapi
 - uvicorn[standard]
-- pydantic[email]
 - sqlalchemy
 - psycopg2-binary
+- pydantic[email]
 - bcrypt
 - python-jose
+- pytest
 
-### 3. Configurar o PostgreSQL
+### 2. Banco de dados
 
-O backend usa a conexao definida em `back/app/database/connection.py`.
+O backend usa PostgreSQL por padrao. A conexao fica em `back/app/database/connection.py`.
 
-Exemplo atual:
+Valor padrao atual:
 
 ```python
-DATABASE_URL = "postgresql://postgres:1234@localhost:5432/aigenda"
+DEFAULT_DATABASE_URL = "postgresql://postgres:1234@localhost:5432/aigenda"
 ```
 
-Ajuste conforme o seu ambiente:
+Para sobrescrever no seu ambiente:
 
-- usuario
-- senha
-- host
-- porta
-- nome do banco
+```bash
+export DATABASE_URL="postgresql://usuario:senha@localhost:5432/aigenda"
+```
 
-Ao iniciar a API, a tabela `users` e criada automaticamente se ainda nao existir.
+### 3. Token JWT
 
-### 4. Rodar o backend FastAPI
+O segredo usado no token pode ser configurado pela variavel abaixo:
+
+```bash
+export JWT_SECRET_KEY="um-segredo-forte-para-desenvolvimento"
+```
+
+Se nada for definido, o projeto usa um valor padrao de desenvolvimento em `back/app/core/security.py`.
+
+### 4. Criacao automatica das tabelas
+
+Ao subir a API, o projeto pode inicializar as tabelas automaticamente.
+
+Comportamento atual:
+
+- `APP_INIT_DB_ON_STARTUP=1`: inicializa tabelas no startup
+- `APP_INIT_DB_ON_STARTUP=0`: nao inicializa tabelas no startup
+
+### 5. Modo de autenticacao no frontend
+
+O frontend consegue alternar entre API real e mock local em `front/js/core/configs/config.js`.
+
+Opcoes:
+
+- `real`: usa FastAPI em `http://127.0.0.1:8000`
+- `mock`: usa JSON Server em `http://127.0.0.1:3002`
+
+## Como executar
+
+### Backend
 
 ```bash
 uvicorn app.main:app --reload --app-dir back
 ```
 
-URLs:
+URLs uteis:
 
 - API: http://127.0.0.1:8000
 - Swagger: http://127.0.0.1:8000/docs
 
-### 5. Rodar o mock local opcional
+### Frontend
+
+Abra `front/index.html` com Live Server ou qualquer servidor estatico local.
+
+### Mock opcional do frontend
+
+Use apenas se quiser testar o modo mock.
 
 ```bash
-npx json-server --watch back/mock/db.json
+npx json-server --watch back/mock/db.json --port 3002
 ```
 
-URL do mock:
+## Testes automatizados
 
-- http://localhost:3000
+Os testes atuais ficam em `back/app/tests` e cobrem o fluxo de autenticacao.
 
-### 6. Abrir o frontend
-
-Abra `front/index.html` com Live Server ou outro servidor estatico local.
-
-## Alternancia do Frontend Entre Mock e API Real
-
-O frontend usa a chave definida em `front/js/core/api.js`:
-
-```js
-const USE_REAL_API = false;
+```bash
+pytest back/app/tests -q
 ```
 
-Valores:
+Cobertura atual:
 
-- `false`: usa JSON Server
-- `true`: usa FastAPI
+- cadastro
+- login
+- rota `/auth/me`
 
-Observacao: o backend ja esta com persistencia real de usuario, mas o frontend ainda pode ser alternado manualmente entre mock e API real.
+## Endpoints implementados hoje
 
-## Endpoints Atuais da API
+### Autenticacao
 
-### GET /
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
 
-Resposta:
+### Tarefas
 
-```json
-{
-	"message": "Backend funcionando!"
-}
-```
+- `POST /tasks`
+- `GET /tasks`
+- `GET /tasks/{task_id}`
+- `PUT /tasks/{task_id}`
+- `DELETE /tasks/{task_id}`
 
-### POST /auth/register
+### Eventos
 
-Payload:
+- `POST /events`
+- `GET /events`
+- `GET /events/{event_id}`
+- `PUT /events/{event_id}`
+- `DELETE /events/{event_id}`
 
-```json
-{
-	"name": "Arthur",
-	"email": "arthur@email.com",
-	"password": "123456",
-	"confirm_password": "123456",
-	"phone": "86999999999",
-	"cpf": "12345678900",
-	"birthdate": "2000-05-10",
-	"role": "user"
-}
-```
+## Proximos passos sugeridos
 
-Resposta de sucesso:
+1. Integrar no frontend as APIs reais de tarefas e eventos, porque o backend dessa parte ja esta pronto.
+2. Criar interface visual para agenda e perfil, hoje ainda vazias ou iniciais.
+3. Expandir os testes automatizados para CRUD de tarefas e eventos.
+4. Centralizar configuracoes sensiveis em variaveis de ambiente e, se desejar, em um arquivo `.env` de desenvolvimento.
+5. Definir a proxima camada funcional do produto, por exemplo progresso, rotina ou acompanhamento por usuario.
 
-```json
-{
-	"message": "Usuario criado com sucesso",
-	"user": {
-		"id": 1,
-		"name": "Arthur",
-		"email": "arthur@email.com"
-	}
-}
-```
-
-### POST /auth/login
-
-Payload:
-
-```json
-{
-	"email": "arthur@email.com",
-	"password": "123456"
-}
-```
-
-Resposta de sucesso:
-
-```json
-{
-	"access_token": "jwt-token-aqui",
-	"token_type": "bearer"
-}
-```
-
-### GET /auth/me
-
-Header:
-
-```http
-Authorization: Bearer SEU_TOKEN
-```
-
-Resposta de sucesso:
-
-```json
-{
-	"id": 1,
-	"email": "arthur@email.com"
-}
-```
-
-## Arquivos Principais do Backend
-
-- `back/app/main.py`: inicializacao da API, CORS, inclusao de routers e criacao automatica das tabelas
-- `back/app/database/connection.py`: engine e sessao do SQLAlchemy
-- `back/app/database/deps.py`: dependencia `get_db`
-- `back/app/models/user.py`: modelo ORM da tabela `users`
-- `back/app/schemas/auth/user.py`: schema de cadastro
-- `back/app/schemas/auth/login.py`: schema de login
-- `back/app/core/security.py`: hash de senha e JWT
-- `back/app/core/auth.py`: identificacao do usuario autenticado via token
-- `back/app/routers/auth/register.py`: endpoint de cadastro
-- `back/app/routers/auth/login.py`: endpoints de login e `/me`
-
-## Navegacao da Documentacao
+## Navegacao da documentacao
 
 ### Beginner
 
-- [O que e o projeto](docs/beginner/what-is-the-project.md)
-- [O que o projeto faz](docs/beginner/what-functions-it-has.md)
-- [Estado atual](docs/beginner/current-state.md)
-- [Futuras evolucoes](docs/beginner/future-evolutions.md)
-
-### Developer
-
-- [Estrutura do projeto](docs/developer/project-structure.md)
-- [Requisitos futuros](docs/developer/future-requirements.md)
+- `docs/beginner/what-is-the-project.md`
+- `docs/beginner/what-functions-it-has.md`
+- `docs/beginner/user-interface.md`
 
 ### Developer Back-end
 
-- [App](docs/developer/back-end/app.md)
-- [Models](docs/developer/back-end/models.md)
-- [Routers](docs/developer/back-end/routers.md)
-- [Schemas](docs/developer/back-end/schemas.md)
-- [Security](docs/developer/back-end/security.md)
+- `docs/developer/back-end/auth.md`
+- `docs/developer/back-end/tasks.md`
+- `docs/developer/back-end/events.md`
 
 ### Developer Front-end
 
-- [CSS](docs/developer/front-end/css.md)
-- [JavaScript](docs/developer/front-end/js.md)
-- [Login](docs/developer/front-end/login.md)
-- [Register](docs/developer/front-end/register.md)
-- [UI](docs/developer/front-end/ui.md)
+- `docs/developer/front-end/login.md`
+- `docs/developer/front-end/register.md`
+- `docs/developer/front-end/dashboard.md`
+- `docs/developer/front-end/routing-and-session.md`
+- `docs/developer/front-end/agenda.md`
+- `docs/developer/front-end/profile.md`
 
-## Observacoes
-
-- `confirm_password` existe apenas no schema de entrada e nao deve ser persistido.
-- O token JWT usa uma chave padrao local, mas o ideal e configurar `JWT_SECRET_KEY` no ambiente.
-- A configuracao de banco ainda esta fixa no codigo e pode evoluir para `.env` depois.
-
-## Proximos Passos Sugeridos
-
-- integrar o frontend ao fluxo JWT completo
-- proteger futuras rotas de tarefas e eventos com `get_current_user`
-- adicionar testes automatizados para cadastro, login e rota protegida

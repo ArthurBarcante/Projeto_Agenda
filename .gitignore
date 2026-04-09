@@ -1,6 +1,5 @@
 # Python virtual environments
 /.venv/
-configs/.venv/
 
 # Python cache/artifacts
 __pycache__/
@@ -16,4 +15,11 @@ node_modules/
 back/mock/
 
 # Local tests (not versioned)
-tests/
+back/app/tests/
+pytest.ini
+
+# IDE/editor config files
+jsconfig.json
+
+# VS Code settings
+.vscode/

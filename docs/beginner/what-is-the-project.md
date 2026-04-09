@@ -1,79 +1,54 @@
-# O que é o projeto
+# O que e o projeto
 
-O Projeto Agenda é um sistema criado para ajudar a pessoa a organizar melhor a própria rotina.
+O Projeto Agenda e uma aplicacao criada para ajudar uma pessoa a organizar melhor a propria rotina.
 
-Em termos simples, ele junta duas ideias no mesmo lugar:
+De forma simples, a ideia do projeto e juntar em um so lugar:
 
-- organizar compromissos, tarefas e horários
-- oferecer uma base para acompanhar a rotina de forma mais prática
+- tarefas
+- eventos e compromissos
+- organizacao pessoal
 
-Hoje, o projeto já tem uma parte funcional importante: o sistema de usuários.
+## Sobre o que o projeto trata
 
-Isso significa que uma pessoa já pode:
+O projeto trata de organizacao do dia a dia.
 
-- criar uma conta
-- fazer login
-- ter seus dados salvos de verdade em um banco de dados
-- ser identificada pelo sistema depois que entra
+Ele foi pensado para virar uma agenda digital em que o usuario possa entrar no sistema, visualizar suas informacoes e cuidar da propria rotina de forma mais pratica.
 
-## Qual é a proposta principal
+Hoje, o projeto ainda esta em desenvolvimento, mas ja deixou de ser apenas uma ideia. Ele ja tem partes reais funcionando.
 
-A proposta é que o sistema não seja apenas um lugar para anotar coisas.
+## O que ja existe hoje
 
-A ideia é construir uma agenda mais completa, capaz de ajudar o usuário a:
+Atualmente, o projeto ja possui:
 
-- lembrar do que precisa fazer
-- manter uma rotina organizada
-- acompanhar o próprio progresso com o tempo
+- cadastro de usuario
+- login
+- identificacao do usuario autenticado
+- armazenamento real de usuarios em banco de dados
+- backend preparado para salvar tarefas e eventos
 
-Hoje, essa visão ainda está em construção, mas a base principal já começou a ser montada.
+Isso significa que o sistema ja tem uma base concreta. A parte de usuarios esta funcionando de verdade e a parte interna de tarefas e eventos ja existe no backend.
 
-## O que já existe de verdade no projeto
+## O que ainda esta sendo construido
 
-Neste momento, o projeto já possui:
+Mesmo com essa base pronta, o projeto ainda nao esta completo do ponto de vista da experiencia final.
 
-- uma tela de cadastro
-- uma tela de login
-- um backend que recebe esses dados
-- um banco PostgreSQL para salvar usuários
-- proteção de senha com hash, que é uma forma segura de armazenamento
-- autenticação com token, que permite ao sistema saber quem está logado
+Ainda faltam, principalmente:
 
-Em outras palavras, o projeto já deixou de ser apenas uma ideia visual. Ele já tem uma parte real funcionando no backend.
+- a interface visual da agenda
+- a interface visual de perfil
+- a conexao completa do frontend com as funcoes de tarefas e eventos
 
-## O que significa "backend" aqui
+## O que significa isso na pratica
 
-Para quem não é da área, backend é a parte do sistema que fica por trás da interface.
+Para quem nao e da area, da para entender assim:
 
-É essa parte que:
+- o frontend e a parte visual que a pessoa enxerga na tela
+- o backend e a parte que recebe, valida e salva os dados
 
-- recebe os dados enviados pelo usuário
-- valida se estão corretos
-- salva as informações
-- responde se deu tudo certo ou se houve erro
-
-No Projeto Agenda, é o backend que hoje cuida do cadastro, do login e da identificação do usuário autenticado.
-
-## O que significa "banco de dados"
-
-Banco de dados é o lugar onde as informações ficam guardadas de forma permanente.
-
-No caso deste projeto, isso quer dizer que os usuários cadastrados não ficam apenas na memória do programa. Eles ficam salvos no PostgreSQL, que é o banco usado pelo sistema hoje.
-
-## O que o projeto quer se tornar no futuro
-
-O objetivo é evoluir essa base para chegar a uma agenda inteligente completa.
-
-Mais para frente, a ideia é permitir:
-
-- cadastro de tarefas
-- cadastro de eventos e compromissos
-- organização da rotina por usuário
-- acompanhamento de progresso
-- recursos de motivação, como missões e streaks
+No Projeto Agenda, o backend esta mais avancado que o frontend neste momento.
 
 ## Resumindo
 
-Hoje, o Projeto Agenda já é um sistema com cadastro, login e persistência real de usuários.
+O Projeto Agenda e um sistema de organizacao pessoal.
 
-No futuro, ele deve crescer para se tornar uma plataforma de organização pessoal mais completa, com agenda, tarefas, eventos e acompanhamento de rotina.
+Hoje ele ja tem autenticacao real e estrutura de dados para tarefas e eventos no backend. O proximo passo natural e transformar isso em uma experiencia visual completa no frontend.

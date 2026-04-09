@@ -5,7 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AIGENDA</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app/dashboard.css">
+  <link rel="stylesheet" href="css/components/sideBar.css">
   <link rel="stylesheet" href="css/auth/login.css">
   <link rel="stylesheet" href="css/auth/register.css">
 </head>
@@ -13,7 +20,18 @@
 <body>
   <div id="app"></div>
 
-  <script type="module" src="js/core/router.js"></script>
+  <template id="route-error-template">
+    <section class="auth-wrapper">
+      <div class="login-container fade-in">
+        <div class="login-header">
+          <h1>AIGENDA</h1>
+          <p data-route-error-message>Falha ao carregar a pagina</p>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <script type="module" src="js/core/api/router.js"></script>
 </body>
 
 </html>

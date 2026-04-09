@@ -1,4 +1,6 @@
-import { getUserByEmail, registerRequest } from "../core/api.js";
+import { getUserByEmail, registerRequest } from "../core/api/api.js";
+import { isMockMode } from "../core/configs/config.js";
+import { saveSession } from "../core/configs/session.js";
 
 const form = document.getElementById("register-form");
 const goToLogin = document.getElementById("go-to-login");
@@ -41,15 +43,20 @@ form.addEventListener("submit", async (e) => {
       email,
       password,
       confirm_password: confirmPassword,
-      birth_date: birthDate,
+      birthdate: birthDate,
+      role: "user",
       cpf,
       phone,
     });
 
-    localStorage.setItem("user", JSON.stringify(newUser));
+    if (isMockMode()) {
+      saveSession({ user: newUser });
+      alert("Conta criada e login realizado!");
+      window.loadPage("dashboard");
+      return;
+    }
 
-    alert("Conta criada e login realizado!");
-
+    alert("Conta criada com sucesso! Faça login.");
     window.loadPage("login");
 
   } catch (error) {

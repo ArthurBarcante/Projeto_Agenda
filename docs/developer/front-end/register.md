@@ -1,111 +1,60 @@
-# Register (Front-end + Back-end)
+# Cadastro
 
-## Objetivo deste documento
+## O que e
 
-Este arquivo explica a funcionalidade de cadastro de usuario no sistema, o que ja foi implementado e por que ela e importante para a persistencia real dos dados.
+Esta funcionalidade permite criar uma nova conta pelo frontend.
 
----
+Ela coleta os dados do usuario, aplica algumas validacoes simples no cliente, envia a requisicao para a API e decide o proximo passo com base no modo atual da aplicacao.
 
-## O que e o cadastro neste projeto
+## Arquivos desta funcionalidade
 
-Cadastro e o fluxo em que uma pessoa informa seus dados para criar uma conta no sistema.
+- `front/ui/auth/register.html`
+- `front/js/auth/register.js`
+- `front/js/core/api/api.js`
+- `front/js/core/configs/config.js`
+- `front/js/core/configs/session.js`
+- `front/css/auth/register.css`
 
-No projeto atual, esse fluxo trabalha com:
+## Responsabilidade de cada arquivo
 
-- nome
-- email
-- senha
-- confirmacao de senha
-- telefone
-- cpf
-- data de nascimento
-- papel do usuario
+- `ui/auth/register.html`: define os campos do formulario de criacao de conta.
+- `js/auth/register.js`: aplica mascara de CPF, valida confirmacao de senha, chama a API e redireciona o fluxo.
+- `js/core/api/api.js`: executa o cadastro em modo real ou mock.
+- `js/core/configs/config.js`: define se o frontend esta usando backend real ou mock.
+- `js/core/configs/session.js`: salva sessao local quando o modo mock autentica automaticamente apos o cadastro.
+- `css/auth/register.css`: estiliza o formulario e os estados visuais da pagina.
 
-Esse conjunto de dados forma o primeiro registro real persistido no PostgreSQL.
+## Detalhes
 
----
+### Tecnologias usadas
 
-## O que foi feito
+- HTML para o formulario
+- CSS para a composicao visual
+- JavaScript modular para logica da pagina
+- Fetch API para comunicacao com backend ou mock
 
-Hoje o cadastro ja esta implementado de ponta a ponta.
+### Fluxo atual do cadastro no frontend
 
-### No frontend
+1. O usuario preenche os campos do formulario.
+2. `register.js` valida se senha e confirmacao coincidem.
+3. Em modo mock, o frontend consulta se o email ja existe.
+4. O frontend envia os dados para `registerRequest`.
+5. Em modo real, o usuario volta para o login depois do sucesso.
+6. Em modo mock, o usuario ja entra direto no dashboard.
 
-Existe uma pagina dedicada para o formulario de cadastro.
+### Comportamento atual
 
-Essa tela tem a funcao de:
+- o CPF recebe mascara durante a digitacao
+- a confirmacao de senha e validada no frontend antes da chamada principal
+- em modo real, a verificacao de email duplicado fica concentrada no backend
+- mensagens de sucesso e erro usam `alert` no estado atual
 
-- coletar os dados do usuario
-- enviar os dados para a API
-- exibir o retorno de sucesso ou erro
+### Estado atual da funcionalidade
 
-### No backend
+O cadastro esta funcional e atende o fluxo basico da aplicacao.
 
-Foi criada a rota `POST /auth/register`.
+O que ainda nao existe nessa funcionalidade:
 
-Essa rota executa um fluxo completo:
-
-1. recebe os dados por schema Pydantic
-2. valida campos como email e confirmacao de senha
-3. verifica se o email ja existe
-4. verifica se o CPF ja existe
-5. gera hash da senha com `bcrypt`
-6. cria o usuario no PostgreSQL
-7. devolve uma resposta com os dados basicos do usuario criado
-
----
-
-## Qual e a funcao do cadastro no sistema
-
-O cadastro e a base da persistencia de usuario.
-
-Sem ele:
-
-- nao existe conta para autenticar
-- o login nao tem quem validar
-- o sistema nao consegue associar dados a uma pessoa real
-
-Com ele:
-
-- o usuario passa a existir de verdade no banco
-- os dados persistem entre execucoes da aplicacao
-- o login passa a ter um registro real para autenticar
-
----
-
-## Fluxo didatico do cadastro
-
-1. o usuario preenche o formulario
-2. o frontend envia os dados para `/auth/register`
-3. o backend valida o payload
-4. o backend verifica duplicidades
-5. a senha e transformada em hash
-6. o usuario e salvo na tabela `users`
-7. a API devolve mensagem de sucesso
-
----
-
-## Por que esse fluxo e importante para estudo
-
-O cadastro concentra varios conceitos fundamentais de backend em um unico caso de uso:
-
-- validacao com schema
-- regra de negocio
-- persistencia com ORM
-- integridade de dados
-- seguranca de senha
-
-Por isso ele e um dos melhores pontos para estudar a arquitetura do projeto.
-
----
-
-## Resumo tecnico-didatico
-
-Neste projeto, o cadastro nao e apenas um formulario visual. Ele e o primeiro fluxo real de escrita no banco.
-
-Em termos práticos:
-
-- a pagina recolhe os dados
-- o backend valida e protege a senha
-- o PostgreSQL grava o usuario
-- o sistema ganha uma conta autentica para uso futuro
+- exibicao inline de erros por campo
+- validacoes de UX mais completas
+- feedback visual de carregamento

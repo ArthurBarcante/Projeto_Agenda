@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Date, Integer, String
+from sqlalchemy.orm import relationship
+
 from app.database.base import Base
 
 
@@ -17,3 +19,6 @@ class User(Base):
     birthdate = Column(Date, nullable=False)
 
     role = Column(String, nullable=False)
+
+    tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
+    events = relationship("Event", back_populates="user", cascade="all, delete-orphan")

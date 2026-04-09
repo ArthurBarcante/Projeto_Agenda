@@ -46,6 +46,16 @@ body {
     var(--background);
 }
 
+#app {
+  width: 100%;
+}
+
+body.dashboard-page {
+  display: block;
+  min-height: 100vh;
+  height: auto;
+}
+
 /* ===================== */
 /* ELEMENTOS PADRAO */
 /* ===================== */

@@ -1,18 +1,14 @@
-# Quais funções o projeto tem hoje
+# Quais funcoes o projeto tem hoje
 
-Este arquivo explica o que o Projeto Agenda já consegue fazer neste momento.
+Este arquivo mostra o que o Projeto Agenda ja faz hoje e o que ainda vai ser implementado.
 
-Como o sistema ainda está em desenvolvimento, algumas funções já existem e outras ainda serão criadas mais para frente.
+Como o projeto esta em desenvolvimento, e importante separar bem o que ja existe de verdade do que ainda esta planejado.
 
-## Funções que já estão funcionando
+## Funcoes ja implementadas atualmente
 
-Hoje, o projeto já possui um primeiro núcleo funcional, voltado para usuários e autenticação.
+### 1. Cadastro de usuario
 
-Na prática, isso quer dizer que o sistema já consegue lidar com o processo de entrada de uma pessoa no sistema.
-
-### 1. Cadastro de usuário
-
-Uma pessoa já pode criar uma conta informando dados como:
+Uma pessoa ja pode criar conta informando dados como:
 
 - nome
 - email
@@ -20,96 +16,83 @@ Uma pessoa já pode criar uma conta informando dados como:
 - telefone
 - CPF
 - data de nascimento
-- tipo de usuário
 
-O sistema também faz algumas verificações automáticas, como:
+O sistema tambem valida:
 
-- confirmar se a senha e a confirmação de senha são iguais
-- impedir email repetido
-- impedir CPF repetido
+- se a senha e a confirmacao batem
+- se o email ja esta cadastrado
+- se o CPF ja esta cadastrado
 
-## 2. Login com email e senha
+### 2. Login
 
-Depois do cadastro, o usuário já pode entrar no sistema com email e senha.
+O usuario ja pode entrar com email e senha.
 
-Se os dados estiverem corretos, o backend libera o acesso.
+Quando o login da certo, o sistema gera um token e passa a reconhecer quem esta autenticado.
 
-Se estiverem errados, o sistema responde com erro de forma segura, sem dizer exatamente se o problema foi no email ou na senha.
+### 3. Identificacao do usuario logado
 
-## 3. Senha protegida
+Depois do login, o backend consegue verificar quem esta usando o sistema naquele momento.
 
-As senhas não ficam salvas de forma aberta no banco.
+Isso e importante porque tarefas e eventos precisam pertencer a um usuario especifico.
 
-Em vez disso, o sistema transforma a senha em um formato protegido chamado hash.
+### 4. Tarefas no backend
 
-Isso é importante porque, mesmo que alguém veja o conteúdo salvo no banco, não enxerga a senha original do usuário de forma direta.
+O backend ja possui funcoes para:
 
-## 4. Usuário salvo de verdade no banco
+- criar tarefa
+- listar tarefas
+- buscar uma tarefa especifica
+- atualizar tarefa
+- excluir tarefa
 
-O sistema já usa PostgreSQL, que é um banco de dados real.
+Importante: essa parte ja existe na API, mas ainda nao possui interface pronta no frontend.
 
-Isso significa que o cadastro não fica apenas em um arquivo temporário ou em memória. Os dados do usuário ficam gravados de forma persistente.
+### 5. Eventos no backend
 
-Em outras palavras, mesmo que a aplicação seja reiniciada, o usuário continua existindo no sistema.
+O backend ja possui funcoes para:
 
-## 5. Login com token
+- criar evento
+- listar eventos
+- buscar um evento especifico
+- atualizar evento
+- excluir evento
 
-Quando o usuário faz login com sucesso, o sistema gera um token.
+Assim como acontece com as tarefas, essa parte ja existe internamente no backend, mas ainda nao esta pronta visualmente no frontend.
 
-Esse token funciona como uma prova de que a pessoa já foi autenticada.
+### 6. Interface inicial do sistema
 
-Depois disso, ele pode ser enviado nas próximas requisições para o backend reconhecer quem está acessando o sistema.
+No frontend, hoje ja existem:
 
-## 6. Rota protegida para identificar o usuário logado
+- tela de login
+- tela de cadastro
+- dashboard inicial
+- menu lateral para navegar entre paginas autenticadas
 
-O projeto já possui uma rota protegida que permite verificar quem está autenticado naquele momento.
+### 7. Modo real e modo mock
 
-Na prática, isso mostra que o sistema já consegue:
+O frontend pode funcionar de dois jeitos:
 
-- receber o token
-- validar se ele é verdadeiro
-- descobrir qual usuário fez a requisição
+- conectado na API real
+- conectado em um mock local para testes
 
-## 7. Telas iniciais no frontend
+## Funcoes que ainda vao ser implementadas
 
-No frontend, já existem telas iniciais para:
+Estas partes ainda nao estao prontas no estado atual do projeto:
 
-- login
-- cadastro
-- navegação entre essas telas
-
-Isso quer dizer que o projeto já tem uma base visual para o fluxo de autenticação.
-
-## 8. Modo mock e modo real
-
-O projeto ainda mantém um modo de dados simulados para facilitar testes no frontend.
-
-Ao mesmo tempo, o backend já possui persistência real de usuários.
-
-Isso faz com que o sistema esteja em uma fase de transição: parte dele ainda pode usar dados simulados, mas a área de autenticação de usuários já está conectada a um banco real.
-
-## O que ainda não está pronto
-
-Apesar de essas funções já existirem, o projeto ainda não possui a parte principal da agenda completa.
-
-Ainda faltam funções como:
-
-- tarefas por usuário
-- eventos e compromissos salvos no banco
-- organização da rotina
-- missões
-- streaks
-- painéis de progresso
+- interface completa da agenda
+- interface completa de perfil
+- uso visual de tarefas no frontend
+- uso visual de eventos no frontend
+- organizacao de rotina mais avancada
+- recursos de progresso, acompanhamento ou motivacao
 
 ## Resumindo
 
-Hoje, o Projeto Agenda já tem funções reais e importantes:
+Hoje o projeto ja tem uma base funcional importante:
 
-- cadastro
-- login
-- senha protegida
-- usuário salvo em banco de dados
-- autenticação por token
-- rota protegida para saber quem está logado
+- autenticacao real
+- usuarios salvos em banco de dados
+- tarefas e eventos no backend
+- interface inicial para entrar na aplicacao
 
-Isso mostra que o sistema já possui uma base funcional de backend, mesmo que a parte completa da agenda ainda esteja em construção.
+O que falta agora e transformar as funcoes que ja existem no backend em experiencia visual completa no frontend.

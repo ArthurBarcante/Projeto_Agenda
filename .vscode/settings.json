@@ -1,9 +1,24 @@
 {
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.editor.showTabs": "multiple",
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.terminal.activateEnvironment": true,
   "python.analysis.autoImportCompletions": true,
+  "python.analysis.indexing": false,
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.extraPaths": [
+    "${workspaceFolder}/back",
     "${workspaceFolder}/.venv/lib/python3.12/site-packages"
-  ]
+  ],
+  "typescript.tsserver.useSeparateSyntaxServer": false,
+  "files.watcherExclude": {
+    "**/.git/**": true,
+    "**/.venv/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/.venv/**": true,
+    "**/node_modules/**": true
+  }
 }
