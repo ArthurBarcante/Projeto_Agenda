@@ -1,4 +1,4 @@
-import { getApiUrl, isRealMode } from "../configs/config.js";
+import { getApiUrl, isMockMode, isRealMode } from "../configs/config.js";
 import {
   clearSession,
   getStoredToken,
@@ -13,6 +13,10 @@ function getCurrentApiUrl() {
 
 function buildUnavailableError() {
   const currentApiUrl = getCurrentApiUrl();
+  if (isMockMode()) {
+    return new Error(`Mock indisponivel. Inicie o JSON Server em ${currentApiUrl}`);
+  }
+
   return new Error(`Backend indisponivel. Inicie a API em ${currentApiUrl}`);
 }
 
@@ -162,7 +166,7 @@ function getAuthAdapter() {
 
 export async function login(email, password) {
   try {
-    return getAuthAdapter().login(email, password);
+    return await getAuthAdapter().login(email, password);
   } catch (error) {
     if (error instanceof TypeError) {
       throw buildUnavailableError();
@@ -175,7 +179,7 @@ export async function login(email, password) {
 
 export async function authenticate(email, password) {
   try {
-    return getAuthAdapter().authenticate(email, password);
+    return await getAuthAdapter().authenticate(email, password);
   } catch (error) {
     clearSession();
 
@@ -223,7 +227,7 @@ export async function fetchWithAuth(url, options = {}) {
 
 export async function getCurrentUser() {
   try {
-    return getAuthAdapter().getCurrentUser();
+    return await getAuthAdapter().getCurrentUser();
   } catch (error) {
     if (error instanceof TypeError) {
       throw buildUnavailableError();
@@ -239,7 +243,7 @@ export async function loginRequest(email, password) {
 
 export async function registerRequest(userData) {
   try {
-    return getAuthAdapter().register(userData);
+    return await getAuthAdapter().register(userData);
   } catch (error) {
     if (error instanceof TypeError) {
       throw buildUnavailableError();
@@ -251,7 +255,7 @@ export async function registerRequest(userData) {
 
 export async function getUserByEmail(email) {
   try {
-    return getAuthAdapter().getUserByEmail(email);
+    return await getAuthAdapter().getUserByEmail(email);
   } catch (error) {
     if (error instanceof TypeError) {
       throw buildUnavailableError();
