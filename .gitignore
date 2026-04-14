@@ -17,10 +17,6 @@ back/.env
 /.env
 /test.db
 
-# Local tests (not versioned)
-back/app/tests/
-pytest.ini
-
 # IDE/editor config files
 jsconfig.json
 
