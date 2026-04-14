@@ -28,7 +28,7 @@ jobs:
           pip install -r configs/requirements.txt
 
       - name: Executar testes do backend
-        run: pytest
+        run: python -m pytest back/app/tests -q
 
       - name: Subir API e validar healthcheck inicial
         run: |
