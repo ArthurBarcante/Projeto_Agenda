@@ -1,53 +1,89 @@
-# Projeto Agenda
+# 📅 AIGENDA
 
-Projeto de organizacao pessoal com frontend em HTML, CSS e JavaScript puro e backend em FastAPI.
+Sistema de agenda inteligente para gerenciamento de tarefas, eventos e progresso do usuário.
 
-Hoje o projeto esta dividido em duas camadas com niveis diferentes de maturidade:
+O projeto combina um backend em FastAPI com um frontend em JavaScript Vanilla, oferecendo uma experiência simples de usar e fácil de evoluir para estudos, portfólio e desenvolvimento incremental.
 
-- o backend ja possui autenticacao, tarefas e eventos com persistencia real
-- o frontend ja possui fluxo visual de autenticacao e area autenticada inicial
-- a interface da agenda ainda nao consome as APIs de tarefas e eventos
+---
 
-## Geral do projeto
+## 🚀 Funcionalidades
 
-O objetivo do Projeto Agenda e evoluir para uma aplicacao que ajude o usuario a organizar rotina, tarefas e compromissos em um unico lugar.
+- 🔐 Autenticação com JWT
+- 👤 Cadastro, login e identificação do usuário autenticado
+- 📌 CRUD completo de tarefas
+- 📅 CRUD completo de eventos
+- 📊 Sistema de progresso com meta diária, percentual e streak
+- 🏅 Área de conquistas, badges e evolução do usuário
+- ✏️ Perfil editável com feedback de validação
+- 📆 Agenda com abas de calendário e compromissos
+- ➕ Fluxo dedicado para criação de tarefas e eventos
 
-No estado atual, o sistema ja entrega:
+---
 
-- cadastro de usuario com persistencia em PostgreSQL
-- login com JWT
-- rota protegida para identificar o usuario autenticado
-- CRUD de tarefas por usuario no backend
-- CRUD de eventos por usuario no backend
-- frontend com login, cadastro, dashboard e navegacao autenticada
+## 🧠 Tecnologias
 
-Ainda estao em construcao:
+### Backend
+- FastAPI
+- SQLAlchemy
+- JWT Authentication
+- Pytest
+- SQLite ou PostgreSQL
 
-- interface visual da agenda conectada ao backend
-- interface visual de perfil
-- telas para criar, listar, editar e excluir tarefas e eventos no frontend
-- recursos mais avancados de acompanhamento de rotina
+### Frontend
+- JavaScript Vanilla modular
+- HTML5
+- CSS3
 
-## Estrutura resumida
+---
 
-```text
+## 📁 Estrutura do Projeto
+
+```bash
 Projeto_Agenda/
-├── back/app/
-│   ├── core/        # autenticacao, token e seguranca
-│   ├── database/    # conexao e sessao do banco
-│   ├── models/      # tabelas ORM
-│   ├── routers/     # endpoints da API
-│   ├── schemas/     # validacao dos dados
-│   └── tests/       # testes automatizados do backend
-├── back/mock/       # base mock para uso opcional no frontend
-├── configs/         # dependencias do backend
-├── docs/            # documentacao beginner e developer
-└── front/           # interface web em HTML, CSS e JS puro
+├── back/
+│   └── app/
+│       ├── core/
+│       ├── database/
+│       ├── modules/
+│       │   ├── auth/
+│       │   ├── users/
+│       │   ├── tasks/
+│       │   ├── events/
+│       │   ├── progress/
+│       │   └── badges/
+│       └── tests/
+├── front/
+│   ├── api/
+│   ├── components/
+│   ├── pages/
+│   ├── router/
+│   └── utils/
+├── docs/
+├── configs/
+└── Makefile
 ```
 
-## Configuracoes principais
+---
 
-### 1. Ambiente Python
+## ⚙️ Como o projeto funciona
+
+- O backend expõe uma API REST para autenticação, tarefas, eventos e progresso.
+- O frontend consome essa API e organiza a navegação em páginas modulares.
+- O projeto pode trabalhar com API real ou com mock local, dependendo da configuração do frontend.
+- As variáveis de ambiente controlam banco de dados, chave JWT e inicialização automática das tabelas.
+
+---
+
+## ▶️ Como rodar o projeto
+
+### 1. Clonar o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd Projeto_Agenda
+```
+
+### 2. Criar e ativar o ambiente Python
 
 ```bash
 python3 -m venv .venv
@@ -55,152 +91,84 @@ source .venv/bin/activate
 pip install -r configs/requirements.txt
 ```
 
-Dependencias principais:
+### 3. Configurar o ambiente
 
-- fastapi
-- uvicorn[standard]
-- sqlalchemy
-- psycopg2-binary
-- pydantic[email]
-- bcrypt
-- python-jose
-- pytest
-
-### 2. Banco de dados
-
-O backend usa PostgreSQL por padrao. A conexao fica em `back/app/database/connection.py`.
-
-Valor padrao atual:
-
-```python
-DEFAULT_DATABASE_URL = "postgresql://postgres:1234@localhost:5432/aigenda"
-```
-
-Para sobrescrever no seu ambiente:
+Copie o arquivo de exemplo para o backend:
 
 ```bash
-export DATABASE_URL="postgresql://usuario:senha@localhost:5432/aigenda"
+cp .env.example back/.env
 ```
 
-### 3. Token JWT
+Exemplo das variáveis principais:
 
-O segredo usado no token pode ser configurado pela variavel abaixo:
+```env
+DATABASE_URL=sqlite:///./test.db
+SECRET_KEY=troque-esta-chave-no-seu-ambiente
+APP_INIT_DB_ON_STARTUP=1
+```
+
+### 4. Subir o backend
 
 ```bash
-export JWT_SECRET_KEY="um-segredo-forte-para-desenvolvimento"
+.venv/bin/python -m uvicorn app.main:app --reload --app-dir back
 ```
 
-Se nada for definido, o projeto usa um valor padrao de desenvolvimento em `back/app/core/security.py`.
+A API ficará disponível em:
+- http://127.0.0.1:8000
+- http://127.0.0.1:8000/docs
 
-### 4. Criacao automatica das tabelas
+### 5. Abrir o frontend
 
-Ao subir a API, o projeto pode inicializar as tabelas automaticamente.
+Você pode abrir o arquivo `front/index.html` com a extensão Live Server no VS Code ou servir a pasta `front/` com um servidor estático local.
 
-Comportamento atual:
+Exemplo com Python:
 
-- `APP_INIT_DB_ON_STARTUP=1`: inicializa tabelas no startup
-- `APP_INIT_DB_ON_STARTUP=0`: nao inicializa tabelas no startup
+```bash
+cd front
+python3 -m http.server 5500
+```
 
-### 5. Modo de autenticacao no frontend
+Depois, acesse no navegador:
+- http://127.0.0.1:5500
 
-O frontend consegue alternar entre API real e mock local em `front/js/core/configs/config.js`.
+### 6. Modo desenvolvimento rápido
 
-Opcoes:
+Se quiser subir o ambiente auxiliar de desenvolvimento com backend + mock local:
 
-- `real`: usa FastAPI em `http://127.0.0.1:8000`
-- `mock`: usa JSON Server em `http://127.0.0.1:3002`
+```bash
+make dev
+```
 
-## Como executar
+---
+
+## 🧪 Testes
 
 ### Backend
 
 ```bash
-uvicorn app.main:app --reload --app-dir back
+.venv/bin/pytest back/app/tests -q
 ```
-
-URLs uteis:
-
-- API: http://127.0.0.1:8000
-- Swagger: http://127.0.0.1:8000/docs
 
 ### Frontend
 
-Abra `front/index.html` com Live Server ou qualquer servidor estatico local.
-
-### Mock opcional do frontend
-
-Use apenas se quiser testar o modo mock.
-
 ```bash
-npx json-server --watch back/mock/db.json --port 3002
+node --test front/tests/front/profile.validation.test.mjs
 ```
 
-## Testes automatizados
+---
 
-Os testes atuais ficam em `back/app/tests` e cobrem o fluxo de autenticacao.
+## 🛣️ Roadmap
 
-```bash
-pytest back/app/tests -q
-```
+- Implementar notificações e lembretes para tarefas e eventos
+- Adicionar recorrência de tarefas e compromissos
+- Evoluir o dashboard com histórico, tendências e métricas semanais
+- Expandir a gamificação com mais conquistas e missões
+- Criar testes end-to-end para os principais fluxos do frontend
+- Estruturar CI/CD e deploy em nuvem com ambiente de produção
 
-Cobertura atual:
+---
 
-- cadastro
-- login
-- rota `/auth/me`
+## 👨‍💻 Autor
 
-## Endpoints implementados hoje
-
-### Autenticacao
-
-- `POST /auth/register`
-- `POST /auth/login`
-- `GET /auth/me`
-
-### Tarefas
-
-- `POST /tasks`
-- `GET /tasks`
-- `GET /tasks/{task_id}`
-- `PUT /tasks/{task_id}`
-- `DELETE /tasks/{task_id}`
-
-### Eventos
-
-- `POST /events`
-- `GET /events`
-- `GET /events/{event_id}`
-- `PUT /events/{event_id}`
-- `DELETE /events/{event_id}`
-
-## Proximos passos sugeridos
-
-1. Integrar no frontend as APIs reais de tarefas e eventos, porque o backend dessa parte ja esta pronto.
-2. Criar interface visual para agenda e perfil, hoje ainda vazias ou iniciais.
-3. Expandir os testes automatizados para CRUD de tarefas e eventos.
-4. Centralizar configuracoes sensiveis em variaveis de ambiente e, se desejar, em um arquivo `.env` de desenvolvimento.
-5. Definir a proxima camada funcional do produto, por exemplo progresso, rotina ou acompanhamento por usuario.
-
-## Navegacao da documentacao
-
-### Beginner
-
-- `docs/beginner/what-is-the-project.md`
-- `docs/beginner/what-functions-it-has.md`
-- `docs/beginner/user-interface.md`
-
-### Developer Back-end
-
-- `docs/developer/back-end/auth.md`
-- `docs/developer/back-end/tasks.md`
-- `docs/developer/back-end/events.md`
-
-### Developer Front-end
-
-- `docs/developer/front-end/login.md`
-- `docs/developer/front-end/register.md`
-- `docs/developer/front-end/dashboard.md`
-- `docs/developer/front-end/routing-and-session.md`
-- `docs/developer/front-end/agenda.md`
-- `docs/developer/front-end/profile.md`
+Arthur Barçante
 

@@ -1,11 +1,9 @@
-import os
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
 from jose import JWTError, jwt
+from app.core.config import SECRET_KEY
 
-# Use env var in production; fallback is only for local development.
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "aigenda_super_secret_key_change_in_production_2026")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

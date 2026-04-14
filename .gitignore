@@ -13,6 +13,9 @@ node_modules/
 
 # Local data mocks (not versioned)
 back/mock/
+back/.env
+/.env
+/test.db
 
 # Local tests (not versioned)
 back/app/tests/
@@ -23,3 +26,6 @@ jsconfig.json
 
 # VS Code settings
 .vscode/
+
+# Makefile
+Makefile

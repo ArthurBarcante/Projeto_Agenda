@@ -5,13 +5,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.base import Base
 from app.database.connection import engine
-from app.models.events import Event
-from app.models.tasks import Task
-from app.models.user import User
-from app.routers.agenda import events as agenda_events
-from app.routers.agenda import tasks as agenda_tasks
-from app.routers.auth import login as auth_login
-from app.routers.auth import register
+from app.modules.auth import router as auth_router
+from app.modules.badges.model import Badge
+from app.modules.events import router as events_router
+from app.modules.events.model import Event
+from app.modules.progress import router as progress_router
+from app.modules.progress.model import Progress
+from app.modules.tasks import router as tasks_router
+from app.modules.tasks.model import Task
+from app.modules.users import router as users_router
+from app.modules.users.model import User
 
 
 def init_database() -> None:
@@ -42,10 +45,11 @@ def create_app(init_database_on_startup: bool | None = None) -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(auth_login.router)
-    app.include_router(register.router)
-    app.include_router(agenda_tasks.router)
-    app.include_router(agenda_events.router)
+    app.include_router(auth_router.router)
+    app.include_router(users_router.router)
+    app.include_router(tasks_router.router)
+    app.include_router(events_router.router)
+    app.include_router(progress_router.router)
 
     @app.get("/")
     def read_root():

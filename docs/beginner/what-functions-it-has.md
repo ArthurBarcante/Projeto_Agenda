@@ -1,98 +1,76 @@
-# Quais funcoes o projeto tem hoje
+# 🚀 Quais funções o AIGENDA tem hoje?
 
-Este arquivo mostra o que o Projeto Agenda ja faz hoje e o que ainda vai ser implementado.
+Este documento mostra, de forma simples, o que o projeto já consegue fazer.
 
-Como o projeto esta em desenvolvimento, e importante separar bem o que ja existe de verdade do que ainda esta planejado.
+---
 
-## Funcoes ja implementadas atualmente
+## 👤 Conta do usuário
 
-### 1. Cadastro de usuario
+O sistema já permite:
 
-Uma pessoa ja pode criar conta informando dados como:
+- criar conta
+- fazer login
+- identificar o usuário autenticado
+- atualizar dados do perfil
 
-- nome
-- email
-- senha
-- telefone
-- CPF
-- data de nascimento
+---
 
-O sistema tambem valida:
+## 📌 Tarefas
 
-- se a senha e a confirmacao batem
-- se o email ja esta cadastrado
-- se o CPF ja esta cadastrado
+O usuário pode:
 
-### 2. Login
-
-O usuario ja pode entrar com email e senha.
-
-Quando o login da certo, o sistema gera um token e passa a reconhecer quem esta autenticado.
-
-### 3. Identificacao do usuario logado
-
-Depois do login, o backend consegue verificar quem esta usando o sistema naquele momento.
-
-Isso e importante porque tarefas e eventos precisam pertencer a um usuario especifico.
-
-### 4. Tarefas no backend
-
-O backend ja possui funcoes para:
-
-- criar tarefa
+- criar tarefas
 - listar tarefas
-- buscar uma tarefa especifica
-- atualizar tarefa
-- excluir tarefa
+- editar tarefas
+- excluir tarefas
+- acompanhar o que já foi concluído
 
-Importante: essa parte ja existe na API, mas ainda nao possui interface pronta no frontend.
+---
 
-### 5. Eventos no backend
+## 📅 Eventos
 
-O backend ja possui funcoes para:
+O sistema também permite:
 
-- criar evento
-- listar eventos
-- buscar um evento especifico
-- atualizar evento
-- excluir evento
+- criar eventos
+- listar compromissos
+- editar eventos
+- remover eventos
 
-Assim como acontece com as tarefas, essa parte ja existe internamente no backend, mas ainda nao esta pronta visualmente no frontend.
+---
 
-### 6. Interface inicial do sistema
+## 📊 Progresso
 
-No frontend, hoje ja existem:
+O projeto acompanha a evolução do usuário com:
 
-- tela de login
-- tela de cadastro
-- dashboard inicial
-- menu lateral para navegar entre paginas autenticadas
+- percentual de conclusão
+- meta diária
+- streak de consistência
+- elementos visuais de gamificação
 
-### 7. Modo real e modo mock
+---
 
-O frontend pode funcionar de dois jeitos:
+## 🖥️ Interface
 
-- conectado na API real
-- conectado em um mock local para testes
+Na parte visual, o sistema já oferece:
 
-## Funcoes que ainda vao ser implementadas
+- login e cadastro
+- dashboard com progresso
+- agenda com abas de calendário e compromissos
+- fluxo guiado para criar tarefas e eventos
+- perfil com dados, progresso e conquistas
+- navegação interna com menu lateral
 
-Estas partes ainda nao estao prontas no estado atual do projeto:
+---
 
-- interface completa da agenda
-- interface completa de perfil
-- uso visual de tarefas no frontend
-- uso visual de eventos no frontend
-- organizacao de rotina mais avancada
-- recursos de progresso, acompanhamento ou motivacao
+## 🔄 Modos de uso
 
-## Resumindo
+O frontend pode funcionar em dois cenários:
 
-Hoje o projeto ja tem uma base funcional importante:
+- usando a API real
+- usando um mock local para testes rápidos
 
-- autenticacao real
-- usuarios salvos em banco de dados
-- tarefas e eventos no backend
-- interface inicial para entrar na aplicacao
+---
 
-O que falta agora e transformar as funcoes que ja existem no backend em experiencia visual completa no frontend.
+## Em resumo
+
+Hoje o AIGENDA já é uma base funcional de agenda digital com autenticação, tarefas, eventos, progresso e perfil.
