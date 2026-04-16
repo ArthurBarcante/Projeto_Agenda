@@ -16,5 +16,9 @@ services:
         value: sqlite:///./render.db
       - key: SECRET_KEY
         generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
       - key: APP_INIT_DB_ON_STARTUP
         value: "1"
