@@ -30,6 +30,9 @@ jobs:
       - name: Executar testes do backend
         run: python -m pytest back/app/tests -q
 
+      - name: Adicionar ALGORITHM e ACCESS_TOKEN_EXPIRE_MINUTES ao env do CI
+        run: echo "ALGORITHM=HS256" >> $GITHUB_ENV && echo "ACCESS_TOKEN_EXPIRE_MINUTES=60" >> $GITHUB_ENV
+
       - name: Subir API e validar healthcheck inicial
         run: |
           uvicorn app.main:app --host 127.0.0.1 --port 8000 --app-dir back > uvicorn.log 2>&1 &
@@ -45,3 +48,15 @@ jobs:
           echo "Falha ao iniciar a API durante o smoke test."
           cat uvicorn.log
           exit 1
+
+  deploy:
+    name: Deploy no Render
+    runs-on: ubuntu-latest
+    needs: backend-ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Acionar deploy via Deploy Hook
+        run: |
+          curl -fsSX POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "Deploy acionado com sucesso!"
