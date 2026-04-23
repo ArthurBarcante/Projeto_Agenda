@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 
 from sqlalchemy.orm import Session
 
+from app.core.utils import get_utc_now, normalize_datetime
 from app.modules.badges.model import Badge
 from app.modules.progress.model import Progress
 from app.modules.tasks.model import Task
@@ -14,20 +15,6 @@ XP_PER_COMPLETED_TASK = 10
 XP_PER_STREAK_DAY = 5
 XP_PER_BADGE = 40
 XP_PER_LEVEL = 100
-
-
-def get_utc_now() -> datetime:
-    return datetime.now(timezone.utc)
-
-
-def normalize_datetime(value: datetime | None) -> datetime | None:
-    if value is None:
-        return None
-
-    if value.tzinfo is None:
-        return value.replace(tzinfo=timezone.utc)
-
-    return value.astimezone(timezone.utc)
 
 
 def calculate_streak(completed_dates: set[date], today: date | None = None) -> tuple[int, int]:
@@ -81,6 +68,7 @@ def get_or_create_progress(db: Session, user_id: int) -> Progress:
             best_streak=0,
             daily_completed_tasks=0,
             updated_at=get_utc_now(),
+            last_completed_at=None,
         )
         db.add(progress)
         db.flush()
@@ -95,17 +83,19 @@ def update_progress(
     total_increment: int = 0,
 ) -> Progress:
     progress = get_or_create_progress(db, user_id)
-    previous_update = normalize_datetime(progress.updated_at)
     today = get_utc_now().date()
 
     progress.completed_tasks = max(progress.completed_tasks + completed_increment, 0)
     progress.total_tasks = max(progress.total_tasks + total_increment, 0)
 
     if completed_increment > 0:
-        if previous_update is None:
+        # Usa last_completed_at — nunca contaminado por decrementos.
+        previous_completion = normalize_datetime(progress.last_completed_at)
+
+        if previous_completion is None:
             progress.streak_days = 1
         else:
-            delta_days = (today - previous_update.date()).days
+            delta_days = (today - previous_completion.date()).days
             if delta_days == 0:
                 progress.streak_days = max(progress.streak_days, 1)
             elif delta_days == 1:
@@ -114,10 +104,13 @@ def update_progress(
                 progress.streak_days = 1
 
         progress.best_streak = max(progress.best_streak, progress.streak_days)
-        if previous_update is None or previous_update.date() != today:
+
+        if previous_completion is None or previous_completion.date() != today:
             progress.daily_completed_tasks = max(completed_increment, 0)
         else:
             progress.daily_completed_tasks = max(progress.daily_completed_tasks + completed_increment, 0)
+
+        progress.last_completed_at = get_utc_now()
 
     progress.updated_at = get_utc_now()
 
@@ -273,7 +266,6 @@ def build_progress_payload(progress: Progress) -> dict:
 
 def get_user_progress_payload(db: Session, user_id: int) -> dict:
     progress = sync_progress(db, user_id, commit=True)
-    check_badges(db, progress)
     return build_progress_payload(progress)
 
 
@@ -288,10 +280,7 @@ def get_progress_detail_payload(db: Session, user_id: int) -> dict:
 
 
 def update_user_daily_goal(db: Session, user_id: int, daily_goal: int) -> dict:
-    progress = sync_progress(db, user_id, commit=False)
+    progress = get_or_create_progress(db, user_id)
     progress.daily_goal = daily_goal
-    db.add(progress)
-    db.commit()
-    db.refresh(progress)
     progress = sync_progress(db, user_id, commit=True)
     return build_progress_payload(progress)
