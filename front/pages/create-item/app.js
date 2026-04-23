@@ -1,11 +1,13 @@
 import { createEvent } from "../../api/events.js";
 import { createTask } from "../../api/tasks.js";
 import { initializeSidebar, renderSidebar, resetSidebarState } from "../../components/sidebar/app.js";
+import { saveAgendaFlashMessage } from "../../utils/agendaFlash.js";
 import { setAuthMode } from "../../utils/auth.js";
 import { isMockMode } from "../../utils/config.js";
+import { toApiDateTime } from "../../utils/dateTime.js";
+import { escapeHtml } from "../../utils/escapeHtml.js";
 
 const root = document.getElementById("create-item-root");
-const AGENDA_FLASH_STORAGE_KEY = "agendaFlashMessage";
 
 const state = {
   feedback: null,
@@ -14,15 +16,6 @@ const state = {
   submitting: false,
 };
 
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
 function setFeedback(type, message) {
   state.feedback = message ? { type, message } : null;
 }
@@ -30,21 +23,6 @@ function setFeedback(type, message) {
 function normalizeTextValue(value) {
   const normalizedValue = String(value || "").trim();
   return normalizedValue ? normalizedValue : null;
-}
-
-function toApiDateTime(value) {
-  if (!value) return null;
-  const normalizedDate = new Date(value);
-  if (Number.isNaN(normalizedDate.getTime())) return null;
-  return normalizedDate.toISOString();
-}
-
-function saveAgendaFlashMessage(message) {
-  try {
-    window.sessionStorage.setItem(AGENDA_FLASH_STORAGE_KEY, JSON.stringify({ type: "success", message }));
-  } catch (error) {
-    console.warn("Nao foi possivel salvar a mensagem de retorno da agenda.", error);
-  }
 }
 
 function goToAgenda(forceReload = false) {
