@@ -20,16 +20,23 @@ class UserCreate(BaseModel):
         return value
 
 
-class UserResponse(BaseModel):
+class UserPublicResponse(BaseModel):
+    """Dados não-sensíveis — seguro para qualquer contexto."""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    email: EmailStr
     name: str
+    email: EmailStr
+    role: str
+
+
+class UserPrivateResponse(UserPublicResponse):
+    """Dados completos — usar apenas em endpoints do próprio usuário autenticado."""
+
     phone: str
     cpf: str
     birthdate: date
-    role: str
 
 
 class UserUpdate(BaseModel):

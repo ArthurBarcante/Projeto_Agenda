@@ -22,8 +22,6 @@ function getPersistedAuthMode() {
   return getLocalItem(AUTH_MODE_STORAGE_KEY);
 }
 
-export const AUTH_MODE = DEFAULT_AUTH_MODE;
-
 export function setAuthMode(mode) {
   const nextMode = normalizeAuthMode(mode);
   setLocalItem(AUTH_MODE_STORAGE_KEY, nextMode);

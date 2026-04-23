@@ -14,6 +14,7 @@ from app.modules.users.model import User
 router = APIRouter(prefix="/progress", tags=["Progress"])
 
 
+# Endpoint publico? Confirmar regra de negocio antes de exigir autenticacao.
 @router.get("/{user_id}", response_model=ProgressDetailResponse)
 def get_progress_by_user_id(user_id: int, db: Session = Depends(get_db)):
     return get_progress_detail_payload(db, user_id)

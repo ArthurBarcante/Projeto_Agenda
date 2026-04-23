@@ -1,6 +1,7 @@
 import { getProgress, updateDailyGoal } from "../../api/progress.js";
 import { initializeSidebar, renderSidebar, resetSidebarState } from "../../components/sidebar/app.js";
 import { isMockMode } from "../../utils/config.js";
+import { escapeHtml } from "../../utils/escapeHtml.js";
 
 const root = document.getElementById("dashboard-root");
 
@@ -24,15 +25,6 @@ const runtime = (typeof window !== "undefined")
     lastProgressPayload: null,
     hasAutoLoadedProgress: false,
   };
-
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
 
 function clampPercentage(value) {
   return Math.max(0, Math.min(100, Number(value || 0)));

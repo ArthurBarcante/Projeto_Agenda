@@ -5,7 +5,7 @@ from app.modules.users.model import User
 def test_register_creates_user_with_hashed_password(client, db_session, valid_user_payload):
     response = client.post("/auth/register", json=valid_user_payload)
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     body = response.json()
     assert body["message"] == "Usuário criado com sucesso"
     assert body["user"]["email"] == valid_user_payload["email"]
@@ -92,7 +92,13 @@ def test_auth_me_returns_authenticated_user(client, create_user):
     response = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
 
     assert response.status_code == 200
-    assert response.json() == {"id": user.id, "email": user.email}
+    body = response.json()
+    assert body["id"] == user.id
+    assert body["email"] == user.email
+    assert body["name"] == user.name
+    assert body["role"] == user.role
+    assert "cpf" not in body
+    assert "password" not in body
 
 
 def test_auth_me_requires_token(client):
@@ -116,3 +122,12 @@ def test_auth_me_rejects_token_for_missing_user(client):
 
     assert response.status_code == 401
     assert response.json() == {"detail": "Usuario nao encontrado"}
+
+
+def test_auth_me_rejects_token_with_non_numeric_sub(client):
+    token = create_access_token(data={"sub": "abc"})
+
+    response = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Token invalido"}

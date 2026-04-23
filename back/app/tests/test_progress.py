@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from app.modules.badges.model import Badge
 from app.modules.progress.model import Progress
-from app.modules.progress.service import calculate_progress, check_badges
+from app.modules.progress.service import calculate_progress, check_badges, update_progress
 from app.modules.tasks.model import Task
 
 
@@ -126,3 +126,46 @@ def test_check_badges_returns_matching_badges(db_session):
     unlocked_badges = check_badges(db_session, progress)
 
     assert [badge.name for badge in unlocked_badges] == ["Iniciante", "Consistente"]
+
+
+def test_update_progress_never_goes_below_zero(db_session, create_user):
+    user, _ = create_user()
+
+    progress = update_progress(
+        db_session,
+        user.id,
+        completed_increment=-5,
+        total_increment=-3,
+    )
+
+    assert progress.completed_tasks == 0
+    assert progress.total_tasks == 0
+
+
+def test_update_progress_uses_last_completed_at_for_streak(db_session, create_user):
+    user, _ = create_user()
+
+    # Primeira conclusão para criar o registro de progresso.
+    initial_progress = update_progress(db_session, user.id, completed_increment=1, total_increment=1)
+    initial_progress.streak_days = 3
+    initial_progress.best_streak = 3
+    initial_progress.last_completed_at = utc_datetime(2)
+    db_session.add(initial_progress)
+    db_session.commit()
+
+    # Decremento não deve alterar a referência de última conclusão.
+    after_decrement = update_progress(db_session, user.id, completed_increment=-1, total_increment=0)
+    assert after_decrement.last_completed_at is not None
+    assert normalize_datetime(after_decrement.last_completed_at).date() == normalize_datetime(
+        utc_datetime(2)
+    ).date()
+
+    # Como a última conclusão foi há 2 dias, nova conclusão precisa resetar streak para 1.
+    after_new_completion = update_progress(db_session, user.id, completed_increment=1, total_increment=0)
+    assert after_new_completion.streak_days == 1
+
+
+def normalize_datetime(value: datetime) -> datetime:
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)

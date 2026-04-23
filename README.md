@@ -159,12 +159,12 @@ node --test front/tests/front/profile.validation.test.mjs
 
 ## 🛣️ Roadmap
 
-- Implementar notificações e lembretes para tarefas e eventos
-- Adicionar recorrência de tarefas e compromissos
-- Evoluir o dashboard com histórico, tendências e métricas semanais
-- Expandir a gamificação com mais conquistas e missões
-- Criar testes end-to-end para os principais fluxos do frontend
-- Estruturar CI/CD e deploy em nuvem com ambiente de produção
+- 4. Implementar notificações e lembretes para tarefas e eventos
+- 3. Adicionar recorrência de tarefas e compromissos
+- 5. Evoluir o dashboard com histórico, tendências e métricas semanais
+- 6. Expandir a gamificação com mais conquistas e missões
+- 2. Criar testes end-to-end para os principais fluxos do frontend
+- 1. Estruturar CI/CD e deploy em nuvem com ambiente de produção
 
 ---
 

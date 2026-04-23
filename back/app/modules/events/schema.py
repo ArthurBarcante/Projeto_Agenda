@@ -3,6 +3,12 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, model_validator
 
 
+def _check_date_order(start_at, end_at) -> None:
+	"""Lança ValueError se end_at for anterior a start_at."""
+	if start_at is not None and end_at is not None and end_at < start_at:
+		raise ValueError("end_at nao pode ser menor que start_at")
+
+
 class EventBase(BaseModel):
 	title: str
 	description: str | None = None
@@ -12,8 +18,7 @@ class EventBase(BaseModel):
 
 	@model_validator(mode="after")
 	def validate_dates(self):
-		if self.end_at is not None and self.end_at < self.start_at:
-			raise ValueError("end_at nao pode ser menor que start_at")
+		_check_date_order(self.start_at, self.end_at)
 		return self
 
 
@@ -30,12 +35,7 @@ class EventUpdate(BaseModel):
 
 	@model_validator(mode="after")
 	def validate_dates(self):
-		if (
-			self.start_at is not None
-			and self.end_at is not None
-			and self.end_at < self.start_at
-		):
-			raise ValueError("end_at nao pode ser menor que start_at")
+		_check_date_order(self.start_at, self.end_at)
 		return self
 
 

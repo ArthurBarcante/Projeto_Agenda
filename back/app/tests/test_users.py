@@ -17,10 +17,10 @@ def test_users_me_requires_authentication(client):
     assert response.json() == {"detail": "Not authenticated"}
 
 
-def test_users_me_put_updates_mutable_fields(client, auth_headers, db_session):
+def test_users_me_patch_updates_mutable_fields(client, auth_headers, db_session):
     headers, _ = auth_headers()
 
-    response = client.put(
+    response = client.patch(
         "/users/me",
         json={"name": "Novo Nome", "email": "novo.email@example.com", "phone": "11998887777"},
         headers=headers,
@@ -37,11 +37,24 @@ def test_users_me_put_updates_mutable_fields(client, auth_headers, db_session):
     assert refreshed_response.json()["email"] == "novo.email@example.com"
 
 
-def test_users_me_put_rejects_duplicate_email(client, auth_headers, create_user):
+def test_users_me_put_kept_for_client_compatibility(client, auth_headers):
+    headers, _ = auth_headers()
+
+    response = client.put(
+        "/users/me",
+        json={"name": "Nome Via Put"},
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+    assert response.json()["name"] == "Nome Via Put"
+
+
+def test_users_me_patch_rejects_duplicate_email(client, auth_headers, create_user):
     headers, _ = auth_headers()
     existing_user, _ = create_user()
 
-    response = client.put(
+    response = client.patch(
         "/users/me",
         json={"email": existing_user.email},
         headers=headers,
@@ -49,3 +62,19 @@ def test_users_me_put_rejects_duplicate_email(client, auth_headers, create_user)
 
     assert response.status_code == 400
     assert response.json() == {"detail": "Email já cadastrado"}
+
+
+def test_users_me_patch_with_empty_payload_keeps_current_data(client, auth_headers):
+    headers, user = auth_headers()
+
+    response = client.patch(
+        "/users/me",
+        json={},
+        headers=headers,
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["id"] == user.id
+    assert body["email"] == user.email
+    assert body["name"] == user.name

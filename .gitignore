@@ -16,6 +16,9 @@ back/mock/
 back/.env
 /.env
 /test.db
+/local.db
+/render.db
+/back/render.db
 
 # IDE/editor config files
 jsconfig.json

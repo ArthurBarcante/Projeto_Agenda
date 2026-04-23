@@ -16,5 +16,8 @@ class Progress(Base):
     best_streak = Column(Integer, nullable=False, default=0)
     daily_completed_tasks = Column(Integer, nullable=False, default=0)
     updated_at = Column(DateTime, nullable=False)
+    # Registra exclusivamente a última vez que o usuário COMPLETOU uma tarefa.
+    # Separado de updated_at para que decrementos não corrompam o cálculo de streak.
+    last_completed_at = Column(DateTime, nullable=True)
 
     user = relationship("User", back_populates="progress")

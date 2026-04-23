@@ -1,15 +1,5 @@
-function defaultEscapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-function defaultFormatDateTimeLabel(_, fallback = "Sem data definida") {
-  return fallback;
-}
+import { defaultFormatDateTimeLabel } from "../../../utils/dateTime.js";
+import { escapeHtml as defaultEscapeHtml } from "../../../utils/escapeHtml.js";
 
 export function renderTaskCard(
   task,

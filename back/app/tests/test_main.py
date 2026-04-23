@@ -38,19 +38,13 @@ def test_render_entrypoint_module_can_be_imported_from_back_directory():
     assert result.returncode == 0, result.stderr
 
 
-def test_render_startup_works_without_env_variables():
+def test_startup_fails_without_secret_key():
     env = os.environ.copy()
-    env.pop("DATABASE_URL", None)
-    env.pop("SECRET_KEY", None)
+    env["SECRET_KEY"] = ""
     env["APP_INIT_DB_ON_STARTUP"] = "0"
 
     script = """
-from unittest.mock import patch
-
-with patch('dotenv.load_dotenv', lambda *args, **kwargs: False):
-    import app.core.config as config
-    assert config.DATABASE_URL
-    assert config.SECRET_KEY
+import app.core.config as config
 """
 
     result = subprocess.run(
@@ -61,4 +55,5 @@ with patch('dotenv.load_dotenv', lambda *args, **kwargs: False):
         text=True,
     )
 
-    assert result.returncode == 0, result.stderr
+    assert result.returncode != 0
+    assert "SECRET_KEY" in result.stderr

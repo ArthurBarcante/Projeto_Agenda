@@ -21,8 +21,6 @@ from app.core.security import create_access_token
 from app.database.base import Base
 from app.database.deps import get_db
 from app.main import create_app
-from app.modules.events.model import Event
-from app.modules.tasks.model import Task
 from app.modules.users.model import User
 
 

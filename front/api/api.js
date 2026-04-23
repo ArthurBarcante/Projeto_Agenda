@@ -7,12 +7,8 @@ import {
   setAuthMessage,
 } from "../utils/session.js";
 
-function getCurrentApiUrl() {
-  return getApiUrl();
-}
-
 function buildUnavailableError() {
-  const currentApiUrl = getCurrentApiUrl();
+  const currentApiUrl = getApiUrl();
   if (isMockMode()) {
     return new Error(`Mock indisponivel. Inicie o JSON Server em ${currentApiUrl}`);
   }
@@ -62,7 +58,7 @@ function handleUnauthorizedResponse(errorMessage) {
 
 const authApi = {
   async login(email, password) {
-    const response = await fetch(`${getCurrentApiUrl()}/auth/login`, {
+    const response = await fetch(`${getApiUrl()}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -79,7 +75,7 @@ const authApi = {
   },
 
   async register(userData) {
-    const response = await fetch(`${getCurrentApiUrl()}/auth/register`, {
+    const response = await fetch(`${getApiUrl()}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -96,10 +92,11 @@ const authApi = {
   },
 
   async getCurrentUser() {
-    return fetchWithAuth(`${getCurrentApiUrl()}/auth/me`);
+    return fetchWithAuth(`${getApiUrl()}/auth/me`);
   },
 
   async getUserByEmail() {
+    // Stub: a validacao real de email duplicado acontece no backend durante o registro.
     return [];
   },
 
@@ -134,7 +131,7 @@ const authApi = {
 
 const authMock = {
   async login(email, password) {
-    const response = await fetch(`${getCurrentApiUrl()}/users?email=${email}&password=${password}`);
+    const response = await fetch(`${getApiUrl()}/users?email=${email}&password=${password}`);
     const data = await response.json();
 
     if (data.length === 0) {
@@ -145,7 +142,7 @@ const authMock = {
   },
 
   async register(userData) {
-    const response = await fetch(`${getCurrentApiUrl()}/users`, {
+    const response = await fetch(`${getApiUrl()}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -161,7 +158,7 @@ const authMock = {
   },
 
   async getUserByEmail(email) {
-    const response = await fetch(`${getCurrentApiUrl()}/users?email=${email}`);
+    const response = await fetch(`${getApiUrl()}/users?email=${email}`);
     return response.json();
   },
 

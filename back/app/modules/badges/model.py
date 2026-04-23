@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.database.base import Base
 
@@ -13,3 +14,5 @@ class Badge(Base):
     # Regras simples de desbloqueio (podem evoluir para regras compostas depois).
     required_tasks = Column(Integer, nullable=False, default=0)
     required_streak = Column(Integer, nullable=False, default=0)
+
+    user_badges = relationship("UserBadge", back_populates="badge", cascade="all, delete-orphan")

@@ -178,3 +178,31 @@ def test_concluding_task_increments_completed_tasks_only_once(client, auth_heade
     body_after_second = progress_after_second.json()
     assert body_after_second["total_tasks"] == 1
     assert body_after_second["completed_tasks"] == 1
+
+
+def test_delete_task_decrements_total_tasks_in_progress(client, auth_headers):
+    headers, _ = auth_headers()
+
+    create_response = client.post(
+        "/tasks",
+        json={
+            "title": "Remover tarefa",
+            "completed": False,
+        },
+        headers=headers,
+    )
+    assert create_response.status_code == 201
+    task_id = create_response.json()["id"]
+
+    progress_before = client.get("/progress", headers=headers)
+    assert progress_before.status_code == 200
+    assert progress_before.json()["total_tasks"] == 1
+
+    delete_response = client.delete(f"/tasks/{task_id}", headers=headers)
+    assert delete_response.status_code == 204
+
+    progress_after = client.get("/progress", headers=headers)
+    assert progress_after.status_code == 200
+    body_after = progress_after.json()
+    assert body_after["total_tasks"] == 0
+    assert body_after["completed_tasks"] == 0

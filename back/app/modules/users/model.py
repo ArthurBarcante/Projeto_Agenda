@@ -23,3 +23,4 @@ class User(Base):
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
     events = relationship("Event", back_populates="user", cascade="all, delete-orphan")
     progress = relationship("Progress", back_populates="user", cascade="all, delete-orphan", uselist=False)
+    badges = relationship("UserBadge", back_populates="user", cascade="all, delete-orphan")

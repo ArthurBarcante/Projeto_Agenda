@@ -1,7 +1,8 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.modules.progress.service import get_utc_now, update_progress
+from app.core.utils import get_utc_now
+from app.modules.progress.service import update_progress
 from app.modules.tasks.model import Task
 from app.modules.tasks.schema import TaskCreate, TaskUpdate
 
